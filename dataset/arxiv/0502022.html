@@ -1,0 +1,1171 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>[cs/0502022] Sub–Structural Niching in Non–Stationary Environments</title><meta property="og:description" content="Niching enables a genetic algorithm (GA) to maintain diversity in a population. It is
+particularly useful when the problem has multiple optima where the aim is to find all or as many as
+possible of these optima. When t…">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sub–Structural Niching in Non–Stationary Environments">
+<meta name="twitter:image:src" content="https://ar5iv.labs.arxiv.org/assets/ar5iv_card.png">
+<meta name="twitter:image:alt" content="ar5iv logo">
+<meta property="og:title" content="Sub–Structural Niching in Non–Stationary Environments">
+<meta property="og:site_name" content="ar5iv">
+<meta property="og:image" content="https://ar5iv.labs.arxiv.org/assets/ar5iv_card.png">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ar5iv.labs.arxiv.org/html/cs/0502022">
+
+<!--Generated on Tue Dec 20 12:04:50 2022 by LaTeXML (version 0.8.6) http://dlmf.nist.gov/LaTeXML/.-->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<script>
+  function detectColorScheme(){
+    var theme="light";
+    var current_theme = localStorage.getItem("ar5iv_theme");
+    if(current_theme){
+      if(current_theme == "dark"){
+        theme = "dark";
+      } }
+    else if(!window.matchMedia) { return false; }
+    else if(window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      theme = "dark"; }
+    if (theme=="dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light"); } }
+
+  detectColorScheme();
+
+  function toggleColorScheme(){
+    var current_theme = localStorage.getItem("ar5iv_theme");
+    if (current_theme) {
+      if (current_theme == "light") {
+        localStorage.setItem("ar5iv_theme", "dark"); }
+      else {
+        localStorage.setItem("ar5iv_theme", "light"); } }
+    else {
+        localStorage.setItem("ar5iv_theme", "dark"); }
+    detectColorScheme(); }
+</script>
+<link media="all" rel="stylesheet" href="/assets/ar5iv.0.7.6.min.css"><link media="all" rel="stylesheet" href="/assets/ar5iv-site.0.2.1.css">
+</head>
+<body>
+<div class="ltx_page_main">
+<div class="ltx_page_content">
+<article class="ltx_document ltx_authors_1line">
+<div id="id1" class="ltx_titlepage">
+<p id="id1.1" class="ltx_p ltx_align_center"><span id="id1.1.1" class="ltx_text ltx_font_bold" style="font-size:120%;">Sub–Structural Niching in</span></p>
+<p id="id1.2" class="ltx_p ltx_align_center"><span id="id1.2.1" class="ltx_text ltx_font_bold" style="font-size:120%;">Non–Stationary Environments</span></p>
+<p id="id1.3" class="ltx_p ltx_align_center"><span id="id1.3.1" class="ltx_text ltx_font_bold">Kumara Sastry</span></p>
+<p id="id1.4" class="ltx_p ltx_align_center"><span id="id1.4.1" class="ltx_text ltx_font_bold">Hussein A. Abbass</span></p>
+<p id="id1.5" class="ltx_p ltx_align_center"><span id="id1.5.1" class="ltx_text ltx_font_bold">David E. Goldberg</span></p>
+<p id="id1.6" class="ltx_p ltx_align_center">IlliGAL Report No. 2004035</p>
+<p id="id1.7" class="ltx_p ltx_align_center">May, 2004</p>
+<p id="id1.8" class="ltx_p ltx_align_center"><span id="id1.8.1" class="ltx_text" style="font-size:120%;">Illinois Genetic Algorithms Laboratory (IlliGAL)</span></p>
+<p id="id1.9" class="ltx_p ltx_align_center"><span id="id1.9.1" class="ltx_text" style="font-size:120%;">Department of General Engineering</span></p>
+<p id="id1.10" class="ltx_p ltx_align_center"><span id="id1.10.1" class="ltx_text" style="font-size:120%;">University of Illinois at Urbana-Champaign</span></p>
+<p id="id1.11" class="ltx_p ltx_align_center"><span id="id1.11.1" class="ltx_text" style="font-size:120%;">117 Transportation Building</span></p>
+<p id="id1.12" class="ltx_p ltx_align_center"><span id="id1.12.1" class="ltx_text" style="font-size:120%;">104 S. Mathews Avenue, Urbana, IL 61801</span></p>
+</div>
+<div class="ltx_abstract">
+<h6 class="ltx_title ltx_title_abstract">Abstract</h6>
+<p id="id6.id1" class="ltx_p">Niching enables a <span id="id6.id1.1" class="ltx_text ltx_font_italic">genetic algorithm</span> (GA) to maintain diversity in a population. It is
+particularly useful when the problem has multiple optima where the aim is to find all or as many as
+possible of these optima. When the fitness landscape of a problem changes overtime, the problem is
+called non–stationary, dynamic or time–variant problem. In these problems, niching can maintain
+useful solutions to respond quickly, reliably and accurately to a change in the environment. In
+this paper, we present a niching method that works on the problem substructures rather than the
+whole solution, therefore it has less space complexity than previously known niching mechanisms. We
+show that the method is responding accurately when environmental changes occur.</p>
+</div>
+<section id="S1" class="ltx_section ltx_indent_first">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1 </span>Introduction</h2>
+
+<div id="S1.p1" class="ltx_para">
+<p id="S1.p1.1" class="ltx_p">The systematic design of genetic operators and parameters is a challenging task in the literature.
+Goldberg <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib14" title="" class="ltx_ref">14</a>]</cite> used Holland’s <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib21" title="" class="ltx_ref">21</a>]</cite> notion of building blocks to propose a
+design–decomposition theory for designing effective <span id="S1.p1.1.1" class="ltx_text ltx_font_italic">genetic algorithms</span> (GAs). This theory is
+based on the correct identification of substructures in a problem to ensure scalability and
+efficient problem solving. The theory establishes the principles for effective supply, exchange and
+manipulation of sub–structures to ensure that a GA will solve problems quickly, reliably, and
+accurately. These types of GAs are called <span id="S1.p1.1.2" class="ltx_text ltx_font_italic">competent</span> GAs to emphasize their robust behavior
+for many problems.</p>
+</div>
+<div id="S1.p2" class="ltx_para">
+<p id="S1.p2.1" class="ltx_p">A wide range of literature exists for competent GAs. This literature encompasses three broad
+categories based on the mechanism used to unfold the substructures in a problem. The first category
+is Perturbation techniques which work by effective permutation of the genes in such a way that
+those belonging to the same substructure are closer to each other. Methods fall in this category
+include the messy GAs <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib16" title="" class="ltx_ref">16</a>]</cite>, fast messy GAs <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib15" title="" class="ltx_ref">15</a>]</cite>, gene expression messy GAs
+<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib22" title="" class="ltx_ref">22</a>]</cite>, linkage identification by nonlinearity check GA, linkage identification by
+monotonicity detection GA <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib27" title="" class="ltx_ref">27</a>]</cite>, dependency structure matrix driven GA <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib34" title="" class="ltx_ref">34</a>]</cite>, and
+linkage identification by limited probing <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib20" title="" class="ltx_ref">20</a>]</cite>.</p>
+</div>
+<div id="S1.p3" class="ltx_para">
+<p id="S1.p3.1" class="ltx_p">The second category is linkage adaptation techniques, where promoters are used to enable genes to
+move across the chromosome; therefore facilitating the emergence of genes’ linkages as in
+<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib7" title="" class="ltx_ref">7</a>]</cite>. The third category is probabilistic model building techniques, where a probabilistic
+model is used to approximate the dependency between genes. Models in this category include
+population-based incremental learning <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib3" title="" class="ltx_ref">3</a>]</cite>, the bivariate marginal distribution algorithm
+<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib29" title="" class="ltx_ref">29</a>]</cite>, the extended compact GA (ecGA) <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib19" title="" class="ltx_ref">19</a>]</cite>, iterated distribution estimation
+algorithm <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib5" title="" class="ltx_ref">5</a>]</cite>, and the Bayesian optimization algorithm (BOA) <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib28" title="" class="ltx_ref">28</a>]</cite>.</p>
+</div>
+<div id="S1.p4" class="ltx_para">
+<p id="S1.p4.1" class="ltx_p">When the fitness landscape of a problem changes overtime, the problem is called non–stationary,
+dynamic or time–variant problem. To date, there have been three main evolutionary approaches to
+solve optimization problems in changing environments. These approaches are: (1) diversity control
+either by increasing diversity when a change occurs as in the hyper–mutation method <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib8" title="" class="ltx_ref">8</a>]</cite>,
+the variable local search technique <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib33" title="" class="ltx_ref">33</a>]</cite> and others <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib4" title="" class="ltx_ref">4</a>, <a href="#bib.bib23" title="" class="ltx_ref">23</a>]</cite>; or maintaining
+high diversity as in redundancy <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib17" title="" class="ltx_ref">17</a>, <a href="#bib.bib9" title="" class="ltx_ref">9</a>, <a href="#bib.bib10" title="" class="ltx_ref">10</a>]</cite>, random immigrants <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib18" title="" class="ltx_ref">18</a>]</cite>, aging
+<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib12" title="" class="ltx_ref">12</a>]</cite>, and the thermodynamical GAs <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib26" title="" class="ltx_ref">26</a>]</cite>; (2) memory-based approaches by using
+either implicit <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib17" title="" class="ltx_ref">17</a>]</cite> or explicit <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib25" title="" class="ltx_ref">25</a>]</cite> memory; and (3) speciation and
+multi–populations as in the self-organizing-scouts method <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib6" title="" class="ltx_ref">6</a>]</cite>.</p>
+</div>
+<div id="S1.p5" class="ltx_para">
+<p id="S1.p5.1" class="ltx_p">Niching is a diversity mechanism that is capable of maintaining multiple optima simultaneously. The
+early study of Goldberg, Deb and Horn <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib13" title="" class="ltx_ref">13</a>]</cite> demonstrated the use of niching for massive
+multimodality and deception. Mahfoud <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib24" title="" class="ltx_ref">24</a>]</cite> conducted a detailed study of niching in
+stationary (static) environments. Despite that many of the studies found niching particularly
+useful for maintaining all the global optima of a problem, when the number of global optima grows,
+the number of niches can grow exponentially.</p>
+</div>
+<div id="S1.p6" class="ltx_para">
+<p id="S1.p6.1" class="ltx_p">In this paper, we propose a niching mechanism that is based on the automatic identification and
+maintaining sub–structures in non–stationary problems. We incorporate bounded changes to both the
+problem structure and the fitness landscape. It should be noted that if the environment changes
+either unboundedly or randomly, on average no method will outperform restarting the solver from
+scratch every time a change occurs. We use a dynamic version of the <span id="S1.p6.1.1" class="ltx_text ltx_font_italic">extended compact genetic
+algorithm</span> (ecGA) <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib19" title="" class="ltx_ref">19</a>]</cite>, called the <span id="S1.p6.1.2" class="ltx_text ltx_font_italic">dynamic compact genetic algorithm</span> (dcGA)
+<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib1" title="" class="ltx_ref">1</a>]</cite>. We show that the proposed method can respond quickly, reliably, and accurately to
+changes in the environment. The structure of the paper is as follows: in the next section, we will
+present dcGA and niching, then a feasibility study to test niching is undertaken followed by
+experiments and discussions.</p>
+</div>
+</section>
+<section id="S2" class="ltx_section ltx_indent_first">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2 </span>Dynamic Compact Genetic Algorithm (dcGA)</h2>
+
+<div id="S2.p1" class="ltx_para">
+<p id="S2.p1.2" class="ltx_p">Harik <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib19" title="" class="ltx_ref">19</a>]</cite> proposed a conjecture that linkage learning is equivalent to a good model that
+learns the structure underlying a set of genotypes. He focused on probabilistic models to learn
+linkage and proposed the ecGA method using the <span id="S2.p1.2.1" class="ltx_text ltx_font_italic">minimum description length</span> (<math id="S2.p1.1.m1.1" class="ltx_Math" alttext="\mathrm{MDL}" display="inline"><semantics id="S2.p1.1.m1.1a"><mi id="S2.p1.1.m1.1.1" xref="S2.p1.1.m1.1.1.cmml">MDL</mi><annotation-xml encoding="MathML-Content" id="S2.p1.1.m1.1b"><ci id="S2.p1.1.m1.1.1.cmml" xref="S2.p1.1.m1.1.1">MDL</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p1.1.m1.1c">\mathrm{MDL}</annotation><annotation encoding="application/x-llamapun" id="S2.p1.1.m1.1d">roman_MDL</annotation></semantics></math>)
+principle <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib30" title="" class="ltx_ref">30</a>]</cite> to compress good genotypes into partitions of the shortest possible
+representations. The <math id="S2.p1.2.m2.1" class="ltx_Math" alttext="\mathrm{MDL}" display="inline"><semantics id="S2.p1.2.m2.1a"><mi id="S2.p1.2.m2.1.1" xref="S2.p1.2.m2.1.1.cmml">MDL</mi><annotation-xml encoding="MathML-Content" id="S2.p1.2.m2.1b"><ci id="S2.p1.2.m2.1.1.cmml" xref="S2.p1.2.m2.1.1">MDL</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p1.2.m2.1c">\mathrm{MDL}</annotation><annotation encoding="application/x-llamapun" id="S2.p1.2.m2.1d">roman_MDL</annotation></semantics></math> measure is a tradeoff between the information contents of a
+population, called compressed population complexity (CPC), and the size of the model, called model
+complexity (MC).</p>
+</div>
+<div id="S2.p2" class="ltx_para">
+<p id="S2.p2.3" class="ltx_p">The CPC measure is based on Shannon’s entropy <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib31" title="" class="ltx_ref">31</a>]</cite>, <math id="S2.p2.1.m1.1" class="ltx_Math" alttext="E(\chi_{I})" display="inline"><semantics id="S2.p2.1.m1.1a"><mrow id="S2.p2.1.m1.1.1" xref="S2.p2.1.m1.1.1.cmml"><mi id="S2.p2.1.m1.1.1.3" xref="S2.p2.1.m1.1.1.3.cmml">E</mi><mo id="S2.p2.1.m1.1.1.2" xref="S2.p2.1.m1.1.1.2.cmml">⁢</mo><mrow id="S2.p2.1.m1.1.1.1.1" xref="S2.p2.1.m1.1.1.1.1.1.cmml"><mo stretchy="false" id="S2.p2.1.m1.1.1.1.1.2" xref="S2.p2.1.m1.1.1.1.1.1.cmml">(</mo><msub id="S2.p2.1.m1.1.1.1.1.1" xref="S2.p2.1.m1.1.1.1.1.1.cmml"><mi id="S2.p2.1.m1.1.1.1.1.1.2" xref="S2.p2.1.m1.1.1.1.1.1.2.cmml">χ</mi><mi id="S2.p2.1.m1.1.1.1.1.1.3" xref="S2.p2.1.m1.1.1.1.1.1.3.cmml">I</mi></msub><mo stretchy="false" id="S2.p2.1.m1.1.1.1.1.3" xref="S2.p2.1.m1.1.1.1.1.1.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S2.p2.1.m1.1b"><apply id="S2.p2.1.m1.1.1.cmml" xref="S2.p2.1.m1.1.1"><times id="S2.p2.1.m1.1.1.2.cmml" xref="S2.p2.1.m1.1.1.2"></times><ci id="S2.p2.1.m1.1.1.3.cmml" xref="S2.p2.1.m1.1.1.3">𝐸</ci><apply id="S2.p2.1.m1.1.1.1.1.1.cmml" xref="S2.p2.1.m1.1.1.1.1"><csymbol cd="ambiguous" id="S2.p2.1.m1.1.1.1.1.1.1.cmml" xref="S2.p2.1.m1.1.1.1.1">subscript</csymbol><ci id="S2.p2.1.m1.1.1.1.1.1.2.cmml" xref="S2.p2.1.m1.1.1.1.1.1.2">𝜒</ci><ci id="S2.p2.1.m1.1.1.1.1.1.3.cmml" xref="S2.p2.1.m1.1.1.1.1.1.3">𝐼</ci></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.1.m1.1c">E(\chi_{I})</annotation><annotation encoding="application/x-llamapun" id="S2.p2.1.m1.1d">italic_E ( italic_χ start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT )</annotation></semantics></math>, of the population
+where each partition of variables <math id="S2.p2.2.m2.1" class="ltx_Math" alttext="\chi_{I}" display="inline"><semantics id="S2.p2.2.m2.1a"><msub id="S2.p2.2.m2.1.1" xref="S2.p2.2.m2.1.1.cmml"><mi id="S2.p2.2.m2.1.1.2" xref="S2.p2.2.m2.1.1.2.cmml">χ</mi><mi id="S2.p2.2.m2.1.1.3" xref="S2.p2.2.m2.1.1.3.cmml">I</mi></msub><annotation-xml encoding="MathML-Content" id="S2.p2.2.m2.1b"><apply id="S2.p2.2.m2.1.1.cmml" xref="S2.p2.2.m2.1.1"><csymbol cd="ambiguous" id="S2.p2.2.m2.1.1.1.cmml" xref="S2.p2.2.m2.1.1">subscript</csymbol><ci id="S2.p2.2.m2.1.1.2.cmml" xref="S2.p2.2.m2.1.1.2">𝜒</ci><ci id="S2.p2.2.m2.1.1.3.cmml" xref="S2.p2.2.m2.1.1.3">𝐼</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.2.m2.1c">\chi_{I}</annotation><annotation encoding="application/x-llamapun" id="S2.p2.2.m2.1d">italic_χ start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT</annotation></semantics></math> is a random variable with probability <math id="S2.p2.3.m3.1" class="ltx_Math" alttext="p_{i}" display="inline"><semantics id="S2.p2.3.m3.1a"><msub id="S2.p2.3.m3.1.1" xref="S2.p2.3.m3.1.1.cmml"><mi id="S2.p2.3.m3.1.1.2" xref="S2.p2.3.m3.1.1.2.cmml">p</mi><mi id="S2.p2.3.m3.1.1.3" xref="S2.p2.3.m3.1.1.3.cmml">i</mi></msub><annotation-xml encoding="MathML-Content" id="S2.p2.3.m3.1b"><apply id="S2.p2.3.m3.1.1.cmml" xref="S2.p2.3.m3.1.1"><csymbol cd="ambiguous" id="S2.p2.3.m3.1.1.1.cmml" xref="S2.p2.3.m3.1.1">subscript</csymbol><ci id="S2.p2.3.m3.1.1.2.cmml" xref="S2.p2.3.m3.1.1.2">𝑝</ci><ci id="S2.p2.3.m3.1.1.3.cmml" xref="S2.p2.3.m3.1.1.3">𝑖</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.3.m3.1c">p_{i}</annotation><annotation encoding="application/x-llamapun" id="S2.p2.3.m3.1d">italic_p start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT</annotation></semantics></math>. The
+measure is given by</p>
+<table id="S2.E1" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E1.m1.1" class="ltx_Math" alttext="E(\chi_{I})=-\ C\sum_{i}^{\sigma}p_{i}\log p_{i}" display="block"><semantics id="S2.E1.m1.1a"><mrow id="S2.E1.m1.1.1" xref="S2.E1.m1.1.1.cmml"><mrow id="S2.E1.m1.1.1.1" xref="S2.E1.m1.1.1.1.cmml"><mi id="S2.E1.m1.1.1.1.3" xref="S2.E1.m1.1.1.1.3.cmml">E</mi><mo id="S2.E1.m1.1.1.1.2" xref="S2.E1.m1.1.1.1.2.cmml">⁢</mo><mrow id="S2.E1.m1.1.1.1.1.1" xref="S2.E1.m1.1.1.1.1.1.1.cmml"><mo stretchy="false" id="S2.E1.m1.1.1.1.1.1.2" xref="S2.E1.m1.1.1.1.1.1.1.cmml">(</mo><msub id="S2.E1.m1.1.1.1.1.1.1" xref="S2.E1.m1.1.1.1.1.1.1.cmml"><mi id="S2.E1.m1.1.1.1.1.1.1.2" xref="S2.E1.m1.1.1.1.1.1.1.2.cmml">χ</mi><mi id="S2.E1.m1.1.1.1.1.1.1.3" xref="S2.E1.m1.1.1.1.1.1.1.3.cmml">I</mi></msub><mo stretchy="false" id="S2.E1.m1.1.1.1.1.1.3" xref="S2.E1.m1.1.1.1.1.1.1.cmml">)</mo></mrow></mrow><mo id="S2.E1.m1.1.1.2" xref="S2.E1.m1.1.1.2.cmml">=</mo><mrow id="S2.E1.m1.1.1.3" xref="S2.E1.m1.1.1.3.cmml"><mo id="S2.E1.m1.1.1.3a" xref="S2.E1.m1.1.1.3.cmml">−</mo><mrow id="S2.E1.m1.1.1.3.2" xref="S2.E1.m1.1.1.3.2.cmml"><mi id="S2.E1.m1.1.1.3.2.2" xref="S2.E1.m1.1.1.3.2.2.cmml">C</mi><mo id="S2.E1.m1.1.1.3.2.1" xref="S2.E1.m1.1.1.3.2.1.cmml">⁢</mo><mrow id="S2.E1.m1.1.1.3.2.3" xref="S2.E1.m1.1.1.3.2.3.cmml"><munderover id="S2.E1.m1.1.1.3.2.3.1" xref="S2.E1.m1.1.1.3.2.3.1.cmml"><mo movablelimits="false" id="S2.E1.m1.1.1.3.2.3.1.2.2" xref="S2.E1.m1.1.1.3.2.3.1.2.2.cmml">∑</mo><mi id="S2.E1.m1.1.1.3.2.3.1.2.3" xref="S2.E1.m1.1.1.3.2.3.1.2.3.cmml">i</mi><mi id="S2.E1.m1.1.1.3.2.3.1.3" xref="S2.E1.m1.1.1.3.2.3.1.3.cmml">σ</mi></munderover><mrow id="S2.E1.m1.1.1.3.2.3.2" xref="S2.E1.m1.1.1.3.2.3.2.cmml"><msub id="S2.E1.m1.1.1.3.2.3.2.2" xref="S2.E1.m1.1.1.3.2.3.2.2.cmml"><mi id="S2.E1.m1.1.1.3.2.3.2.2.2" xref="S2.E1.m1.1.1.3.2.3.2.2.2.cmml">p</mi><mi id="S2.E1.m1.1.1.3.2.3.2.2.3" xref="S2.E1.m1.1.1.3.2.3.2.2.3.cmml">i</mi></msub><mo lspace="0.167em" id="S2.E1.m1.1.1.3.2.3.2.1" xref="S2.E1.m1.1.1.3.2.3.2.1.cmml">⁢</mo><mrow id="S2.E1.m1.1.1.3.2.3.2.3" xref="S2.E1.m1.1.1.3.2.3.2.3.cmml"><mi id="S2.E1.m1.1.1.3.2.3.2.3.1" xref="S2.E1.m1.1.1.3.2.3.2.3.1.cmml">log</mi><mo lspace="0.167em" id="S2.E1.m1.1.1.3.2.3.2.3a" xref="S2.E1.m1.1.1.3.2.3.2.3.cmml">⁡</mo><msub id="S2.E1.m1.1.1.3.2.3.2.3.2" xref="S2.E1.m1.1.1.3.2.3.2.3.2.cmml"><mi id="S2.E1.m1.1.1.3.2.3.2.3.2.2" xref="S2.E1.m1.1.1.3.2.3.2.3.2.2.cmml">p</mi><mi id="S2.E1.m1.1.1.3.2.3.2.3.2.3" xref="S2.E1.m1.1.1.3.2.3.2.3.2.3.cmml">i</mi></msub></mrow></mrow></mrow></mrow></mrow></mrow><annotation-xml encoding="MathML-Content" id="S2.E1.m1.1b"><apply id="S2.E1.m1.1.1.cmml" xref="S2.E1.m1.1.1"><eq id="S2.E1.m1.1.1.2.cmml" xref="S2.E1.m1.1.1.2"></eq><apply id="S2.E1.m1.1.1.1.cmml" xref="S2.E1.m1.1.1.1"><times id="S2.E1.m1.1.1.1.2.cmml" xref="S2.E1.m1.1.1.1.2"></times><ci id="S2.E1.m1.1.1.1.3.cmml" xref="S2.E1.m1.1.1.1.3">𝐸</ci><apply id="S2.E1.m1.1.1.1.1.1.1.cmml" xref="S2.E1.m1.1.1.1.1.1"><csymbol cd="ambiguous" id="S2.E1.m1.1.1.1.1.1.1.1.cmml" xref="S2.E1.m1.1.1.1.1.1">subscript</csymbol><ci id="S2.E1.m1.1.1.1.1.1.1.2.cmml" xref="S2.E1.m1.1.1.1.1.1.1.2">𝜒</ci><ci id="S2.E1.m1.1.1.1.1.1.1.3.cmml" xref="S2.E1.m1.1.1.1.1.1.1.3">𝐼</ci></apply></apply><apply id="S2.E1.m1.1.1.3.cmml" xref="S2.E1.m1.1.1.3"><minus id="S2.E1.m1.1.1.3.1.cmml" xref="S2.E1.m1.1.1.3"></minus><apply id="S2.E1.m1.1.1.3.2.cmml" xref="S2.E1.m1.1.1.3.2"><times id="S2.E1.m1.1.1.3.2.1.cmml" xref="S2.E1.m1.1.1.3.2.1"></times><ci id="S2.E1.m1.1.1.3.2.2.cmml" xref="S2.E1.m1.1.1.3.2.2">𝐶</ci><apply id="S2.E1.m1.1.1.3.2.3.cmml" xref="S2.E1.m1.1.1.3.2.3"><apply id="S2.E1.m1.1.1.3.2.3.1.cmml" xref="S2.E1.m1.1.1.3.2.3.1"><csymbol cd="ambiguous" id="S2.E1.m1.1.1.3.2.3.1.1.cmml" xref="S2.E1.m1.1.1.3.2.3.1">superscript</csymbol><apply id="S2.E1.m1.1.1.3.2.3.1.2.cmml" xref="S2.E1.m1.1.1.3.2.3.1"><csymbol cd="ambiguous" id="S2.E1.m1.1.1.3.2.3.1.2.1.cmml" xref="S2.E1.m1.1.1.3.2.3.1">subscript</csymbol><sum id="S2.E1.m1.1.1.3.2.3.1.2.2.cmml" xref="S2.E1.m1.1.1.3.2.3.1.2.2"></sum><ci id="S2.E1.m1.1.1.3.2.3.1.2.3.cmml" xref="S2.E1.m1.1.1.3.2.3.1.2.3">𝑖</ci></apply><ci id="S2.E1.m1.1.1.3.2.3.1.3.cmml" xref="S2.E1.m1.1.1.3.2.3.1.3">𝜎</ci></apply><apply id="S2.E1.m1.1.1.3.2.3.2.cmml" xref="S2.E1.m1.1.1.3.2.3.2"><times id="S2.E1.m1.1.1.3.2.3.2.1.cmml" xref="S2.E1.m1.1.1.3.2.3.2.1"></times><apply id="S2.E1.m1.1.1.3.2.3.2.2.cmml" xref="S2.E1.m1.1.1.3.2.3.2.2"><csymbol cd="ambiguous" id="S2.E1.m1.1.1.3.2.3.2.2.1.cmml" xref="S2.E1.m1.1.1.3.2.3.2.2">subscript</csymbol><ci id="S2.E1.m1.1.1.3.2.3.2.2.2.cmml" xref="S2.E1.m1.1.1.3.2.3.2.2.2">𝑝</ci><ci id="S2.E1.m1.1.1.3.2.3.2.2.3.cmml" xref="S2.E1.m1.1.1.3.2.3.2.2.3">𝑖</ci></apply><apply id="S2.E1.m1.1.1.3.2.3.2.3.cmml" xref="S2.E1.m1.1.1.3.2.3.2.3"><log id="S2.E1.m1.1.1.3.2.3.2.3.1.cmml" xref="S2.E1.m1.1.1.3.2.3.2.3.1"></log><apply id="S2.E1.m1.1.1.3.2.3.2.3.2.cmml" xref="S2.E1.m1.1.1.3.2.3.2.3.2"><csymbol cd="ambiguous" id="S2.E1.m1.1.1.3.2.3.2.3.2.1.cmml" xref="S2.E1.m1.1.1.3.2.3.2.3.2">subscript</csymbol><ci id="S2.E1.m1.1.1.3.2.3.2.3.2.2.cmml" xref="S2.E1.m1.1.1.3.2.3.2.3.2.2">𝑝</ci><ci id="S2.E1.m1.1.1.3.2.3.2.3.2.3.cmml" xref="S2.E1.m1.1.1.3.2.3.2.3.2.3">𝑖</ci></apply></apply></apply></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E1.m1.1c">E(\chi_{I})=-\ C\sum_{i}^{\sigma}p_{i}\log p_{i}</annotation><annotation encoding="application/x-llamapun" id="S2.E1.m1.1d">italic_E ( italic_χ start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT ) = - italic_C ∑ start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_σ end_POSTSUPERSCRIPT italic_p start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT roman_log italic_p start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(1)</span></td>
+</tr></tbody>
+</table>
+<p id="S2.p2.10" class="ltx_p">where <math id="S2.p2.4.m1.1" class="ltx_Math" alttext="C" display="inline"><semantics id="S2.p2.4.m1.1a"><mi id="S2.p2.4.m1.1.1" xref="S2.p2.4.m1.1.1.cmml">C</mi><annotation-xml encoding="MathML-Content" id="S2.p2.4.m1.1b"><ci id="S2.p2.4.m1.1.1.cmml" xref="S2.p2.4.m1.1.1">𝐶</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.4.m1.1c">C</annotation><annotation encoding="application/x-llamapun" id="S2.p2.4.m1.1d">italic_C</annotation></semantics></math> is a constant related to the base chosen to express the logarithm and <math id="S2.p2.5.m2.1" class="ltx_Math" alttext="\sigma" display="inline"><semantics id="S2.p2.5.m2.1a"><mi id="S2.p2.5.m2.1.1" xref="S2.p2.5.m2.1.1.cmml">σ</mi><annotation-xml encoding="MathML-Content" id="S2.p2.5.m2.1b"><ci id="S2.p2.5.m2.1.1.cmml" xref="S2.p2.5.m2.1.1">𝜎</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.5.m2.1c">\sigma</annotation><annotation encoding="application/x-llamapun" id="S2.p2.5.m2.1d">italic_σ</annotation></semantics></math> is the
+number of all possible bit sequences for the variables belonging to partition <math id="S2.p2.6.m3.1" class="ltx_Math" alttext="\chi_{I}" display="inline"><semantics id="S2.p2.6.m3.1a"><msub id="S2.p2.6.m3.1.1" xref="S2.p2.6.m3.1.1.cmml"><mi id="S2.p2.6.m3.1.1.2" xref="S2.p2.6.m3.1.1.2.cmml">χ</mi><mi id="S2.p2.6.m3.1.1.3" xref="S2.p2.6.m3.1.1.3.cmml">I</mi></msub><annotation-xml encoding="MathML-Content" id="S2.p2.6.m3.1b"><apply id="S2.p2.6.m3.1.1.cmml" xref="S2.p2.6.m3.1.1"><csymbol cd="ambiguous" id="S2.p2.6.m3.1.1.1.cmml" xref="S2.p2.6.m3.1.1">subscript</csymbol><ci id="S2.p2.6.m3.1.1.2.cmml" xref="S2.p2.6.m3.1.1.2">𝜒</ci><ci id="S2.p2.6.m3.1.1.3.cmml" xref="S2.p2.6.m3.1.1.3">𝐼</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.6.m3.1c">\chi_{I}</annotation><annotation encoding="application/x-llamapun" id="S2.p2.6.m3.1d">italic_χ start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT</annotation></semantics></math>; that is, if
+the cardinality of <math id="S2.p2.7.m4.1" class="ltx_Math" alttext="\chi_{I}" display="inline"><semantics id="S2.p2.7.m4.1a"><msub id="S2.p2.7.m4.1.1" xref="S2.p2.7.m4.1.1.cmml"><mi id="S2.p2.7.m4.1.1.2" xref="S2.p2.7.m4.1.1.2.cmml">χ</mi><mi id="S2.p2.7.m4.1.1.3" xref="S2.p2.7.m4.1.1.3.cmml">I</mi></msub><annotation-xml encoding="MathML-Content" id="S2.p2.7.m4.1b"><apply id="S2.p2.7.m4.1.1.cmml" xref="S2.p2.7.m4.1.1"><csymbol cd="ambiguous" id="S2.p2.7.m4.1.1.1.cmml" xref="S2.p2.7.m4.1.1">subscript</csymbol><ci id="S2.p2.7.m4.1.1.2.cmml" xref="S2.p2.7.m4.1.1.2">𝜒</ci><ci id="S2.p2.7.m4.1.1.3.cmml" xref="S2.p2.7.m4.1.1.3">𝐼</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.7.m4.1c">\chi_{I}</annotation><annotation encoding="application/x-llamapun" id="S2.p2.7.m4.1d">italic_χ start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT</annotation></semantics></math> is <math id="S2.p2.8.m5.1" class="ltx_Math" alttext="{\nu_{I}}" display="inline"><semantics id="S2.p2.8.m5.1a"><msub id="S2.p2.8.m5.1.1" xref="S2.p2.8.m5.1.1.cmml"><mi id="S2.p2.8.m5.1.1.2" xref="S2.p2.8.m5.1.1.2.cmml">ν</mi><mi id="S2.p2.8.m5.1.1.3" xref="S2.p2.8.m5.1.1.3.cmml">I</mi></msub><annotation-xml encoding="MathML-Content" id="S2.p2.8.m5.1b"><apply id="S2.p2.8.m5.1.1.cmml" xref="S2.p2.8.m5.1.1"><csymbol cd="ambiguous" id="S2.p2.8.m5.1.1.1.cmml" xref="S2.p2.8.m5.1.1">subscript</csymbol><ci id="S2.p2.8.m5.1.1.2.cmml" xref="S2.p2.8.m5.1.1.2">𝜈</ci><ci id="S2.p2.8.m5.1.1.3.cmml" xref="S2.p2.8.m5.1.1.3">𝐼</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.8.m5.1c">{\nu_{I}}</annotation><annotation encoding="application/x-llamapun" id="S2.p2.8.m5.1d">italic_ν start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT</annotation></semantics></math>, <math id="S2.p2.9.m6.1" class="ltx_Math" alttext="\sigma=2^{\nu_{I}}" display="inline"><semantics id="S2.p2.9.m6.1a"><mrow id="S2.p2.9.m6.1.1" xref="S2.p2.9.m6.1.1.cmml"><mi id="S2.p2.9.m6.1.1.2" xref="S2.p2.9.m6.1.1.2.cmml">σ</mi><mo id="S2.p2.9.m6.1.1.1" xref="S2.p2.9.m6.1.1.1.cmml">=</mo><msup id="S2.p2.9.m6.1.1.3" xref="S2.p2.9.m6.1.1.3.cmml"><mn id="S2.p2.9.m6.1.1.3.2" xref="S2.p2.9.m6.1.1.3.2.cmml">2</mn><msub id="S2.p2.9.m6.1.1.3.3" xref="S2.p2.9.m6.1.1.3.3.cmml"><mi id="S2.p2.9.m6.1.1.3.3.2" xref="S2.p2.9.m6.1.1.3.3.2.cmml">ν</mi><mi id="S2.p2.9.m6.1.1.3.3.3" xref="S2.p2.9.m6.1.1.3.3.3.cmml">I</mi></msub></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.p2.9.m6.1b"><apply id="S2.p2.9.m6.1.1.cmml" xref="S2.p2.9.m6.1.1"><eq id="S2.p2.9.m6.1.1.1.cmml" xref="S2.p2.9.m6.1.1.1"></eq><ci id="S2.p2.9.m6.1.1.2.cmml" xref="S2.p2.9.m6.1.1.2">𝜎</ci><apply id="S2.p2.9.m6.1.1.3.cmml" xref="S2.p2.9.m6.1.1.3"><csymbol cd="ambiguous" id="S2.p2.9.m6.1.1.3.1.cmml" xref="S2.p2.9.m6.1.1.3">superscript</csymbol><cn type="integer" id="S2.p2.9.m6.1.1.3.2.cmml" xref="S2.p2.9.m6.1.1.3.2">2</cn><apply id="S2.p2.9.m6.1.1.3.3.cmml" xref="S2.p2.9.m6.1.1.3.3"><csymbol cd="ambiguous" id="S2.p2.9.m6.1.1.3.3.1.cmml" xref="S2.p2.9.m6.1.1.3.3">subscript</csymbol><ci id="S2.p2.9.m6.1.1.3.3.2.cmml" xref="S2.p2.9.m6.1.1.3.3.2">𝜈</ci><ci id="S2.p2.9.m6.1.1.3.3.3.cmml" xref="S2.p2.9.m6.1.1.3.3.3">𝐼</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.9.m6.1c">\sigma=2^{\nu_{I}}</annotation><annotation encoding="application/x-llamapun" id="S2.p2.9.m6.1d">italic_σ = 2 start_POSTSUPERSCRIPT italic_ν start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT end_POSTSUPERSCRIPT</annotation></semantics></math>. This measures the amount of
+disorder associated within a population under a decomposition scheme. The <math id="S2.p2.10.m7.1" class="ltx_Math" alttext="\mathrm{MDL}" display="inline"><semantics id="S2.p2.10.m7.1a"><mi id="S2.p2.10.m7.1.1" xref="S2.p2.10.m7.1.1.cmml">MDL</mi><annotation-xml encoding="MathML-Content" id="S2.p2.10.m7.1b"><ci id="S2.p2.10.m7.1.1.cmml" xref="S2.p2.10.m7.1.1">MDL</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p2.10.m7.1c">\mathrm{MDL}</annotation><annotation encoding="application/x-llamapun" id="S2.p2.10.m7.1d">roman_MDL</annotation></semantics></math> measure is
+the sum of CPC and MC as follows</p>
+<table id="S2.E2" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E2.m1.1" class="ltx_math_unparsed" alttext="\mathrm{MDL}\ \ =N\sum_{I}\left(-\ C\sum_{i}^{\sigma}p_{i}\log p_{i}\right)+\log(N)2^{\nu_{I}}" display="block"><semantics id="S2.E2.m1.1a"><mrow id="S2.E2.m1.1b"><mi id="S2.E2.m1.1.1">MDL</mi><mspace width="1em" id="S2.E2.m1.1.2"></mspace><mo id="S2.E2.m1.1.3">=</mo><mi id="S2.E2.m1.1.4">N</mi><munder id="S2.E2.m1.1.5"><mo movablelimits="false" rspace="0em" id="S2.E2.m1.1.5.2">∑</mo><mi id="S2.E2.m1.1.5.3">I</mi></munder><mrow id="S2.E2.m1.1.6"><mo id="S2.E2.m1.1.6.1">(</mo><mo lspace="0em" rspace="0.722em" id="S2.E2.m1.1.6.2">−</mo><mi id="S2.E2.m1.1.6.3">C</mi><munderover id="S2.E2.m1.1.6.4"><mo movablelimits="false" id="S2.E2.m1.1.6.4.2.2">∑</mo><mi id="S2.E2.m1.1.6.4.2.3">i</mi><mi id="S2.E2.m1.1.6.4.3">σ</mi></munderover><msub id="S2.E2.m1.1.6.5"><mi id="S2.E2.m1.1.6.5.2">p</mi><mi id="S2.E2.m1.1.6.5.3">i</mi></msub><mi id="S2.E2.m1.1.6.6">log</mi><msub id="S2.E2.m1.1.6.7"><mi id="S2.E2.m1.1.6.7.2">p</mi><mi id="S2.E2.m1.1.6.7.3">i</mi></msub><mo id="S2.E2.m1.1.6.8">)</mo></mrow><mo id="S2.E2.m1.1.7">+</mo><mi id="S2.E2.m1.1.8">log</mi><mrow id="S2.E2.m1.1.9"><mo stretchy="false" id="S2.E2.m1.1.9.1">(</mo><mi id="S2.E2.m1.1.9.2">N</mi><mo stretchy="false" id="S2.E2.m1.1.9.3">)</mo></mrow><msup id="S2.E2.m1.1.10"><mn id="S2.E2.m1.1.10.2">2</mn><msub id="S2.E2.m1.1.10.3"><mi id="S2.E2.m1.1.10.3.2">ν</mi><mi id="S2.E2.m1.1.10.3.3">I</mi></msub></msup></mrow><annotation encoding="application/x-tex" id="S2.E2.m1.1c">\mathrm{MDL}\ \ =N\sum_{I}\left(-\ C\sum_{i}^{\sigma}p_{i}\log p_{i}\right)+\log(N)2^{\nu_{I}}</annotation><annotation encoding="application/x-llamapun" id="S2.E2.m1.1d">roman_MDL = italic_N ∑ start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT ( - italic_C ∑ start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_σ end_POSTSUPERSCRIPT italic_p start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT roman_log italic_p start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT ) + roman_log ( italic_N ) 2 start_POSTSUPERSCRIPT italic_ν start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT end_POSTSUPERSCRIPT</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(2)</span></td>
+</tr></tbody>
+</table>
+<p id="S2.p2.11" class="ltx_p">With the first term measures CPC while the second term measures MC.</p>
+</div>
+<div id="S2.p3" class="ltx_para">
+<p id="S2.p3.1" class="ltx_p">In this paper, we assume that we have a mechanism to detect the change in the environment.
+Detecting a change in the environment can be done in several ways including: (1) re–evaluating a
+number of previous solutions; and (2) monitoring statistical measures such as the average fitness
+of the population <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib6" title="" class="ltx_ref">6</a>]</cite>. The focus of this paper is not, however, on how to detect a change
+in the environment; therefore, we assume that we can simply detect it. The <span id="S2.p3.1.1" class="ltx_text ltx_font_italic">dynamic compact
+genetic algorithm</span> (dcGA) works as follows:</p>
+</div>
+<div id="S2.p4" class="ltx_para">
+<ol id="S2.I1" class="ltx_enumerate">
+<li id="S2.I1.i1" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">1.</span> 
+<div id="S2.I1.i1.p1" class="ltx_para">
+<p id="S2.I1.i1.p1.1" class="ltx_p">Initialize the population at random with <math id="S2.I1.i1.p1.1.m1.1" class="ltx_Math" alttext="n" display="inline"><semantics id="S2.I1.i1.p1.1.m1.1a"><mi id="S2.I1.i1.p1.1.m1.1.1" xref="S2.I1.i1.p1.1.m1.1.1.cmml">n</mi><annotation-xml encoding="MathML-Content" id="S2.I1.i1.p1.1.m1.1b"><ci id="S2.I1.i1.p1.1.m1.1.1.cmml" xref="S2.I1.i1.p1.1.m1.1.1">𝑛</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.I1.i1.p1.1.m1.1c">n</annotation><annotation encoding="application/x-llamapun" id="S2.I1.i1.p1.1.m1.1d">italic_n</annotation></semantics></math> individuals;</p>
+</div>
+</li>
+<li id="S2.I1.i2" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">2.</span> 
+<div id="S2.I1.i2.p1" class="ltx_para">
+<p id="S2.I1.i2.p1.1" class="ltx_p">If a change in the environment is being detected, do:</p>
+</div>
+<div id="S2.I1.i2.p2" class="ltx_para">
+<ol id="S2.I1.i2.I1" class="ltx_enumerate">
+<li id="S2.I1.i2.I1.i1" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(a)</span> 
+<div id="S2.I1.i2.I1.i1.p1" class="ltx_para">
+<p id="S2.I1.i2.I1.i1.p1.1" class="ltx_p">Re–initialize the population at random with <math id="S2.I1.i2.I1.i1.p1.1.m1.1" class="ltx_Math" alttext="n" display="inline"><semantics id="S2.I1.i2.I1.i1.p1.1.m1.1a"><mi id="S2.I1.i2.I1.i1.p1.1.m1.1.1" xref="S2.I1.i2.I1.i1.p1.1.m1.1.1.cmml">n</mi><annotation-xml encoding="MathML-Content" id="S2.I1.i2.I1.i1.p1.1.m1.1b"><ci id="S2.I1.i2.I1.i1.p1.1.m1.1.1.cmml" xref="S2.I1.i2.I1.i1.p1.1.m1.1.1">𝑛</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.I1.i2.I1.i1.p1.1.m1.1c">n</annotation><annotation encoding="application/x-llamapun" id="S2.I1.i2.I1.i1.p1.1.m1.1d">italic_n</annotation></semantics></math> individuals;</p>
+</div>
+</li>
+<li id="S2.I1.i2.I1.i2" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(b)</span> 
+<div id="S2.I1.i2.I1.i2.p1" class="ltx_para">
+<p id="S2.I1.i2.I1.i2.p1.1" class="ltx_p">Evaluate all individuals in the population;</p>
+</div>
+</li>
+<li id="S2.I1.i2.I1.i3" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(c)</span> 
+<div id="S2.I1.i2.I1.i3.p1" class="ltx_para">
+<p id="S2.I1.i2.I1.i3.p1.1" class="ltx_p">Use tournament selection with replacement to select <math id="S2.I1.i2.I1.i3.p1.1.m1.1" class="ltx_Math" alttext="n" display="inline"><semantics id="S2.I1.i2.I1.i3.p1.1.m1.1a"><mi id="S2.I1.i2.I1.i3.p1.1.m1.1.1" xref="S2.I1.i2.I1.i3.p1.1.m1.1.1.cmml">n</mi><annotation-xml encoding="MathML-Content" id="S2.I1.i2.I1.i3.p1.1.m1.1b"><ci id="S2.I1.i2.I1.i3.p1.1.m1.1.1.cmml" xref="S2.I1.i2.I1.i3.p1.1.m1.1.1">𝑛</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.I1.i2.I1.i3.p1.1.m1.1c">n</annotation><annotation encoding="application/x-llamapun" id="S2.I1.i2.I1.i3.p1.1.m1.1d">italic_n</annotation></semantics></math> individuals;</p>
+</div>
+</li>
+<li id="S2.I1.i2.I1.i4" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">(d)</span> 
+<div id="S2.I1.i2.I1.i4.p1" class="ltx_para">
+<p id="S2.I1.i2.I1.i4.p1.1" class="ltx_p">Use the last found partition to shuffle the building blocks (building block–wise crossover)
+to generate a new population of <math id="S2.I1.i2.I1.i4.p1.1.m1.1" class="ltx_Math" alttext="n" display="inline"><semantics id="S2.I1.i2.I1.i4.p1.1.m1.1a"><mi id="S2.I1.i2.I1.i4.p1.1.m1.1.1" xref="S2.I1.i2.I1.i4.p1.1.m1.1.1.cmml">n</mi><annotation-xml encoding="MathML-Content" id="S2.I1.i2.I1.i4.p1.1.m1.1b"><ci id="S2.I1.i2.I1.i4.p1.1.m1.1.1.cmml" xref="S2.I1.i2.I1.i4.p1.1.m1.1.1">𝑛</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.I1.i2.I1.i4.p1.1.m1.1c">n</annotation><annotation encoding="application/x-llamapun" id="S2.I1.i2.I1.i4.p1.1.m1.1d">italic_n</annotation></semantics></math> individuals;</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li id="S2.I1.i3" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">3.</span> 
+<div id="S2.I1.i3.p1" class="ltx_para">
+<p id="S2.I1.i3.p1.1" class="ltx_p">Evaluate all individuals in the population;</p>
+</div>
+</li>
+<li id="S2.I1.i4" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">4.</span> 
+<div id="S2.I1.i4.p1" class="ltx_para">
+<p id="S2.I1.i4.p1.1" class="ltx_p">Use tournament selection with replacement to select <math id="S2.I1.i4.p1.1.m1.1" class="ltx_Math" alttext="n" display="inline"><semantics id="S2.I1.i4.p1.1.m1.1a"><mi id="S2.I1.i4.p1.1.m1.1.1" xref="S2.I1.i4.p1.1.m1.1.1.cmml">n</mi><annotation-xml encoding="MathML-Content" id="S2.I1.i4.p1.1.m1.1b"><ci id="S2.I1.i4.p1.1.m1.1.1.cmml" xref="S2.I1.i4.p1.1.m1.1.1">𝑛</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.I1.i4.p1.1.m1.1c">n</annotation><annotation encoding="application/x-llamapun" id="S2.I1.i4.p1.1.m1.1d">italic_n</annotation></semantics></math> individuals;</p>
+</div>
+</li>
+<li id="S2.I1.i5" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">5.</span> 
+<div id="S2.I1.i5.p1" class="ltx_para">
+<p id="S2.I1.i5.p1.1" class="ltx_p">Use the <math id="S2.I1.i5.p1.1.m1.1" class="ltx_Math" alttext="\mathrm{MDL}" display="inline"><semantics id="S2.I1.i5.p1.1.m1.1a"><mi id="S2.I1.i5.p1.1.m1.1.1" xref="S2.I1.i5.p1.1.m1.1.1.cmml">MDL</mi><annotation-xml encoding="MathML-Content" id="S2.I1.i5.p1.1.m1.1b"><ci id="S2.I1.i5.p1.1.m1.1.1.cmml" xref="S2.I1.i5.p1.1.m1.1.1">MDL</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.I1.i5.p1.1.m1.1c">\mathrm{MDL}</annotation><annotation encoding="application/x-llamapun" id="S2.I1.i5.p1.1.m1.1d">roman_MDL</annotation></semantics></math> measure to recursively partition the variables until the measure
+increases;</p>
+</div>
+</li>
+<li id="S2.I1.i6" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">6.</span> 
+<div id="S2.I1.i6.p1" class="ltx_para">
+<p id="S2.I1.i6.p1.1" class="ltx_p">Use the partition to shuffle the building blocks (building block–wise crossover) to generate
+a new population of <math id="S2.I1.i6.p1.1.m1.1" class="ltx_Math" alttext="n" display="inline"><semantics id="S2.I1.i6.p1.1.m1.1a"><mi id="S2.I1.i6.p1.1.m1.1.1" xref="S2.I1.i6.p1.1.m1.1.1.cmml">n</mi><annotation-xml encoding="MathML-Content" id="S2.I1.i6.p1.1.m1.1b"><ci id="S2.I1.i6.p1.1.m1.1.1.cmml" xref="S2.I1.i6.p1.1.m1.1.1">𝑛</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.I1.i6.p1.1.m1.1c">n</annotation><annotation encoding="application/x-llamapun" id="S2.I1.i6.p1.1.m1.1d">italic_n</annotation></semantics></math> individuals;</p>
+</div>
+</li>
+<li id="S2.I1.i7" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">7.</span> 
+<div id="S2.I1.i7.p1" class="ltx_para">
+<p id="S2.I1.i7.p1.1" class="ltx_p">If the termination condition is not satisfied, go to 2; otherwise stop.</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="S2.p5" class="ltx_para">
+<p id="S2.p5.1" class="ltx_p">Once a change is detected, a new population is generated at random then the last learnt model is
+used to bias the re–start mechanism using selection and crossover. The method then continues with
+the new population. In ecGA, the model is re-built from scratch in every generation. This has the
+advantage of recovering from possible problems that may exist from the use of a hill–climber in
+learning the model.</p>
+</div>
+<div id="S2.p6" class="ltx_para">
+<p id="S2.p6.1" class="ltx_p">In the original ecGA and dcGA, the probabilities are estimated using the frequencies of the bits
+after selection. The motivation is that, after selection, the population contains only those
+solutions which are good enough to survive the selection process. Therefore, approximating the
+model on the selected individuals inherently utilizes fitness information. However, if explicit
+fitness information is used, problems may arise from the magnitude of these fitness values or the
+scaling method.</p>
+</div>
+<div id="S2.p7" class="ltx_para">
+<p id="S2.p7.1" class="ltx_p">Traditional niching algorithms work on the level of the individual. For example, re-scaling the
+fitness of individuals based on some similarity measures. These types of niching require the niche
+radius, which defines the threshold beyond which individuals are dissimilar. The results of a
+niching method are normally sensitive to the niche radius. A smaller niche radius would increase
+the number of niches in the problem and is more suitable when multiple optima are located closer to
+each other, while a larger niche radius would reduce the number of niches but will miss out some
+optima if the optima are close to each other. Overall, finding a reasonable value for the niche
+radius is a challenging task.</p>
+</div>
+<div id="S2.p8" class="ltx_para">
+<p id="S2.p8.4" class="ltx_p">When looking at ecGA, for example, the variables in the model are decomposed into subsets with each
+subset represents variables that are tight together. In a problem with <math id="S2.p8.1.m1.1" class="ltx_Math" alttext="m" display="inline"><semantics id="S2.p8.1.m1.1a"><mi id="S2.p8.1.m1.1.1" xref="S2.p8.1.m1.1.1.cmml">m</mi><annotation-xml encoding="MathML-Content" id="S2.p8.1.m1.1b"><ci id="S2.p8.1.m1.1.1.cmml" xref="S2.p8.1.m1.1.1">𝑚</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p8.1.m1.1c">m</annotation><annotation encoding="application/x-llamapun" id="S2.p8.1.m1.1d">italic_m</annotation></semantics></math> building blocks and <math id="S2.p8.2.m2.1" class="ltx_Math" alttext="n" display="inline"><semantics id="S2.p8.2.m2.1a"><mi id="S2.p8.2.m2.1.1" xref="S2.p8.2.m2.1.1.cmml">n</mi><annotation-xml encoding="MathML-Content" id="S2.p8.2.m2.1b"><ci id="S2.p8.2.m2.1.1.cmml" xref="S2.p8.2.m2.1.1">𝑛</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p8.2.m2.1c">n</annotation><annotation encoding="application/x-llamapun" id="S2.p8.2.m2.1d">italic_n</annotation></semantics></math>
+global optima within each building block, the number of global optima for the problem is <math id="S2.p8.3.m3.1" class="ltx_Math" alttext="n^{m}" display="inline"><semantics id="S2.p8.3.m3.1a"><msup id="S2.p8.3.m3.1.1" xref="S2.p8.3.m3.1.1.cmml"><mi id="S2.p8.3.m3.1.1.2" xref="S2.p8.3.m3.1.1.2.cmml">n</mi><mi id="S2.p8.3.m3.1.1.3" xref="S2.p8.3.m3.1.1.3.cmml">m</mi></msup><annotation-xml encoding="MathML-Content" id="S2.p8.3.m3.1b"><apply id="S2.p8.3.m3.1.1.cmml" xref="S2.p8.3.m3.1.1"><csymbol cd="ambiguous" id="S2.p8.3.m3.1.1.1.cmml" xref="S2.p8.3.m3.1.1">superscript</csymbol><ci id="S2.p8.3.m3.1.1.2.cmml" xref="S2.p8.3.m3.1.1.2">𝑛</ci><ci id="S2.p8.3.m3.1.1.3.cmml" xref="S2.p8.3.m3.1.1.3">𝑚</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p8.3.m3.1c">n^{m}</annotation><annotation encoding="application/x-llamapun" id="S2.p8.3.m3.1d">italic_n start_POSTSUPERSCRIPT italic_m end_POSTSUPERSCRIPT</annotation></semantics></math>.
+This is an exponentially large number and it will require an exponentially large number of niches.
+However, since the problem is decomposable, one can maintain the niches within each building block
+separately. Therefore, we will need only <math id="S2.p8.4.m4.1" class="ltx_Math" alttext="n\times m" display="inline"><semantics id="S2.p8.4.m4.1a"><mrow id="S2.p8.4.m4.1.1" xref="S2.p8.4.m4.1.1.cmml"><mi id="S2.p8.4.m4.1.1.2" xref="S2.p8.4.m4.1.1.2.cmml">n</mi><mo lspace="0.222em" rspace="0.222em" id="S2.p8.4.m4.1.1.1" xref="S2.p8.4.m4.1.1.1.cmml">×</mo><mi id="S2.p8.4.m4.1.1.3" xref="S2.p8.4.m4.1.1.3.cmml">m</mi></mrow><annotation-xml encoding="MathML-Content" id="S2.p8.4.m4.1b"><apply id="S2.p8.4.m4.1.1.cmml" xref="S2.p8.4.m4.1.1"><times id="S2.p8.4.m4.1.1.1.cmml" xref="S2.p8.4.m4.1.1.1"></times><ci id="S2.p8.4.m4.1.1.2.cmml" xref="S2.p8.4.m4.1.1.2">𝑛</ci><ci id="S2.p8.4.m4.1.1.3.cmml" xref="S2.p8.4.m4.1.1.3">𝑚</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p8.4.m4.1c">n\times m</annotation><annotation encoding="application/x-llamapun" id="S2.p8.4.m4.1d">italic_n × italic_m</annotation></semantics></math> niches. Obviously, we do not know in advance
+if the problem is decomposable or not; that is the power of ecGA and similar models. If the problem
+is decomposable, it will find the decomposition, we can identify the niches on the level of the
+sub–structures, and we save unnecessary niches. If the problem is not decomposable, the model will
+return a single partition, the niches will be identified on the overall solution, and we are back
+to the normal case. ecGA learns the decomposition in an adaptive manner, therefore, the niches will
+also be learnt adaptively.</p>
+</div>
+<div id="S2.p9" class="ltx_para">
+<p id="S2.p9.2" class="ltx_p">We propose two types of niches in dcGA for dynamic environments. We will call them Schem1 and
+Schem2 respectively. For each sub-structure (partition), the average fitness of each schema <math id="S2.p9.1.m1.1" class="ltx_Math" alttext="s" display="inline"><semantics id="S2.p9.1.m1.1a"><mi id="S2.p9.1.m1.1.1" xref="S2.p9.1.m1.1.1.cmml">s</mi><annotation-xml encoding="MathML-Content" id="S2.p9.1.m1.1b"><ci id="S2.p9.1.m1.1.1.cmml" xref="S2.p9.1.m1.1.1">𝑠</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p9.1.m1.1c">s</annotation><annotation encoding="application/x-llamapun" id="S2.p9.1.m1.1d">italic_s</annotation></semantics></math> is
+calculated for partition <math id="S2.p9.2.m2.1" class="ltx_Math" alttext="\chi_{I}" display="inline"><semantics id="S2.p9.2.m2.1a"><msub id="S2.p9.2.m2.1.1" xref="S2.p9.2.m2.1.1.cmml"><mi id="S2.p9.2.m2.1.1.2" xref="S2.p9.2.m2.1.1.2.cmml">χ</mi><mi id="S2.p9.2.m2.1.1.3" xref="S2.p9.2.m2.1.1.3.cmml">I</mi></msub><annotation-xml encoding="MathML-Content" id="S2.p9.2.m2.1b"><apply id="S2.p9.2.m2.1.1.cmml" xref="S2.p9.2.m2.1.1"><csymbol cd="ambiguous" id="S2.p9.2.m2.1.1.1.cmml" xref="S2.p9.2.m2.1.1">subscript</csymbol><ci id="S2.p9.2.m2.1.1.2.cmml" xref="S2.p9.2.m2.1.1.2">𝜒</ci><ci id="S2.p9.2.m2.1.1.3.cmml" xref="S2.p9.2.m2.1.1.3">𝐼</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p9.2.m2.1c">\chi_{I}</annotation><annotation encoding="application/x-llamapun" id="S2.p9.2.m2.1d">italic_χ start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT</annotation></semantics></math> as follows:</p>
+<table id="S2.E3" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E3.m1.1" class="ltx_Math" alttext="\text{Fit}(s\in\chi_{I})=\frac{\sum_{i}^{p}\grave{f}_{is}}{\sigma}" display="block"><semantics id="S2.E3.m1.1a"><mrow id="S2.E3.m1.1.1" xref="S2.E3.m1.1.1.cmml"><mrow id="S2.E3.m1.1.1.1" xref="S2.E3.m1.1.1.1.cmml"><mtext id="S2.E3.m1.1.1.1.3" xref="S2.E3.m1.1.1.1.3a.cmml">Fit</mtext><mo id="S2.E3.m1.1.1.1.2" xref="S2.E3.m1.1.1.1.2.cmml">⁢</mo><mrow id="S2.E3.m1.1.1.1.1.1" xref="S2.E3.m1.1.1.1.1.1.1.cmml"><mo stretchy="false" id="S2.E3.m1.1.1.1.1.1.2" xref="S2.E3.m1.1.1.1.1.1.1.cmml">(</mo><mrow id="S2.E3.m1.1.1.1.1.1.1" xref="S2.E3.m1.1.1.1.1.1.1.cmml"><mi id="S2.E3.m1.1.1.1.1.1.1.2" xref="S2.E3.m1.1.1.1.1.1.1.2.cmml">s</mi><mo id="S2.E3.m1.1.1.1.1.1.1.1" xref="S2.E3.m1.1.1.1.1.1.1.1.cmml">∈</mo><msub id="S2.E3.m1.1.1.1.1.1.1.3" xref="S2.E3.m1.1.1.1.1.1.1.3.cmml"><mi id="S2.E3.m1.1.1.1.1.1.1.3.2" xref="S2.E3.m1.1.1.1.1.1.1.3.2.cmml">χ</mi><mi id="S2.E3.m1.1.1.1.1.1.1.3.3" xref="S2.E3.m1.1.1.1.1.1.1.3.3.cmml">I</mi></msub></mrow><mo stretchy="false" id="S2.E3.m1.1.1.1.1.1.3" xref="S2.E3.m1.1.1.1.1.1.1.cmml">)</mo></mrow></mrow><mo id="S2.E3.m1.1.1.2" xref="S2.E3.m1.1.1.2.cmml">=</mo><mfrac id="S2.E3.m1.1.1.3" xref="S2.E3.m1.1.1.3.cmml"><mrow id="S2.E3.m1.1.1.3.2" xref="S2.E3.m1.1.1.3.2.cmml"><msubsup id="S2.E3.m1.1.1.3.2.1" xref="S2.E3.m1.1.1.3.2.1.cmml"><mo id="S2.E3.m1.1.1.3.2.1.2.2" xref="S2.E3.m1.1.1.3.2.1.2.2.cmml">∑</mo><mi id="S2.E3.m1.1.1.3.2.1.2.3" xref="S2.E3.m1.1.1.3.2.1.2.3.cmml">i</mi><mi id="S2.E3.m1.1.1.3.2.1.3" xref="S2.E3.m1.1.1.3.2.1.3.cmml">p</mi></msubsup><msub id="S2.E3.m1.1.1.3.2.2" xref="S2.E3.m1.1.1.3.2.2.cmml"><mover accent="true" id="S2.E3.m1.1.1.3.2.2.2" xref="S2.E3.m1.1.1.3.2.2.2.cmml"><mi id="S2.E3.m1.1.1.3.2.2.2.2" xref="S2.E3.m1.1.1.3.2.2.2.2.cmml">f</mi><mo id="S2.E3.m1.1.1.3.2.2.2.1" xref="S2.E3.m1.1.1.3.2.2.2.1.cmml">`</mo></mover><mrow id="S2.E3.m1.1.1.3.2.2.3" xref="S2.E3.m1.1.1.3.2.2.3.cmml"><mi id="S2.E3.m1.1.1.3.2.2.3.2" xref="S2.E3.m1.1.1.3.2.2.3.2.cmml">i</mi><mo id="S2.E3.m1.1.1.3.2.2.3.1" xref="S2.E3.m1.1.1.3.2.2.3.1.cmml">⁢</mo><mi id="S2.E3.m1.1.1.3.2.2.3.3" xref="S2.E3.m1.1.1.3.2.2.3.3.cmml">s</mi></mrow></msub></mrow><mi id="S2.E3.m1.1.1.3.3" xref="S2.E3.m1.1.1.3.3.cmml">σ</mi></mfrac></mrow><annotation-xml encoding="MathML-Content" id="S2.E3.m1.1b"><apply id="S2.E3.m1.1.1.cmml" xref="S2.E3.m1.1.1"><eq id="S2.E3.m1.1.1.2.cmml" xref="S2.E3.m1.1.1.2"></eq><apply id="S2.E3.m1.1.1.1.cmml" xref="S2.E3.m1.1.1.1"><times id="S2.E3.m1.1.1.1.2.cmml" xref="S2.E3.m1.1.1.1.2"></times><ci id="S2.E3.m1.1.1.1.3a.cmml" xref="S2.E3.m1.1.1.1.3"><mtext id="S2.E3.m1.1.1.1.3.cmml" xref="S2.E3.m1.1.1.1.3">Fit</mtext></ci><apply id="S2.E3.m1.1.1.1.1.1.1.cmml" xref="S2.E3.m1.1.1.1.1.1"><in id="S2.E3.m1.1.1.1.1.1.1.1.cmml" xref="S2.E3.m1.1.1.1.1.1.1.1"></in><ci id="S2.E3.m1.1.1.1.1.1.1.2.cmml" xref="S2.E3.m1.1.1.1.1.1.1.2">𝑠</ci><apply id="S2.E3.m1.1.1.1.1.1.1.3.cmml" xref="S2.E3.m1.1.1.1.1.1.1.3"><csymbol cd="ambiguous" id="S2.E3.m1.1.1.1.1.1.1.3.1.cmml" xref="S2.E3.m1.1.1.1.1.1.1.3">subscript</csymbol><ci id="S2.E3.m1.1.1.1.1.1.1.3.2.cmml" xref="S2.E3.m1.1.1.1.1.1.1.3.2">𝜒</ci><ci id="S2.E3.m1.1.1.1.1.1.1.3.3.cmml" xref="S2.E3.m1.1.1.1.1.1.1.3.3">𝐼</ci></apply></apply></apply><apply id="S2.E3.m1.1.1.3.cmml" xref="S2.E3.m1.1.1.3"><divide id="S2.E3.m1.1.1.3.1.cmml" xref="S2.E3.m1.1.1.3"></divide><apply id="S2.E3.m1.1.1.3.2.cmml" xref="S2.E3.m1.1.1.3.2"><apply id="S2.E3.m1.1.1.3.2.1.cmml" xref="S2.E3.m1.1.1.3.2.1"><csymbol cd="ambiguous" id="S2.E3.m1.1.1.3.2.1.1.cmml" xref="S2.E3.m1.1.1.3.2.1">superscript</csymbol><apply id="S2.E3.m1.1.1.3.2.1.2.cmml" xref="S2.E3.m1.1.1.3.2.1"><csymbol cd="ambiguous" id="S2.E3.m1.1.1.3.2.1.2.1.cmml" xref="S2.E3.m1.1.1.3.2.1">subscript</csymbol><sum id="S2.E3.m1.1.1.3.2.1.2.2.cmml" xref="S2.E3.m1.1.1.3.2.1.2.2"></sum><ci id="S2.E3.m1.1.1.3.2.1.2.3.cmml" xref="S2.E3.m1.1.1.3.2.1.2.3">𝑖</ci></apply><ci id="S2.E3.m1.1.1.3.2.1.3.cmml" xref="S2.E3.m1.1.1.3.2.1.3">𝑝</ci></apply><apply id="S2.E3.m1.1.1.3.2.2.cmml" xref="S2.E3.m1.1.1.3.2.2"><csymbol cd="ambiguous" id="S2.E3.m1.1.1.3.2.2.1.cmml" xref="S2.E3.m1.1.1.3.2.2">subscript</csymbol><apply id="S2.E3.m1.1.1.3.2.2.2.cmml" xref="S2.E3.m1.1.1.3.2.2.2"><ci id="S2.E3.m1.1.1.3.2.2.2.1.cmml" xref="S2.E3.m1.1.1.3.2.2.2.1">`</ci><ci id="S2.E3.m1.1.1.3.2.2.2.2.cmml" xref="S2.E3.m1.1.1.3.2.2.2.2">𝑓</ci></apply><apply id="S2.E3.m1.1.1.3.2.2.3.cmml" xref="S2.E3.m1.1.1.3.2.2.3"><times id="S2.E3.m1.1.1.3.2.2.3.1.cmml" xref="S2.E3.m1.1.1.3.2.2.3.1"></times><ci id="S2.E3.m1.1.1.3.2.2.3.2.cmml" xref="S2.E3.m1.1.1.3.2.2.3.2">𝑖</ci><ci id="S2.E3.m1.1.1.3.2.2.3.3.cmml" xref="S2.E3.m1.1.1.3.2.2.3.3">𝑠</ci></apply></apply></apply><ci id="S2.E3.m1.1.1.3.3.cmml" xref="S2.E3.m1.1.1.3.3">𝜎</ci></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E3.m1.1c">\text{Fit}(s\in\chi_{I})=\frac{\sum_{i}^{p}\grave{f}_{is}}{\sigma}</annotation><annotation encoding="application/x-llamapun" id="S2.E3.m1.1d">Fit ( italic_s ∈ italic_χ start_POSTSUBSCRIPT italic_I end_POSTSUBSCRIPT ) = divide start_ARG ∑ start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_p end_POSTSUPERSCRIPT over` start_ARG italic_f end_ARG start_POSTSUBSCRIPT italic_i italic_s end_POSTSUBSCRIPT end_ARG start_ARG italic_σ end_ARG</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(3)</span></td>
+</tr></tbody>
+</table>
+<table id="S2.E4" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E4.m1.2" class="ltx_Math" alttext="\grave{f}_{is}=\left\{\begin{array}[]{lr}\grave{fit}_{i}&amp;if\ \ i\mapsto s\\
+0&amp;otherwise\\
+\end{array}\right." display="block"><semantics id="S2.E4.m1.2a"><mrow id="S2.E4.m1.2.3" xref="S2.E4.m1.2.3.cmml"><msub id="S2.E4.m1.2.3.2" xref="S2.E4.m1.2.3.2.cmml"><mover accent="true" id="S2.E4.m1.2.3.2.2" xref="S2.E4.m1.2.3.2.2.cmml"><mi id="S2.E4.m1.2.3.2.2.2" xref="S2.E4.m1.2.3.2.2.2.cmml">f</mi><mo id="S2.E4.m1.2.3.2.2.1" xref="S2.E4.m1.2.3.2.2.1.cmml">`</mo></mover><mrow id="S2.E4.m1.2.3.2.3" xref="S2.E4.m1.2.3.2.3.cmml"><mi id="S2.E4.m1.2.3.2.3.2" xref="S2.E4.m1.2.3.2.3.2.cmml">i</mi><mo id="S2.E4.m1.2.3.2.3.1" xref="S2.E4.m1.2.3.2.3.1.cmml">⁢</mo><mi id="S2.E4.m1.2.3.2.3.3" xref="S2.E4.m1.2.3.2.3.3.cmml">s</mi></mrow></msub><mo id="S2.E4.m1.2.3.1" xref="S2.E4.m1.2.3.1.cmml">=</mo><mrow id="S2.E4.m1.2.3.3.2" xref="S2.E4.m1.2.3.3.1.cmml"><mo id="S2.E4.m1.2.3.3.2.1" xref="S2.E4.m1.2.3.3.1.1.cmml">{</mo><mtable columnspacing="5pt" displaystyle="true" rowspacing="0pt" id="S2.E4.m1.2.2" xref="S2.E4.m1.2.2.cmml"><mtr id="S2.E4.m1.2.2a" xref="S2.E4.m1.2.2.cmml"><mtd class="ltx_align_left" columnalign="left" id="S2.E4.m1.2.2b" xref="S2.E4.m1.2.2.cmml"><msub id="S2.E4.m1.2.2.2.3.1" xref="S2.E4.m1.2.2.2.3.1.cmml"><mover accent="true" id="S2.E4.m1.2.2.2.3.1.2" xref="S2.E4.m1.2.2.2.3.1.2.cmml"><mrow id="S2.E4.m1.2.2.2.3.1.2.2" xref="S2.E4.m1.2.2.2.3.1.2.2.cmml"><mi id="S2.E4.m1.2.2.2.3.1.2.2.2" xref="S2.E4.m1.2.2.2.3.1.2.2.2.cmml">f</mi><mo id="S2.E4.m1.2.2.2.3.1.2.2.1" xref="S2.E4.m1.2.2.2.3.1.2.2.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.2.3.1.2.2.3" xref="S2.E4.m1.2.2.2.3.1.2.2.3.cmml">i</mi><mo id="S2.E4.m1.2.2.2.3.1.2.2.1a" xref="S2.E4.m1.2.2.2.3.1.2.2.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.2.3.1.2.2.4" xref="S2.E4.m1.2.2.2.3.1.2.2.4.cmml">t</mi></mrow><mo id="S2.E4.m1.2.2.2.3.1.2.1" xref="S2.E4.m1.2.2.2.3.1.2.1.cmml">`</mo></mover><mi id="S2.E4.m1.2.2.2.3.1.3" xref="S2.E4.m1.2.2.2.3.1.3.cmml">i</mi></msub></mtd><mtd class="ltx_align_right" columnalign="right" id="S2.E4.m1.2.2c" xref="S2.E4.m1.2.2.cmml"><mrow id="S2.E4.m1.2.2.2.2.2" xref="S2.E4.m1.2.2.2.2.2.cmml"><mrow id="S2.E4.m1.2.2.2.2.2.2.1" xref="S2.E4.m1.2.2.2.2.2.2.2.cmml"><mrow id="S2.E4.m1.2.2.2.2.2.2.1.1" xref="S2.E4.m1.2.2.2.2.2.2.1.1.cmml"><mi id="S2.E4.m1.2.2.2.2.2.2.1.1.2" xref="S2.E4.m1.2.2.2.2.2.2.1.1.2.cmml">i</mi><mo id="S2.E4.m1.2.2.2.2.2.2.1.1.1" xref="S2.E4.m1.2.2.2.2.2.2.1.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.2.2.2.2.1.1.3" xref="S2.E4.m1.2.2.2.2.2.2.1.1.3.cmml">f</mi></mrow><mspace width="1em" id="S2.E4.m1.2.2.2.2.2.2.1.2" xref="S2.E4.m1.2.2.2.2.2.2.2.cmml"></mspace><mi id="S2.E4.m1.1.1.1.1.1.1" xref="S2.E4.m1.1.1.1.1.1.1.cmml">i</mi></mrow><mo stretchy="false" id="S2.E4.m1.2.2.2.2.2.3" xref="S2.E4.m1.2.2.2.2.2.3.cmml">↦</mo><mi id="S2.E4.m1.2.2.2.2.2.4" xref="S2.E4.m1.2.2.2.2.2.4.cmml">s</mi></mrow></mtd></mtr><mtr id="S2.E4.m1.2.2d" xref="S2.E4.m1.2.2.cmml"><mtd class="ltx_align_left" columnalign="left" id="S2.E4.m1.2.2e" xref="S2.E4.m1.2.2.cmml"><mn id="S2.E4.m1.2.2.3.1.1" xref="S2.E4.m1.2.2.3.1.1.cmml">0</mn></mtd><mtd class="ltx_align_right" columnalign="right" id="S2.E4.m1.2.2f" xref="S2.E4.m1.2.2.cmml"><mrow id="S2.E4.m1.2.2.3.2.1" xref="S2.E4.m1.2.2.3.2.1.cmml"><mi id="S2.E4.m1.2.2.3.2.1.2" xref="S2.E4.m1.2.2.3.2.1.2.cmml">o</mi><mo id="S2.E4.m1.2.2.3.2.1.1" xref="S2.E4.m1.2.2.3.2.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.3.2.1.3" xref="S2.E4.m1.2.2.3.2.1.3.cmml">t</mi><mo id="S2.E4.m1.2.2.3.2.1.1a" xref="S2.E4.m1.2.2.3.2.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.3.2.1.4" xref="S2.E4.m1.2.2.3.2.1.4.cmml">h</mi><mo id="S2.E4.m1.2.2.3.2.1.1b" xref="S2.E4.m1.2.2.3.2.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.3.2.1.5" xref="S2.E4.m1.2.2.3.2.1.5.cmml">e</mi><mo id="S2.E4.m1.2.2.3.2.1.1c" xref="S2.E4.m1.2.2.3.2.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.3.2.1.6" xref="S2.E4.m1.2.2.3.2.1.6.cmml">r</mi><mo id="S2.E4.m1.2.2.3.2.1.1d" xref="S2.E4.m1.2.2.3.2.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.3.2.1.7" xref="S2.E4.m1.2.2.3.2.1.7.cmml">w</mi><mo id="S2.E4.m1.2.2.3.2.1.1e" xref="S2.E4.m1.2.2.3.2.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.3.2.1.8" xref="S2.E4.m1.2.2.3.2.1.8.cmml">i</mi><mo id="S2.E4.m1.2.2.3.2.1.1f" xref="S2.E4.m1.2.2.3.2.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.3.2.1.9" xref="S2.E4.m1.2.2.3.2.1.9.cmml">s</mi><mo id="S2.E4.m1.2.2.3.2.1.1g" xref="S2.E4.m1.2.2.3.2.1.1.cmml">⁢</mo><mi id="S2.E4.m1.2.2.3.2.1.10" xref="S2.E4.m1.2.2.3.2.1.10.cmml">e</mi></mrow></mtd></mtr></mtable><mi id="S2.E4.m1.2.3.3.2.2" xref="S2.E4.m1.2.3.3.1.1.cmml"></mi></mrow></mrow><annotation-xml encoding="MathML-Content" id="S2.E4.m1.2b"><apply id="S2.E4.m1.2.3.cmml" xref="S2.E4.m1.2.3"><eq id="S2.E4.m1.2.3.1.cmml" xref="S2.E4.m1.2.3.1"></eq><apply id="S2.E4.m1.2.3.2.cmml" xref="S2.E4.m1.2.3.2"><csymbol cd="ambiguous" id="S2.E4.m1.2.3.2.1.cmml" xref="S2.E4.m1.2.3.2">subscript</csymbol><apply id="S2.E4.m1.2.3.2.2.cmml" xref="S2.E4.m1.2.3.2.2"><ci id="S2.E4.m1.2.3.2.2.1.cmml" xref="S2.E4.m1.2.3.2.2.1">`</ci><ci id="S2.E4.m1.2.3.2.2.2.cmml" xref="S2.E4.m1.2.3.2.2.2">𝑓</ci></apply><apply id="S2.E4.m1.2.3.2.3.cmml" xref="S2.E4.m1.2.3.2.3"><times id="S2.E4.m1.2.3.2.3.1.cmml" xref="S2.E4.m1.2.3.2.3.1"></times><ci id="S2.E4.m1.2.3.2.3.2.cmml" xref="S2.E4.m1.2.3.2.3.2">𝑖</ci><ci id="S2.E4.m1.2.3.2.3.3.cmml" xref="S2.E4.m1.2.3.2.3.3">𝑠</ci></apply></apply><apply id="S2.E4.m1.2.3.3.1.cmml" xref="S2.E4.m1.2.3.3.2"><csymbol cd="latexml" id="S2.E4.m1.2.3.3.1.1.cmml" xref="S2.E4.m1.2.3.3.2.1">cases</csymbol><matrix id="S2.E4.m1.2.2.cmml" xref="S2.E4.m1.2.2"><matrixrow id="S2.E4.m1.2.2a.cmml" xref="S2.E4.m1.2.2"><apply id="S2.E4.m1.2.2.2.3.1.cmml" xref="S2.E4.m1.2.2.2.3.1"><csymbol cd="ambiguous" id="S2.E4.m1.2.2.2.3.1.1.cmml" xref="S2.E4.m1.2.2.2.3.1">subscript</csymbol><apply id="S2.E4.m1.2.2.2.3.1.2.cmml" xref="S2.E4.m1.2.2.2.3.1.2"><ci id="S2.E4.m1.2.2.2.3.1.2.1.cmml" xref="S2.E4.m1.2.2.2.3.1.2.1">`</ci><apply id="S2.E4.m1.2.2.2.3.1.2.2.cmml" xref="S2.E4.m1.2.2.2.3.1.2.2"><times id="S2.E4.m1.2.2.2.3.1.2.2.1.cmml" xref="S2.E4.m1.2.2.2.3.1.2.2.1"></times><ci id="S2.E4.m1.2.2.2.3.1.2.2.2.cmml" xref="S2.E4.m1.2.2.2.3.1.2.2.2">𝑓</ci><ci id="S2.E4.m1.2.2.2.3.1.2.2.3.cmml" xref="S2.E4.m1.2.2.2.3.1.2.2.3">𝑖</ci><ci id="S2.E4.m1.2.2.2.3.1.2.2.4.cmml" xref="S2.E4.m1.2.2.2.3.1.2.2.4">𝑡</ci></apply></apply><ci id="S2.E4.m1.2.2.2.3.1.3.cmml" xref="S2.E4.m1.2.2.2.3.1.3">𝑖</ci></apply><apply id="S2.E4.m1.2.2.2.2.2.cmml" xref="S2.E4.m1.2.2.2.2.2"><csymbol cd="latexml" id="S2.E4.m1.2.2.2.2.2.3.cmml" xref="S2.E4.m1.2.2.2.2.2.3">maps-to</csymbol><list id="S2.E4.m1.2.2.2.2.2.2.2.cmml" xref="S2.E4.m1.2.2.2.2.2.2.1"><apply id="S2.E4.m1.2.2.2.2.2.2.1.1.cmml" xref="S2.E4.m1.2.2.2.2.2.2.1.1"><times id="S2.E4.m1.2.2.2.2.2.2.1.1.1.cmml" xref="S2.E4.m1.2.2.2.2.2.2.1.1.1"></times><ci id="S2.E4.m1.2.2.2.2.2.2.1.1.2.cmml" xref="S2.E4.m1.2.2.2.2.2.2.1.1.2">𝑖</ci><ci id="S2.E4.m1.2.2.2.2.2.2.1.1.3.cmml" xref="S2.E4.m1.2.2.2.2.2.2.1.1.3">𝑓</ci></apply><ci id="S2.E4.m1.1.1.1.1.1.1.cmml" xref="S2.E4.m1.1.1.1.1.1.1">𝑖</ci></list><ci id="S2.E4.m1.2.2.2.2.2.4.cmml" xref="S2.E4.m1.2.2.2.2.2.4">𝑠</ci></apply></matrixrow><matrixrow id="S2.E4.m1.2.2b.cmml" xref="S2.E4.m1.2.2"><cn type="integer" id="S2.E4.m1.2.2.3.1.1.cmml" xref="S2.E4.m1.2.2.3.1.1">0</cn><apply id="S2.E4.m1.2.2.3.2.1.cmml" xref="S2.E4.m1.2.2.3.2.1"><times id="S2.E4.m1.2.2.3.2.1.1.cmml" xref="S2.E4.m1.2.2.3.2.1.1"></times><ci id="S2.E4.m1.2.2.3.2.1.2.cmml" xref="S2.E4.m1.2.2.3.2.1.2">𝑜</ci><ci id="S2.E4.m1.2.2.3.2.1.3.cmml" xref="S2.E4.m1.2.2.3.2.1.3">𝑡</ci><ci id="S2.E4.m1.2.2.3.2.1.4.cmml" xref="S2.E4.m1.2.2.3.2.1.4">ℎ</ci><ci id="S2.E4.m1.2.2.3.2.1.5.cmml" xref="S2.E4.m1.2.2.3.2.1.5">𝑒</ci><ci id="S2.E4.m1.2.2.3.2.1.6.cmml" xref="S2.E4.m1.2.2.3.2.1.6">𝑟</ci><ci id="S2.E4.m1.2.2.3.2.1.7.cmml" xref="S2.E4.m1.2.2.3.2.1.7">𝑤</ci><ci id="S2.E4.m1.2.2.3.2.1.8.cmml" xref="S2.E4.m1.2.2.3.2.1.8">𝑖</ci><ci id="S2.E4.m1.2.2.3.2.1.9.cmml" xref="S2.E4.m1.2.2.3.2.1.9">𝑠</ci><ci id="S2.E4.m1.2.2.3.2.1.10.cmml" xref="S2.E4.m1.2.2.3.2.1.10">𝑒</ci></apply></matrixrow></matrix></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E4.m1.2c">\grave{f}_{is}=\left\{\begin{array}[]{lr}\grave{fit}_{i}&amp;if\ \ i\mapsto s\\
+0&amp;otherwise\\
+\end{array}\right.</annotation><annotation encoding="application/x-llamapun" id="S2.E4.m1.2d">over` start_ARG italic_f end_ARG start_POSTSUBSCRIPT italic_i italic_s end_POSTSUBSCRIPT = { start_ARRAY start_ROW start_CELL over` start_ARG italic_f italic_i italic_t end_ARG start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT end_CELL start_CELL italic_i italic_f italic_i ↦ italic_s end_CELL end_ROW start_ROW start_CELL 0 end_CELL start_CELL italic_o italic_t italic_h italic_e italic_r italic_w italic_i italic_s italic_e end_CELL end_ROW end_ARRAY</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(4)</span></td>
+</tr></tbody>
+</table>
+<p id="S2.p9.8" class="ltx_p">where, <math id="S2.p9.3.m1.1" class="ltx_Math" alttext="fit_{i}" display="inline"><semantics id="S2.p9.3.m1.1a"><mrow id="S2.p9.3.m1.1.1" xref="S2.p9.3.m1.1.1.cmml"><mi id="S2.p9.3.m1.1.1.2" xref="S2.p9.3.m1.1.1.2.cmml">f</mi><mo id="S2.p9.3.m1.1.1.1" xref="S2.p9.3.m1.1.1.1.cmml">⁢</mo><mi id="S2.p9.3.m1.1.1.3" xref="S2.p9.3.m1.1.1.3.cmml">i</mi><mo id="S2.p9.3.m1.1.1.1a" xref="S2.p9.3.m1.1.1.1.cmml">⁢</mo><msub id="S2.p9.3.m1.1.1.4" xref="S2.p9.3.m1.1.1.4.cmml"><mi id="S2.p9.3.m1.1.1.4.2" xref="S2.p9.3.m1.1.1.4.2.cmml">t</mi><mi id="S2.p9.3.m1.1.1.4.3" xref="S2.p9.3.m1.1.1.4.3.cmml">i</mi></msub></mrow><annotation-xml encoding="MathML-Content" id="S2.p9.3.m1.1b"><apply id="S2.p9.3.m1.1.1.cmml" xref="S2.p9.3.m1.1.1"><times id="S2.p9.3.m1.1.1.1.cmml" xref="S2.p9.3.m1.1.1.1"></times><ci id="S2.p9.3.m1.1.1.2.cmml" xref="S2.p9.3.m1.1.1.2">𝑓</ci><ci id="S2.p9.3.m1.1.1.3.cmml" xref="S2.p9.3.m1.1.1.3">𝑖</ci><apply id="S2.p9.3.m1.1.1.4.cmml" xref="S2.p9.3.m1.1.1.4"><csymbol cd="ambiguous" id="S2.p9.3.m1.1.1.4.1.cmml" xref="S2.p9.3.m1.1.1.4">subscript</csymbol><ci id="S2.p9.3.m1.1.1.4.2.cmml" xref="S2.p9.3.m1.1.1.4.2">𝑡</ci><ci id="S2.p9.3.m1.1.1.4.3.cmml" xref="S2.p9.3.m1.1.1.4.3">𝑖</ci></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p9.3.m1.1c">fit_{i}</annotation><annotation encoding="application/x-llamapun" id="S2.p9.3.m1.1d">italic_f italic_i italic_t start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT</annotation></semantics></math> is the fitness value of individual <math id="S2.p9.4.m2.1" class="ltx_Math" alttext="i" display="inline"><semantics id="S2.p9.4.m2.1a"><mi id="S2.p9.4.m2.1.1" xref="S2.p9.4.m2.1.1.cmml">i</mi><annotation-xml encoding="MathML-Content" id="S2.p9.4.m2.1b"><ci id="S2.p9.4.m2.1.1.cmml" xref="S2.p9.4.m2.1.1">𝑖</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p9.4.m2.1c">i</annotation><annotation encoding="application/x-llamapun" id="S2.p9.4.m2.1d">italic_i</annotation></semantics></math>, <math id="S2.p9.5.m3.1" class="ltx_Math" alttext="\grave{f}_{is}" display="inline"><semantics id="S2.p9.5.m3.1a"><msub id="S2.p9.5.m3.1.1" xref="S2.p9.5.m3.1.1.cmml"><mover accent="true" id="S2.p9.5.m3.1.1.2" xref="S2.p9.5.m3.1.1.2.cmml"><mi id="S2.p9.5.m3.1.1.2.2" xref="S2.p9.5.m3.1.1.2.2.cmml">f</mi><mo id="S2.p9.5.m3.1.1.2.1" xref="S2.p9.5.m3.1.1.2.1.cmml">`</mo></mover><mrow id="S2.p9.5.m3.1.1.3" xref="S2.p9.5.m3.1.1.3.cmml"><mi id="S2.p9.5.m3.1.1.3.2" xref="S2.p9.5.m3.1.1.3.2.cmml">i</mi><mo id="S2.p9.5.m3.1.1.3.1" xref="S2.p9.5.m3.1.1.3.1.cmml">⁢</mo><mi id="S2.p9.5.m3.1.1.3.3" xref="S2.p9.5.m3.1.1.3.3.cmml">s</mi></mrow></msub><annotation-xml encoding="MathML-Content" id="S2.p9.5.m3.1b"><apply id="S2.p9.5.m3.1.1.cmml" xref="S2.p9.5.m3.1.1"><csymbol cd="ambiguous" id="S2.p9.5.m3.1.1.1.cmml" xref="S2.p9.5.m3.1.1">subscript</csymbol><apply id="S2.p9.5.m3.1.1.2.cmml" xref="S2.p9.5.m3.1.1.2"><ci id="S2.p9.5.m3.1.1.2.1.cmml" xref="S2.p9.5.m3.1.1.2.1">`</ci><ci id="S2.p9.5.m3.1.1.2.2.cmml" xref="S2.p9.5.m3.1.1.2.2">𝑓</ci></apply><apply id="S2.p9.5.m3.1.1.3.cmml" xref="S2.p9.5.m3.1.1.3"><times id="S2.p9.5.m3.1.1.3.1.cmml" xref="S2.p9.5.m3.1.1.3.1"></times><ci id="S2.p9.5.m3.1.1.3.2.cmml" xref="S2.p9.5.m3.1.1.3.2">𝑖</ci><ci id="S2.p9.5.m3.1.1.3.3.cmml" xref="S2.p9.5.m3.1.1.3.3">𝑠</ci></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p9.5.m3.1c">\grave{f}_{is}</annotation><annotation encoding="application/x-llamapun" id="S2.p9.5.m3.1d">over` start_ARG italic_f end_ARG start_POSTSUBSCRIPT italic_i italic_s end_POSTSUBSCRIPT</annotation></semantics></math> is the fitness value of
+individual <math id="S2.p9.6.m4.1" class="ltx_Math" alttext="i" display="inline"><semantics id="S2.p9.6.m4.1a"><mi id="S2.p9.6.m4.1.1" xref="S2.p9.6.m4.1.1.cmml">i</mi><annotation-xml encoding="MathML-Content" id="S2.p9.6.m4.1b"><ci id="S2.p9.6.m4.1.1.cmml" xref="S2.p9.6.m4.1.1">𝑖</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p9.6.m4.1c">i</annotation><annotation encoding="application/x-llamapun" id="S2.p9.6.m4.1d">italic_i</annotation></semantics></math> if the schema <math id="S2.p9.7.m5.1" class="ltx_Math" alttext="s" display="inline"><semantics id="S2.p9.7.m5.1a"><mi id="S2.p9.7.m5.1.1" xref="S2.p9.7.m5.1.1.cmml">s</mi><annotation-xml encoding="MathML-Content" id="S2.p9.7.m5.1b"><ci id="S2.p9.7.m5.1.1.cmml" xref="S2.p9.7.m5.1.1">𝑠</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p9.7.m5.1c">s</annotation><annotation encoding="application/x-llamapun" id="S2.p9.7.m5.1d">italic_s</annotation></semantics></math> is part of <math id="S2.p9.8.m6.1" class="ltx_Math" alttext="i" display="inline"><semantics id="S2.p9.8.m6.1a"><mi id="S2.p9.8.m6.1.1" xref="S2.p9.8.m6.1.1.cmml">i</mi><annotation-xml encoding="MathML-Content" id="S2.p9.8.m6.1b"><ci id="S2.p9.8.m6.1.1.cmml" xref="S2.p9.8.m6.1.1">𝑖</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p9.8.m6.1c">i</annotation><annotation encoding="application/x-llamapun" id="S2.p9.8.m6.1d">italic_i</annotation></semantics></math> and 0 otherwise. The schema fitness is calculated
+in Schem1 using the previous equation. In Schem2, the schema fitness is set to zero if its original
+value is less than the average population fitness. In theory, it is good to maintain all schemas in
+the population. In practice, however, maintaining all schemas will disturb the convergence of the
+probabilistic model. In addition, due to selection, some below average schemas will disappear
+overtime. Therefore, the choice will largely depend on the problem in hand. The dcGA algorithm is
+modified into Schem1 and Schem2 by calculating the probabilities for sampling each schema based on
+the schema fitness rather than the frequencies alone. This re–scaling maintains schemas when their
+frequencies is small but their average fitness is high.</p>
+</div>
+</section>
+<section id="S3" class="ltx_section ltx_indent_first">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3 </span>Feasibility of the method</h2>
+
+<div id="S3.p1" class="ltx_para">
+<p id="S3.p1.5" class="ltx_p">Before we proceed with the experiments in the non–stationary environment, we need to check the
+performance of the method on a stationary function. The function we use here is trap–4. Trap
+functions were introduced by Ackley <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib2" title="" class="ltx_ref">2</a>]</cite> and subsequently analyzed in details by others
+<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib11" title="" class="ltx_ref">11</a>, <a href="#bib.bib14" title="" class="ltx_ref">14</a>, <a href="#bib.bib32" title="" class="ltx_ref">32</a>]</cite>. A trap function is defined as follows</p>
+<table id="S3.E5" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E5.m1.1" class="ltx_Math" alttext="trap_{k}=\left\{\begin{array}[]{ll}high&amp;\text{if }u=k\\
+low-u*\frac{low}{k-1}&amp;otherwise\end{array}\right." display="block"><semantics id="S3.E5.m1.1a"><mrow id="S3.E5.m1.1.2" xref="S3.E5.m1.1.2.cmml"><mrow id="S3.E5.m1.1.2.2" xref="S3.E5.m1.1.2.2.cmml"><mi id="S3.E5.m1.1.2.2.2" xref="S3.E5.m1.1.2.2.2.cmml">t</mi><mo id="S3.E5.m1.1.2.2.1" xref="S3.E5.m1.1.2.2.1.cmml">⁢</mo><mi id="S3.E5.m1.1.2.2.3" xref="S3.E5.m1.1.2.2.3.cmml">r</mi><mo id="S3.E5.m1.1.2.2.1a" xref="S3.E5.m1.1.2.2.1.cmml">⁢</mo><mi id="S3.E5.m1.1.2.2.4" xref="S3.E5.m1.1.2.2.4.cmml">a</mi><mo id="S3.E5.m1.1.2.2.1b" xref="S3.E5.m1.1.2.2.1.cmml">⁢</mo><msub id="S3.E5.m1.1.2.2.5" xref="S3.E5.m1.1.2.2.5.cmml"><mi id="S3.E5.m1.1.2.2.5.2" xref="S3.E5.m1.1.2.2.5.2.cmml">p</mi><mi id="S3.E5.m1.1.2.2.5.3" xref="S3.E5.m1.1.2.2.5.3.cmml">k</mi></msub></mrow><mo id="S3.E5.m1.1.2.1" xref="S3.E5.m1.1.2.1.cmml">=</mo><mrow id="S3.E5.m1.1.2.3.2" xref="S3.E5.m1.1.2.3.1.cmml"><mo id="S3.E5.m1.1.2.3.2.1" xref="S3.E5.m1.1.2.3.1.1.cmml">{</mo><mtable columnspacing="5pt" displaystyle="true" rowspacing="0pt" id="S3.E5.m1.1.1" xref="S3.E5.m1.1.1.cmml"><mtr id="S3.E5.m1.1.1a" xref="S3.E5.m1.1.1.cmml"><mtd class="ltx_align_left" columnalign="left" id="S3.E5.m1.1.1b" xref="S3.E5.m1.1.1.cmml"><mrow id="S3.E5.m1.1.1.1.1.1" xref="S3.E5.m1.1.1.1.1.1.cmml"><mi id="S3.E5.m1.1.1.1.1.1.2" xref="S3.E5.m1.1.1.1.1.1.2.cmml">h</mi><mo id="S3.E5.m1.1.1.1.1.1.1" xref="S3.E5.m1.1.1.1.1.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.1.1.1.3" xref="S3.E5.m1.1.1.1.1.1.3.cmml">i</mi><mo id="S3.E5.m1.1.1.1.1.1.1a" xref="S3.E5.m1.1.1.1.1.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.1.1.1.4" xref="S3.E5.m1.1.1.1.1.1.4.cmml">g</mi><mo id="S3.E5.m1.1.1.1.1.1.1b" xref="S3.E5.m1.1.1.1.1.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.1.1.1.5" xref="S3.E5.m1.1.1.1.1.1.5.cmml">h</mi></mrow></mtd><mtd class="ltx_align_left" columnalign="left" id="S3.E5.m1.1.1c" xref="S3.E5.m1.1.1.cmml"><mrow id="S3.E5.m1.1.1.1.2.1" xref="S3.E5.m1.1.1.1.2.1.cmml"><mrow id="S3.E5.m1.1.1.1.2.1.2" xref="S3.E5.m1.1.1.1.2.1.2.cmml"><mtext id="S3.E5.m1.1.1.1.2.1.2.2" xref="S3.E5.m1.1.1.1.2.1.2.2a.cmml">if </mtext><mo id="S3.E5.m1.1.1.1.2.1.2.1" xref="S3.E5.m1.1.1.1.2.1.2.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.1.2.1.2.3" xref="S3.E5.m1.1.1.1.2.1.2.3.cmml">u</mi></mrow><mo id="S3.E5.m1.1.1.1.2.1.1" xref="S3.E5.m1.1.1.1.2.1.1.cmml">=</mo><mi id="S3.E5.m1.1.1.1.2.1.3" xref="S3.E5.m1.1.1.1.2.1.3.cmml">k</mi></mrow></mtd></mtr><mtr id="S3.E5.m1.1.1d" xref="S3.E5.m1.1.1.cmml"><mtd class="ltx_align_left" columnalign="left" id="S3.E5.m1.1.1e" xref="S3.E5.m1.1.1.cmml"><mrow id="S3.E5.m1.1.1.2.1.1" xref="S3.E5.m1.1.1.2.1.1.cmml"><mrow id="S3.E5.m1.1.1.2.1.1.2" xref="S3.E5.m1.1.1.2.1.1.2.cmml"><mi id="S3.E5.m1.1.1.2.1.1.2.2" xref="S3.E5.m1.1.1.2.1.1.2.2.cmml">l</mi><mo id="S3.E5.m1.1.1.2.1.1.2.1" xref="S3.E5.m1.1.1.2.1.1.2.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.1.1.2.3" xref="S3.E5.m1.1.1.2.1.1.2.3.cmml">o</mi><mo id="S3.E5.m1.1.1.2.1.1.2.1a" xref="S3.E5.m1.1.1.2.1.1.2.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.1.1.2.4" xref="S3.E5.m1.1.1.2.1.1.2.4.cmml">w</mi></mrow><mo id="S3.E5.m1.1.1.2.1.1.1" xref="S3.E5.m1.1.1.2.1.1.1.cmml">−</mo><mrow id="S3.E5.m1.1.1.2.1.1.3" xref="S3.E5.m1.1.1.2.1.1.3.cmml"><mi id="S3.E5.m1.1.1.2.1.1.3.2" xref="S3.E5.m1.1.1.2.1.1.3.2.cmml">u</mi><mo lspace="0.222em" rspace="0.222em" id="S3.E5.m1.1.1.2.1.1.3.1" xref="S3.E5.m1.1.1.2.1.1.3.1.cmml">*</mo><mstyle displaystyle="false" id="S3.E5.m1.1.1.2.1.1.3.3" xref="S3.E5.m1.1.1.2.1.1.3.3.cmml"><mfrac id="S3.E5.m1.1.1.2.1.1.3.3a" xref="S3.E5.m1.1.1.2.1.1.3.3.cmml"><mrow id="S3.E5.m1.1.1.2.1.1.3.3.2" xref="S3.E5.m1.1.1.2.1.1.3.3.2.cmml"><mi id="S3.E5.m1.1.1.2.1.1.3.3.2.2" xref="S3.E5.m1.1.1.2.1.1.3.3.2.2.cmml">l</mi><mo id="S3.E5.m1.1.1.2.1.1.3.3.2.1" xref="S3.E5.m1.1.1.2.1.1.3.3.2.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.1.1.3.3.2.3" xref="S3.E5.m1.1.1.2.1.1.3.3.2.3.cmml">o</mi><mo id="S3.E5.m1.1.1.2.1.1.3.3.2.1a" xref="S3.E5.m1.1.1.2.1.1.3.3.2.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.1.1.3.3.2.4" xref="S3.E5.m1.1.1.2.1.1.3.3.2.4.cmml">w</mi></mrow><mrow id="S3.E5.m1.1.1.2.1.1.3.3.3" xref="S3.E5.m1.1.1.2.1.1.3.3.3.cmml"><mi id="S3.E5.m1.1.1.2.1.1.3.3.3.2" xref="S3.E5.m1.1.1.2.1.1.3.3.3.2.cmml">k</mi><mo id="S3.E5.m1.1.1.2.1.1.3.3.3.1" xref="S3.E5.m1.1.1.2.1.1.3.3.3.1.cmml">−</mo><mn id="S3.E5.m1.1.1.2.1.1.3.3.3.3" xref="S3.E5.m1.1.1.2.1.1.3.3.3.3.cmml">1</mn></mrow></mfrac></mstyle></mrow></mrow></mtd><mtd class="ltx_align_left" columnalign="left" id="S3.E5.m1.1.1f" xref="S3.E5.m1.1.1.cmml"><mrow id="S3.E5.m1.1.1.2.2.1" xref="S3.E5.m1.1.1.2.2.1.cmml"><mi id="S3.E5.m1.1.1.2.2.1.2" xref="S3.E5.m1.1.1.2.2.1.2.cmml">o</mi><mo id="S3.E5.m1.1.1.2.2.1.1" xref="S3.E5.m1.1.1.2.2.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.2.1.3" xref="S3.E5.m1.1.1.2.2.1.3.cmml">t</mi><mo id="S3.E5.m1.1.1.2.2.1.1a" xref="S3.E5.m1.1.1.2.2.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.2.1.4" xref="S3.E5.m1.1.1.2.2.1.4.cmml">h</mi><mo id="S3.E5.m1.1.1.2.2.1.1b" xref="S3.E5.m1.1.1.2.2.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.2.1.5" xref="S3.E5.m1.1.1.2.2.1.5.cmml">e</mi><mo id="S3.E5.m1.1.1.2.2.1.1c" xref="S3.E5.m1.1.1.2.2.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.2.1.6" xref="S3.E5.m1.1.1.2.2.1.6.cmml">r</mi><mo id="S3.E5.m1.1.1.2.2.1.1d" xref="S3.E5.m1.1.1.2.2.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.2.1.7" xref="S3.E5.m1.1.1.2.2.1.7.cmml">w</mi><mo id="S3.E5.m1.1.1.2.2.1.1e" xref="S3.E5.m1.1.1.2.2.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.2.1.8" xref="S3.E5.m1.1.1.2.2.1.8.cmml">i</mi><mo id="S3.E5.m1.1.1.2.2.1.1f" xref="S3.E5.m1.1.1.2.2.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.2.1.9" xref="S3.E5.m1.1.1.2.2.1.9.cmml">s</mi><mo id="S3.E5.m1.1.1.2.2.1.1g" xref="S3.E5.m1.1.1.2.2.1.1.cmml">⁢</mo><mi id="S3.E5.m1.1.1.2.2.1.10" xref="S3.E5.m1.1.1.2.2.1.10.cmml">e</mi></mrow></mtd></mtr></mtable><mi id="S3.E5.m1.1.2.3.2.2" xref="S3.E5.m1.1.2.3.1.1.cmml"></mi></mrow></mrow><annotation-xml encoding="MathML-Content" id="S3.E5.m1.1b"><apply id="S3.E5.m1.1.2.cmml" xref="S3.E5.m1.1.2"><eq id="S3.E5.m1.1.2.1.cmml" xref="S3.E5.m1.1.2.1"></eq><apply id="S3.E5.m1.1.2.2.cmml" xref="S3.E5.m1.1.2.2"><times id="S3.E5.m1.1.2.2.1.cmml" xref="S3.E5.m1.1.2.2.1"></times><ci id="S3.E5.m1.1.2.2.2.cmml" xref="S3.E5.m1.1.2.2.2">𝑡</ci><ci id="S3.E5.m1.1.2.2.3.cmml" xref="S3.E5.m1.1.2.2.3">𝑟</ci><ci id="S3.E5.m1.1.2.2.4.cmml" xref="S3.E5.m1.1.2.2.4">𝑎</ci><apply id="S3.E5.m1.1.2.2.5.cmml" xref="S3.E5.m1.1.2.2.5"><csymbol cd="ambiguous" id="S3.E5.m1.1.2.2.5.1.cmml" xref="S3.E5.m1.1.2.2.5">subscript</csymbol><ci id="S3.E5.m1.1.2.2.5.2.cmml" xref="S3.E5.m1.1.2.2.5.2">𝑝</ci><ci id="S3.E5.m1.1.2.2.5.3.cmml" xref="S3.E5.m1.1.2.2.5.3">𝑘</ci></apply></apply><apply id="S3.E5.m1.1.2.3.1.cmml" xref="S3.E5.m1.1.2.3.2"><csymbol cd="latexml" id="S3.E5.m1.1.2.3.1.1.cmml" xref="S3.E5.m1.1.2.3.2.1">cases</csymbol><matrix id="S3.E5.m1.1.1.cmml" xref="S3.E5.m1.1.1"><matrixrow id="S3.E5.m1.1.1a.cmml" xref="S3.E5.m1.1.1"><apply id="S3.E5.m1.1.1.1.1.1.cmml" xref="S3.E5.m1.1.1.1.1.1"><times id="S3.E5.m1.1.1.1.1.1.1.cmml" xref="S3.E5.m1.1.1.1.1.1.1"></times><ci id="S3.E5.m1.1.1.1.1.1.2.cmml" xref="S3.E5.m1.1.1.1.1.1.2">ℎ</ci><ci id="S3.E5.m1.1.1.1.1.1.3.cmml" xref="S3.E5.m1.1.1.1.1.1.3">𝑖</ci><ci id="S3.E5.m1.1.1.1.1.1.4.cmml" xref="S3.E5.m1.1.1.1.1.1.4">𝑔</ci><ci id="S3.E5.m1.1.1.1.1.1.5.cmml" xref="S3.E5.m1.1.1.1.1.1.5">ℎ</ci></apply><apply id="S3.E5.m1.1.1.1.2.1.cmml" xref="S3.E5.m1.1.1.1.2.1"><eq id="S3.E5.m1.1.1.1.2.1.1.cmml" xref="S3.E5.m1.1.1.1.2.1.1"></eq><apply id="S3.E5.m1.1.1.1.2.1.2.cmml" xref="S3.E5.m1.1.1.1.2.1.2"><times id="S3.E5.m1.1.1.1.2.1.2.1.cmml" xref="S3.E5.m1.1.1.1.2.1.2.1"></times><ci id="S3.E5.m1.1.1.1.2.1.2.2a.cmml" xref="S3.E5.m1.1.1.1.2.1.2.2"><mtext id="S3.E5.m1.1.1.1.2.1.2.2.cmml" xref="S3.E5.m1.1.1.1.2.1.2.2">if </mtext></ci><ci id="S3.E5.m1.1.1.1.2.1.2.3.cmml" xref="S3.E5.m1.1.1.1.2.1.2.3">𝑢</ci></apply><ci id="S3.E5.m1.1.1.1.2.1.3.cmml" xref="S3.E5.m1.1.1.1.2.1.3">𝑘</ci></apply></matrixrow><matrixrow id="S3.E5.m1.1.1b.cmml" xref="S3.E5.m1.1.1"><apply id="S3.E5.m1.1.1.2.1.1.cmml" xref="S3.E5.m1.1.1.2.1.1"><minus id="S3.E5.m1.1.1.2.1.1.1.cmml" xref="S3.E5.m1.1.1.2.1.1.1"></minus><apply id="S3.E5.m1.1.1.2.1.1.2.cmml" xref="S3.E5.m1.1.1.2.1.1.2"><times id="S3.E5.m1.1.1.2.1.1.2.1.cmml" xref="S3.E5.m1.1.1.2.1.1.2.1"></times><ci id="S3.E5.m1.1.1.2.1.1.2.2.cmml" xref="S3.E5.m1.1.1.2.1.1.2.2">𝑙</ci><ci id="S3.E5.m1.1.1.2.1.1.2.3.cmml" xref="S3.E5.m1.1.1.2.1.1.2.3">𝑜</ci><ci id="S3.E5.m1.1.1.2.1.1.2.4.cmml" xref="S3.E5.m1.1.1.2.1.1.2.4">𝑤</ci></apply><apply id="S3.E5.m1.1.1.2.1.1.3.cmml" xref="S3.E5.m1.1.1.2.1.1.3"><times id="S3.E5.m1.1.1.2.1.1.3.1.cmml" xref="S3.E5.m1.1.1.2.1.1.3.1"></times><ci id="S3.E5.m1.1.1.2.1.1.3.2.cmml" xref="S3.E5.m1.1.1.2.1.1.3.2">𝑢</ci><apply id="S3.E5.m1.1.1.2.1.1.3.3.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3"><divide id="S3.E5.m1.1.1.2.1.1.3.3.1.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3"></divide><apply id="S3.E5.m1.1.1.2.1.1.3.3.2.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.2"><times id="S3.E5.m1.1.1.2.1.1.3.3.2.1.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.2.1"></times><ci id="S3.E5.m1.1.1.2.1.1.3.3.2.2.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.2.2">𝑙</ci><ci id="S3.E5.m1.1.1.2.1.1.3.3.2.3.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.2.3">𝑜</ci><ci id="S3.E5.m1.1.1.2.1.1.3.3.2.4.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.2.4">𝑤</ci></apply><apply id="S3.E5.m1.1.1.2.1.1.3.3.3.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.3"><minus id="S3.E5.m1.1.1.2.1.1.3.3.3.1.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.3.1"></minus><ci id="S3.E5.m1.1.1.2.1.1.3.3.3.2.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.3.2">𝑘</ci><cn type="integer" id="S3.E5.m1.1.1.2.1.1.3.3.3.3.cmml" xref="S3.E5.m1.1.1.2.1.1.3.3.3.3">1</cn></apply></apply></apply></apply><apply id="S3.E5.m1.1.1.2.2.1.cmml" xref="S3.E5.m1.1.1.2.2.1"><times id="S3.E5.m1.1.1.2.2.1.1.cmml" xref="S3.E5.m1.1.1.2.2.1.1"></times><ci id="S3.E5.m1.1.1.2.2.1.2.cmml" xref="S3.E5.m1.1.1.2.2.1.2">𝑜</ci><ci id="S3.E5.m1.1.1.2.2.1.3.cmml" xref="S3.E5.m1.1.1.2.2.1.3">𝑡</ci><ci id="S3.E5.m1.1.1.2.2.1.4.cmml" xref="S3.E5.m1.1.1.2.2.1.4">ℎ</ci><ci id="S3.E5.m1.1.1.2.2.1.5.cmml" xref="S3.E5.m1.1.1.2.2.1.5">𝑒</ci><ci id="S3.E5.m1.1.1.2.2.1.6.cmml" xref="S3.E5.m1.1.1.2.2.1.6">𝑟</ci><ci id="S3.E5.m1.1.1.2.2.1.7.cmml" xref="S3.E5.m1.1.1.2.2.1.7">𝑤</ci><ci id="S3.E5.m1.1.1.2.2.1.8.cmml" xref="S3.E5.m1.1.1.2.2.1.8">𝑖</ci><ci id="S3.E5.m1.1.1.2.2.1.9.cmml" xref="S3.E5.m1.1.1.2.2.1.9">𝑠</ci><ci id="S3.E5.m1.1.1.2.2.1.10.cmml" xref="S3.E5.m1.1.1.2.2.1.10">𝑒</ci></apply></matrixrow></matrix></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.E5.m1.1c">trap_{k}=\left\{\begin{array}[]{ll}high&amp;\text{if }u=k\\
+low-u*\frac{low}{k-1}&amp;otherwise\end{array}\right.</annotation><annotation encoding="application/x-llamapun" id="S3.E5.m1.1d">italic_t italic_r italic_a italic_p start_POSTSUBSCRIPT italic_k end_POSTSUBSCRIPT = { start_ARRAY start_ROW start_CELL italic_h italic_i italic_g italic_h end_CELL start_CELL if italic_u = italic_k end_CELL end_ROW start_ROW start_CELL italic_l italic_o italic_w - italic_u * divide start_ARG italic_l italic_o italic_w end_ARG start_ARG italic_k - 1 end_ARG end_CELL start_CELL italic_o italic_t italic_h italic_e italic_r italic_w italic_i italic_s italic_e end_CELL end_ROW end_ARRAY</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(5)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.p1.4" class="ltx_p">where, <math id="S3.p1.1.m1.1" class="ltx_Math" alttext="low" display="inline"><semantics id="S3.p1.1.m1.1a"><mrow id="S3.p1.1.m1.1.1" xref="S3.p1.1.m1.1.1.cmml"><mi id="S3.p1.1.m1.1.1.2" xref="S3.p1.1.m1.1.1.2.cmml">l</mi><mo id="S3.p1.1.m1.1.1.1" xref="S3.p1.1.m1.1.1.1.cmml">⁢</mo><mi id="S3.p1.1.m1.1.1.3" xref="S3.p1.1.m1.1.1.3.cmml">o</mi><mo id="S3.p1.1.m1.1.1.1a" xref="S3.p1.1.m1.1.1.1.cmml">⁢</mo><mi id="S3.p1.1.m1.1.1.4" xref="S3.p1.1.m1.1.1.4.cmml">w</mi></mrow><annotation-xml encoding="MathML-Content" id="S3.p1.1.m1.1b"><apply id="S3.p1.1.m1.1.1.cmml" xref="S3.p1.1.m1.1.1"><times id="S3.p1.1.m1.1.1.1.cmml" xref="S3.p1.1.m1.1.1.1"></times><ci id="S3.p1.1.m1.1.1.2.cmml" xref="S3.p1.1.m1.1.1.2">𝑙</ci><ci id="S3.p1.1.m1.1.1.3.cmml" xref="S3.p1.1.m1.1.1.3">𝑜</ci><ci id="S3.p1.1.m1.1.1.4.cmml" xref="S3.p1.1.m1.1.1.4">𝑤</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.p1.1.m1.1c">low</annotation><annotation encoding="application/x-llamapun" id="S3.p1.1.m1.1d">italic_l italic_o italic_w</annotation></semantics></math> and <math id="S3.p1.2.m2.1" class="ltx_Math" alttext="high" display="inline"><semantics id="S3.p1.2.m2.1a"><mrow id="S3.p1.2.m2.1.1" xref="S3.p1.2.m2.1.1.cmml"><mi id="S3.p1.2.m2.1.1.2" xref="S3.p1.2.m2.1.1.2.cmml">h</mi><mo id="S3.p1.2.m2.1.1.1" xref="S3.p1.2.m2.1.1.1.cmml">⁢</mo><mi id="S3.p1.2.m2.1.1.3" xref="S3.p1.2.m2.1.1.3.cmml">i</mi><mo id="S3.p1.2.m2.1.1.1a" xref="S3.p1.2.m2.1.1.1.cmml">⁢</mo><mi id="S3.p1.2.m2.1.1.4" xref="S3.p1.2.m2.1.1.4.cmml">g</mi><mo id="S3.p1.2.m2.1.1.1b" xref="S3.p1.2.m2.1.1.1.cmml">⁢</mo><mi id="S3.p1.2.m2.1.1.5" xref="S3.p1.2.m2.1.1.5.cmml">h</mi></mrow><annotation-xml encoding="MathML-Content" id="S3.p1.2.m2.1b"><apply id="S3.p1.2.m2.1.1.cmml" xref="S3.p1.2.m2.1.1"><times id="S3.p1.2.m2.1.1.1.cmml" xref="S3.p1.2.m2.1.1.1"></times><ci id="S3.p1.2.m2.1.1.2.cmml" xref="S3.p1.2.m2.1.1.2">ℎ</ci><ci id="S3.p1.2.m2.1.1.3.cmml" xref="S3.p1.2.m2.1.1.3">𝑖</ci><ci id="S3.p1.2.m2.1.1.4.cmml" xref="S3.p1.2.m2.1.1.4">𝑔</ci><ci id="S3.p1.2.m2.1.1.5.cmml" xref="S3.p1.2.m2.1.1.5">ℎ</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.p1.2.m2.1c">high</annotation><annotation encoding="application/x-llamapun" id="S3.p1.2.m2.1d">italic_h italic_i italic_g italic_h</annotation></semantics></math> are scalars, <math id="S3.p1.3.m3.1" class="ltx_Math" alttext="u" display="inline"><semantics id="S3.p1.3.m3.1a"><mi id="S3.p1.3.m3.1.1" xref="S3.p1.3.m3.1.1.cmml">u</mi><annotation-xml encoding="MathML-Content" id="S3.p1.3.m3.1b"><ci id="S3.p1.3.m3.1.1.cmml" xref="S3.p1.3.m3.1.1">𝑢</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p1.3.m3.1c">u</annotation><annotation encoding="application/x-llamapun" id="S3.p1.3.m3.1d">italic_u</annotation></semantics></math> is the number of 1’s in the string, and <math id="S3.p1.4.m4.1" class="ltx_Math" alttext="k" display="inline"><semantics id="S3.p1.4.m4.1a"><mi id="S3.p1.4.m4.1.1" xref="S3.p1.4.m4.1.1.cmml">k</mi><annotation-xml encoding="MathML-Content" id="S3.p1.4.m4.1b"><ci id="S3.p1.4.m4.1.1.cmml" xref="S3.p1.4.m4.1.1">𝑘</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p1.4.m4.1c">k</annotation><annotation encoding="application/x-llamapun" id="S3.p1.4.m4.1d">italic_k</annotation></semantics></math> is the order
+of the trap function.</p>
+</div>
+<figure id="S3.F1" class="ltx_figure">
+<div class="ltx_flex_figure">
+
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x1.png" id="S3.F1.g1" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x2.png" id="S3.F1.g2" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span>On left, trap–4. On right, theoretical and experimental fitness sample.</figcaption>
+</figure>
+<div id="S3.p2" class="ltx_para">
+<p id="S3.p2.3" class="ltx_p">Figure <a href="#S3.F1" title="Figure 1 ‣ 3 Feasibility of the method ‣ Sub–Structural Niching in Non–Stationary Environments" class="ltx_ref"><span class="ltx_text ltx_ref_tag">1</span></a>–left depicts the trap–4 function we use in this experiment. The first key
+question in these experiments is whether or not during the first generation of niching, the niching
+method correctly samples the actual fitness function. We define a unitation as a function which
+counts the number of 1’s in a chromosome. Given an order <math id="S3.p2.1.m1.1" class="ltx_Math" alttext="k" display="inline"><semantics id="S3.p2.1.m1.1a"><mi id="S3.p2.1.m1.1.1" xref="S3.p2.1.m1.1.1.cmml">k</mi><annotation-xml encoding="MathML-Content" id="S3.p2.1.m1.1b"><ci id="S3.p2.1.m1.1.1.cmml" xref="S3.p2.1.m1.1.1">𝑘</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p2.1.m1.1c">k</annotation><annotation encoding="application/x-llamapun" id="S3.p2.1.m1.1d">italic_k</annotation></semantics></math> trap, the theoretical proportion of a
+schema <math id="S3.p2.2.m2.1" class="ltx_Math" alttext="s" display="inline"><semantics id="S3.p2.2.m2.1a"><mi id="S3.p2.2.m2.1.1" xref="S3.p2.2.m2.1.1.cmml">s</mi><annotation-xml encoding="MathML-Content" id="S3.p2.2.m2.1b"><ci id="S3.p2.2.m2.1.1.cmml" xref="S3.p2.2.m2.1.1">𝑠</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p2.2.m2.1c">s</annotation><annotation encoding="application/x-llamapun" id="S3.p2.2.m2.1d">italic_s</annotation></semantics></math> with a unitation of <math id="S3.p2.3.m3.1" class="ltx_Math" alttext="i" display="inline"><semantics id="S3.p2.3.m3.1a"><mi id="S3.p2.3.m3.1.1" xref="S3.p2.3.m3.1.1.cmml">i</mi><annotation-xml encoding="MathML-Content" id="S3.p2.3.m3.1b"><ci id="S3.p2.3.m3.1.1.cmml" xref="S3.p2.3.m3.1.1">𝑖</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p2.3.m3.1c">i</annotation><annotation encoding="application/x-llamapun" id="S3.p2.3.m3.1d">italic_i</annotation></semantics></math> is calculated as follows:
+</p>
+<table id="S3.E6" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E6.m1.7" class="ltx_Math" alttext="p(s=i)=\frac{C(k,i)\times f(s=i)}{\sum_{j=0}^{k}C(k,j)\times f(s=j)}" display="block"><semantics id="S3.E6.m1.7a"><mrow id="S3.E6.m1.7.7" xref="S3.E6.m1.7.7.cmml"><mrow id="S3.E6.m1.7.7.1" xref="S3.E6.m1.7.7.1.cmml"><mi id="S3.E6.m1.7.7.1.3" xref="S3.E6.m1.7.7.1.3.cmml">p</mi><mo id="S3.E6.m1.7.7.1.2" xref="S3.E6.m1.7.7.1.2.cmml">⁢</mo><mrow id="S3.E6.m1.7.7.1.1.1" xref="S3.E6.m1.7.7.1.1.1.1.cmml"><mo stretchy="false" id="S3.E6.m1.7.7.1.1.1.2" xref="S3.E6.m1.7.7.1.1.1.1.cmml">(</mo><mrow id="S3.E6.m1.7.7.1.1.1.1" xref="S3.E6.m1.7.7.1.1.1.1.cmml"><mi id="S3.E6.m1.7.7.1.1.1.1.2" xref="S3.E6.m1.7.7.1.1.1.1.2.cmml">s</mi><mo id="S3.E6.m1.7.7.1.1.1.1.1" xref="S3.E6.m1.7.7.1.1.1.1.1.cmml">=</mo><mi id="S3.E6.m1.7.7.1.1.1.1.3" xref="S3.E6.m1.7.7.1.1.1.1.3.cmml">i</mi></mrow><mo stretchy="false" id="S3.E6.m1.7.7.1.1.1.3" xref="S3.E6.m1.7.7.1.1.1.1.cmml">)</mo></mrow></mrow><mo id="S3.E6.m1.7.7.2" xref="S3.E6.m1.7.7.2.cmml">=</mo><mfrac id="S3.E6.m1.6.6" xref="S3.E6.m1.6.6.cmml"><mrow id="S3.E6.m1.3.3.3" xref="S3.E6.m1.3.3.3.cmml"><mrow id="S3.E6.m1.3.3.3.5" xref="S3.E6.m1.3.3.3.5.cmml"><mrow id="S3.E6.m1.3.3.3.5.2" xref="S3.E6.m1.3.3.3.5.2.cmml"><mi id="S3.E6.m1.3.3.3.5.2.2" xref="S3.E6.m1.3.3.3.5.2.2.cmml">C</mi><mo id="S3.E6.m1.3.3.3.5.2.1" xref="S3.E6.m1.3.3.3.5.2.1.cmml">⁢</mo><mrow id="S3.E6.m1.3.3.3.5.2.3.2" xref="S3.E6.m1.3.3.3.5.2.3.1.cmml"><mo stretchy="false" id="S3.E6.m1.3.3.3.5.2.3.2.1" xref="S3.E6.m1.3.3.3.5.2.3.1.cmml">(</mo><mi id="S3.E6.m1.1.1.1.1" xref="S3.E6.m1.1.1.1.1.cmml">k</mi><mo id="S3.E6.m1.3.3.3.5.2.3.2.2" xref="S3.E6.m1.3.3.3.5.2.3.1.cmml">,</mo><mi id="S3.E6.m1.2.2.2.2" xref="S3.E6.m1.2.2.2.2.cmml">i</mi><mo rspace="0.055em" stretchy="false" id="S3.E6.m1.3.3.3.5.2.3.2.3" xref="S3.E6.m1.3.3.3.5.2.3.1.cmml">)</mo></mrow></mrow><mo rspace="0.222em" id="S3.E6.m1.3.3.3.5.1" xref="S3.E6.m1.3.3.3.5.1.cmml">×</mo><mi id="S3.E6.m1.3.3.3.5.3" xref="S3.E6.m1.3.3.3.5.3.cmml">f</mi></mrow><mo id="S3.E6.m1.3.3.3.4" xref="S3.E6.m1.3.3.3.4.cmml">⁢</mo><mrow id="S3.E6.m1.3.3.3.3.1" xref="S3.E6.m1.3.3.3.3.1.1.cmml"><mo stretchy="false" id="S3.E6.m1.3.3.3.3.1.2" xref="S3.E6.m1.3.3.3.3.1.1.cmml">(</mo><mrow id="S3.E6.m1.3.3.3.3.1.1" xref="S3.E6.m1.3.3.3.3.1.1.cmml"><mi id="S3.E6.m1.3.3.3.3.1.1.2" xref="S3.E6.m1.3.3.3.3.1.1.2.cmml">s</mi><mo id="S3.E6.m1.3.3.3.3.1.1.1" xref="S3.E6.m1.3.3.3.3.1.1.1.cmml">=</mo><mi id="S3.E6.m1.3.3.3.3.1.1.3" xref="S3.E6.m1.3.3.3.3.1.1.3.cmml">i</mi></mrow><mo stretchy="false" id="S3.E6.m1.3.3.3.3.1.3" xref="S3.E6.m1.3.3.3.3.1.1.cmml">)</mo></mrow></mrow><mrow id="S3.E6.m1.6.6.6" xref="S3.E6.m1.6.6.6.cmml"><msubsup id="S3.E6.m1.6.6.6.4" xref="S3.E6.m1.6.6.6.4.cmml"><mo id="S3.E6.m1.6.6.6.4.2.2" xref="S3.E6.m1.6.6.6.4.2.2.cmml">∑</mo><mrow id="S3.E6.m1.6.6.6.4.2.3" xref="S3.E6.m1.6.6.6.4.2.3.cmml"><mi id="S3.E6.m1.6.6.6.4.2.3.2" xref="S3.E6.m1.6.6.6.4.2.3.2.cmml">j</mi><mo id="S3.E6.m1.6.6.6.4.2.3.1" xref="S3.E6.m1.6.6.6.4.2.3.1.cmml">=</mo><mn id="S3.E6.m1.6.6.6.4.2.3.3" xref="S3.E6.m1.6.6.6.4.2.3.3.cmml">0</mn></mrow><mi id="S3.E6.m1.6.6.6.4.3" xref="S3.E6.m1.6.6.6.4.3.cmml">k</mi></msubsup><mrow id="S3.E6.m1.6.6.6.3" xref="S3.E6.m1.6.6.6.3.cmml"><mrow id="S3.E6.m1.6.6.6.3.3" xref="S3.E6.m1.6.6.6.3.3.cmml"><mrow id="S3.E6.m1.6.6.6.3.3.2" xref="S3.E6.m1.6.6.6.3.3.2.cmml"><mi id="S3.E6.m1.6.6.6.3.3.2.2" xref="S3.E6.m1.6.6.6.3.3.2.2.cmml">C</mi><mo id="S3.E6.m1.6.6.6.3.3.2.1" xref="S3.E6.m1.6.6.6.3.3.2.1.cmml">⁢</mo><mrow id="S3.E6.m1.6.6.6.3.3.2.3.2" xref="S3.E6.m1.6.6.6.3.3.2.3.1.cmml"><mo stretchy="false" id="S3.E6.m1.6.6.6.3.3.2.3.2.1" xref="S3.E6.m1.6.6.6.3.3.2.3.1.cmml">(</mo><mi id="S3.E6.m1.4.4.4.1" xref="S3.E6.m1.4.4.4.1.cmml">k</mi><mo id="S3.E6.m1.6.6.6.3.3.2.3.2.2" xref="S3.E6.m1.6.6.6.3.3.2.3.1.cmml">,</mo><mi id="S3.E6.m1.5.5.5.2" xref="S3.E6.m1.5.5.5.2.cmml">j</mi><mo rspace="0.055em" stretchy="false" id="S3.E6.m1.6.6.6.3.3.2.3.2.3" xref="S3.E6.m1.6.6.6.3.3.2.3.1.cmml">)</mo></mrow></mrow><mo rspace="0.222em" id="S3.E6.m1.6.6.6.3.3.1" xref="S3.E6.m1.6.6.6.3.3.1.cmml">×</mo><mi id="S3.E6.m1.6.6.6.3.3.3" xref="S3.E6.m1.6.6.6.3.3.3.cmml">f</mi></mrow><mo id="S3.E6.m1.6.6.6.3.2" xref="S3.E6.m1.6.6.6.3.2.cmml">⁢</mo><mrow id="S3.E6.m1.6.6.6.3.1.1" xref="S3.E6.m1.6.6.6.3.1.1.1.cmml"><mo stretchy="false" id="S3.E6.m1.6.6.6.3.1.1.2" xref="S3.E6.m1.6.6.6.3.1.1.1.cmml">(</mo><mrow id="S3.E6.m1.6.6.6.3.1.1.1" xref="S3.E6.m1.6.6.6.3.1.1.1.cmml"><mi id="S3.E6.m1.6.6.6.3.1.1.1.2" xref="S3.E6.m1.6.6.6.3.1.1.1.2.cmml">s</mi><mo id="S3.E6.m1.6.6.6.3.1.1.1.1" xref="S3.E6.m1.6.6.6.3.1.1.1.1.cmml">=</mo><mi id="S3.E6.m1.6.6.6.3.1.1.1.3" xref="S3.E6.m1.6.6.6.3.1.1.1.3.cmml">j</mi></mrow><mo stretchy="false" id="S3.E6.m1.6.6.6.3.1.1.3" xref="S3.E6.m1.6.6.6.3.1.1.1.cmml">)</mo></mrow></mrow></mrow></mfrac></mrow><annotation-xml encoding="MathML-Content" id="S3.E6.m1.7b"><apply id="S3.E6.m1.7.7.cmml" xref="S3.E6.m1.7.7"><eq id="S3.E6.m1.7.7.2.cmml" xref="S3.E6.m1.7.7.2"></eq><apply id="S3.E6.m1.7.7.1.cmml" xref="S3.E6.m1.7.7.1"><times id="S3.E6.m1.7.7.1.2.cmml" xref="S3.E6.m1.7.7.1.2"></times><ci id="S3.E6.m1.7.7.1.3.cmml" xref="S3.E6.m1.7.7.1.3">𝑝</ci><apply id="S3.E6.m1.7.7.1.1.1.1.cmml" xref="S3.E6.m1.7.7.1.1.1"><eq id="S3.E6.m1.7.7.1.1.1.1.1.cmml" xref="S3.E6.m1.7.7.1.1.1.1.1"></eq><ci id="S3.E6.m1.7.7.1.1.1.1.2.cmml" xref="S3.E6.m1.7.7.1.1.1.1.2">𝑠</ci><ci id="S3.E6.m1.7.7.1.1.1.1.3.cmml" xref="S3.E6.m1.7.7.1.1.1.1.3">𝑖</ci></apply></apply><apply id="S3.E6.m1.6.6.cmml" xref="S3.E6.m1.6.6"><divide id="S3.E6.m1.6.6.7.cmml" xref="S3.E6.m1.6.6"></divide><apply id="S3.E6.m1.3.3.3.cmml" xref="S3.E6.m1.3.3.3"><times id="S3.E6.m1.3.3.3.4.cmml" xref="S3.E6.m1.3.3.3.4"></times><apply id="S3.E6.m1.3.3.3.5.cmml" xref="S3.E6.m1.3.3.3.5"><times id="S3.E6.m1.3.3.3.5.1.cmml" xref="S3.E6.m1.3.3.3.5.1"></times><apply id="S3.E6.m1.3.3.3.5.2.cmml" xref="S3.E6.m1.3.3.3.5.2"><times id="S3.E6.m1.3.3.3.5.2.1.cmml" xref="S3.E6.m1.3.3.3.5.2.1"></times><ci id="S3.E6.m1.3.3.3.5.2.2.cmml" xref="S3.E6.m1.3.3.3.5.2.2">𝐶</ci><interval closure="open" id="S3.E6.m1.3.3.3.5.2.3.1.cmml" xref="S3.E6.m1.3.3.3.5.2.3.2"><ci id="S3.E6.m1.1.1.1.1.cmml" xref="S3.E6.m1.1.1.1.1">𝑘</ci><ci id="S3.E6.m1.2.2.2.2.cmml" xref="S3.E6.m1.2.2.2.2">𝑖</ci></interval></apply><ci id="S3.E6.m1.3.3.3.5.3.cmml" xref="S3.E6.m1.3.3.3.5.3">𝑓</ci></apply><apply id="S3.E6.m1.3.3.3.3.1.1.cmml" xref="S3.E6.m1.3.3.3.3.1"><eq id="S3.E6.m1.3.3.3.3.1.1.1.cmml" xref="S3.E6.m1.3.3.3.3.1.1.1"></eq><ci id="S3.E6.m1.3.3.3.3.1.1.2.cmml" xref="S3.E6.m1.3.3.3.3.1.1.2">𝑠</ci><ci id="S3.E6.m1.3.3.3.3.1.1.3.cmml" xref="S3.E6.m1.3.3.3.3.1.1.3">𝑖</ci></apply></apply><apply id="S3.E6.m1.6.6.6.cmml" xref="S3.E6.m1.6.6.6"><apply id="S3.E6.m1.6.6.6.4.cmml" xref="S3.E6.m1.6.6.6.4"><csymbol cd="ambiguous" id="S3.E6.m1.6.6.6.4.1.cmml" xref="S3.E6.m1.6.6.6.4">superscript</csymbol><apply id="S3.E6.m1.6.6.6.4.2.cmml" xref="S3.E6.m1.6.6.6.4"><csymbol cd="ambiguous" id="S3.E6.m1.6.6.6.4.2.1.cmml" xref="S3.E6.m1.6.6.6.4">subscript</csymbol><sum id="S3.E6.m1.6.6.6.4.2.2.cmml" xref="S3.E6.m1.6.6.6.4.2.2"></sum><apply id="S3.E6.m1.6.6.6.4.2.3.cmml" xref="S3.E6.m1.6.6.6.4.2.3"><eq id="S3.E6.m1.6.6.6.4.2.3.1.cmml" xref="S3.E6.m1.6.6.6.4.2.3.1"></eq><ci id="S3.E6.m1.6.6.6.4.2.3.2.cmml" xref="S3.E6.m1.6.6.6.4.2.3.2">𝑗</ci><cn type="integer" id="S3.E6.m1.6.6.6.4.2.3.3.cmml" xref="S3.E6.m1.6.6.6.4.2.3.3">0</cn></apply></apply><ci id="S3.E6.m1.6.6.6.4.3.cmml" xref="S3.E6.m1.6.6.6.4.3">𝑘</ci></apply><apply id="S3.E6.m1.6.6.6.3.cmml" xref="S3.E6.m1.6.6.6.3"><times id="S3.E6.m1.6.6.6.3.2.cmml" xref="S3.E6.m1.6.6.6.3.2"></times><apply id="S3.E6.m1.6.6.6.3.3.cmml" xref="S3.E6.m1.6.6.6.3.3"><times id="S3.E6.m1.6.6.6.3.3.1.cmml" xref="S3.E6.m1.6.6.6.3.3.1"></times><apply id="S3.E6.m1.6.6.6.3.3.2.cmml" xref="S3.E6.m1.6.6.6.3.3.2"><times id="S3.E6.m1.6.6.6.3.3.2.1.cmml" xref="S3.E6.m1.6.6.6.3.3.2.1"></times><ci id="S3.E6.m1.6.6.6.3.3.2.2.cmml" xref="S3.E6.m1.6.6.6.3.3.2.2">𝐶</ci><interval closure="open" id="S3.E6.m1.6.6.6.3.3.2.3.1.cmml" xref="S3.E6.m1.6.6.6.3.3.2.3.2"><ci id="S3.E6.m1.4.4.4.1.cmml" xref="S3.E6.m1.4.4.4.1">𝑘</ci><ci id="S3.E6.m1.5.5.5.2.cmml" xref="S3.E6.m1.5.5.5.2">𝑗</ci></interval></apply><ci id="S3.E6.m1.6.6.6.3.3.3.cmml" xref="S3.E6.m1.6.6.6.3.3.3">𝑓</ci></apply><apply id="S3.E6.m1.6.6.6.3.1.1.1.cmml" xref="S3.E6.m1.6.6.6.3.1.1"><eq id="S3.E6.m1.6.6.6.3.1.1.1.1.cmml" xref="S3.E6.m1.6.6.6.3.1.1.1.1"></eq><ci id="S3.E6.m1.6.6.6.3.1.1.1.2.cmml" xref="S3.E6.m1.6.6.6.3.1.1.1.2">𝑠</ci><ci id="S3.E6.m1.6.6.6.3.1.1.1.3.cmml" xref="S3.E6.m1.6.6.6.3.1.1.1.3">𝑗</ci></apply></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.E6.m1.7c">p(s=i)=\frac{C(k,i)\times f(s=i)}{\sum_{j=0}^{k}C(k,j)\times f(s=j)}</annotation><annotation encoding="application/x-llamapun" id="S3.E6.m1.7d">italic_p ( italic_s = italic_i ) = divide start_ARG italic_C ( italic_k , italic_i ) × italic_f ( italic_s = italic_i ) end_ARG start_ARG ∑ start_POSTSUBSCRIPT italic_j = 0 end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_k end_POSTSUPERSCRIPT italic_C ( italic_k , italic_j ) × italic_f ( italic_s = italic_j ) end_ARG</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(6)</span></td>
+</tr></tbody>
+</table>
+<p id="S3.p2.4" class="ltx_p">Figure <a href="#S3.F1" title="Figure 1 ‣ 3 Feasibility of the method ‣ Sub–Structural Niching in Non–Stationary Environments" class="ltx_ref"><span class="ltx_text ltx_ref_tag">1</span></a>–right depicts the theoretical and experimental proportion of the schemas,
+where it is clear that the building blocks exist in proportion to their schema fitness.</p>
+</div>
+<figure id="S3.F2" class="ltx_figure"><img src="/html/cs/0502022/assets/x3.png" id="S3.F2.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="553" height="304" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2: </span>The modified trap function 4 in a changing environment.</figcaption>
+</figure>
+<div id="S3.p3" class="ltx_para">
+<p id="S3.p3.1" class="ltx_p">Once we ensure that the building block exists in proportion to their fitness, the second question
+to answer is whether the niching method we propose is sufficient to maintain the relative
+proportion of the different schemas correctly. Figure <a href="#S3.F2" title="Figure 2 ‣ 3 Feasibility of the method ‣ Sub–Structural Niching in Non–Stationary Environments" class="ltx_ref"><span class="ltx_text ltx_ref_tag">2</span></a> confirms this behavior, where
+one can see that the niching method was able to maintain the relative proportion of the different
+schemas.</p>
+</div>
+<div id="S3.p4" class="ltx_para">
+<p id="S3.p4.1" class="ltx_p">We can conclude from the previous experiment that the niching method is successful in maintaining
+the schemas. These results do not require any additional experiments in a changing environment
+where the environment switches between the already maintained schemas. For example, if the
+environment is switching between schema 0000 and schema 1111 as the global optima, the previous
+results is sufficient to guarantee the best performance in a changing environment. One of the main
+reason for that is the environment is only manipulating the good schemas. However, what will happen
+if the bad schemas become the good ones and the environment is reversing the definition of a good
+and bad schemas. We already know that the maintenance of all schemas will slow down the convergence
+and because of selection pressures, below average schemas will eventually disappear. Therefore, we
+construct our experimental setup in a changing environment problem with two challenging problems
+for niching. The first problem alters the definition of above and below average schemas, while the
+second problem manipulates the boundaries of the building blocks (switching between two values of
+k).</p>
+</div>
+</section>
+<section id="S4" class="ltx_section ltx_indent_first">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4 </span>Experiments</h2>
+
+<div id="S4.p1" class="ltx_para">
+<p id="S4.p1.1" class="ltx_p">We repeated each experiment 30 times with different seeds. All results are presented for the
+average performance over the 30 runs. The population size is chosen large enough to provide enough
+samples for the probabilistic model to learn the structure and is fixed to 5000 in all experiments.
+Termination occurs when the algorithm reaches the maximum number of generations of 100. We assume
+that the environment changes between generations and the changes in the environment are assumed to
+be cyclic, where we tested two cycles of length 5 and 10 generations respectively. The crossover
+probability is 1, and the tournament size is 16 in all experiments based on Harik’s default values.</p>
+</div>
+<section id="S4.SS1" class="ltx_subsection ltx_indent_first">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.1 </span>Experiment 1</h3>
+
+<div id="S4.SS1.p1" class="ltx_para">
+<p id="S4.SS1.p1.2" class="ltx_p">In the initial set of experiments, we modified the trap function of order 4 to break the symmetry
+in the attractors. In this section, we choose <math id="S4.SS1.p1.1.m1.1" class="ltx_Math" alttext="low=k" display="inline"><semantics id="S4.SS1.p1.1.m1.1a"><mrow id="S4.SS1.p1.1.m1.1.1" xref="S4.SS1.p1.1.m1.1.1.cmml"><mrow id="S4.SS1.p1.1.m1.1.1.2" xref="S4.SS1.p1.1.m1.1.1.2.cmml"><mi id="S4.SS1.p1.1.m1.1.1.2.2" xref="S4.SS1.p1.1.m1.1.1.2.2.cmml">l</mi><mo id="S4.SS1.p1.1.m1.1.1.2.1" xref="S4.SS1.p1.1.m1.1.1.2.1.cmml">⁢</mo><mi id="S4.SS1.p1.1.m1.1.1.2.3" xref="S4.SS1.p1.1.m1.1.1.2.3.cmml">o</mi><mo id="S4.SS1.p1.1.m1.1.1.2.1a" xref="S4.SS1.p1.1.m1.1.1.2.1.cmml">⁢</mo><mi id="S4.SS1.p1.1.m1.1.1.2.4" xref="S4.SS1.p1.1.m1.1.1.2.4.cmml">w</mi></mrow><mo id="S4.SS1.p1.1.m1.1.1.1" xref="S4.SS1.p1.1.m1.1.1.1.cmml">=</mo><mi id="S4.SS1.p1.1.m1.1.1.3" xref="S4.SS1.p1.1.m1.1.1.3.cmml">k</mi></mrow><annotation-xml encoding="MathML-Content" id="S4.SS1.p1.1.m1.1b"><apply id="S4.SS1.p1.1.m1.1.1.cmml" xref="S4.SS1.p1.1.m1.1.1"><eq id="S4.SS1.p1.1.m1.1.1.1.cmml" xref="S4.SS1.p1.1.m1.1.1.1"></eq><apply id="S4.SS1.p1.1.m1.1.1.2.cmml" xref="S4.SS1.p1.1.m1.1.1.2"><times id="S4.SS1.p1.1.m1.1.1.2.1.cmml" xref="S4.SS1.p1.1.m1.1.1.2.1"></times><ci id="S4.SS1.p1.1.m1.1.1.2.2.cmml" xref="S4.SS1.p1.1.m1.1.1.2.2">𝑙</ci><ci id="S4.SS1.p1.1.m1.1.1.2.3.cmml" xref="S4.SS1.p1.1.m1.1.1.2.3">𝑜</ci><ci id="S4.SS1.p1.1.m1.1.1.2.4.cmml" xref="S4.SS1.p1.1.m1.1.1.2.4">𝑤</ci></apply><ci id="S4.SS1.p1.1.m1.1.1.3.cmml" xref="S4.SS1.p1.1.m1.1.1.3">𝑘</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S4.SS1.p1.1.m1.1c">low=k</annotation><annotation encoding="application/x-llamapun" id="S4.SS1.p1.1.m1.1d">italic_l italic_o italic_w = italic_k</annotation></semantics></math>, <math id="S4.SS1.p1.2.m2.1" class="ltx_Math" alttext="high=k+1" display="inline"><semantics id="S4.SS1.p1.2.m2.1a"><mrow id="S4.SS1.p1.2.m2.1.1" xref="S4.SS1.p1.2.m2.1.1.cmml"><mrow id="S4.SS1.p1.2.m2.1.1.2" xref="S4.SS1.p1.2.m2.1.1.2.cmml"><mi id="S4.SS1.p1.2.m2.1.1.2.2" xref="S4.SS1.p1.2.m2.1.1.2.2.cmml">h</mi><mo id="S4.SS1.p1.2.m2.1.1.2.1" xref="S4.SS1.p1.2.m2.1.1.2.1.cmml">⁢</mo><mi id="S4.SS1.p1.2.m2.1.1.2.3" xref="S4.SS1.p1.2.m2.1.1.2.3.cmml">i</mi><mo id="S4.SS1.p1.2.m2.1.1.2.1a" xref="S4.SS1.p1.2.m2.1.1.2.1.cmml">⁢</mo><mi id="S4.SS1.p1.2.m2.1.1.2.4" xref="S4.SS1.p1.2.m2.1.1.2.4.cmml">g</mi><mo id="S4.SS1.p1.2.m2.1.1.2.1b" xref="S4.SS1.p1.2.m2.1.1.2.1.cmml">⁢</mo><mi id="S4.SS1.p1.2.m2.1.1.2.5" xref="S4.SS1.p1.2.m2.1.1.2.5.cmml">h</mi></mrow><mo id="S4.SS1.p1.2.m2.1.1.1" xref="S4.SS1.p1.2.m2.1.1.1.cmml">=</mo><mrow id="S4.SS1.p1.2.m2.1.1.3" xref="S4.SS1.p1.2.m2.1.1.3.cmml"><mi id="S4.SS1.p1.2.m2.1.1.3.2" xref="S4.SS1.p1.2.m2.1.1.3.2.cmml">k</mi><mo id="S4.SS1.p1.2.m2.1.1.3.1" xref="S4.SS1.p1.2.m2.1.1.3.1.cmml">+</mo><mn id="S4.SS1.p1.2.m2.1.1.3.3" xref="S4.SS1.p1.2.m2.1.1.3.3.cmml">1</mn></mrow></mrow><annotation-xml encoding="MathML-Content" id="S4.SS1.p1.2.m2.1b"><apply id="S4.SS1.p1.2.m2.1.1.cmml" xref="S4.SS1.p1.2.m2.1.1"><eq id="S4.SS1.p1.2.m2.1.1.1.cmml" xref="S4.SS1.p1.2.m2.1.1.1"></eq><apply id="S4.SS1.p1.2.m2.1.1.2.cmml" xref="S4.SS1.p1.2.m2.1.1.2"><times id="S4.SS1.p1.2.m2.1.1.2.1.cmml" xref="S4.SS1.p1.2.m2.1.1.2.1"></times><ci id="S4.SS1.p1.2.m2.1.1.2.2.cmml" xref="S4.SS1.p1.2.m2.1.1.2.2">ℎ</ci><ci id="S4.SS1.p1.2.m2.1.1.2.3.cmml" xref="S4.SS1.p1.2.m2.1.1.2.3">𝑖</ci><ci id="S4.SS1.p1.2.m2.1.1.2.4.cmml" xref="S4.SS1.p1.2.m2.1.1.2.4">𝑔</ci><ci id="S4.SS1.p1.2.m2.1.1.2.5.cmml" xref="S4.SS1.p1.2.m2.1.1.2.5">ℎ</ci></apply><apply id="S4.SS1.p1.2.m2.1.1.3.cmml" xref="S4.SS1.p1.2.m2.1.1.3"><plus id="S4.SS1.p1.2.m2.1.1.3.1.cmml" xref="S4.SS1.p1.2.m2.1.1.3.1"></plus><ci id="S4.SS1.p1.2.m2.1.1.3.2.cmml" xref="S4.SS1.p1.2.m2.1.1.3.2">𝑘</ci><cn type="integer" id="S4.SS1.p1.2.m2.1.1.3.3.cmml" xref="S4.SS1.p1.2.m2.1.1.3.3">1</cn></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S4.SS1.p1.2.m2.1c">high=k+1</annotation><annotation encoding="application/x-llamapun" id="S4.SS1.p1.2.m2.1d">italic_h italic_i italic_g italic_h = italic_k + 1</annotation></semantics></math>. Symmetry can be utilized by a
+solver to easily track optima. The new function is visualized in Figure <a href="#S4.F3" title="Figure 3 ‣ 4.1 Experiment 1 ‣ 4 Experiments ‣ Sub–Structural Niching in Non–Stationary Environments" class="ltx_ref"><span class="ltx_text ltx_ref_tag">3</span></a>. At time 0 and
+in even cycles, the optimal solution is when all variables are set to 0’s and the second attractor
+is when the sum of 1’s is equal to 3. When the environment changes during the odd cycles, the new
+solution is optimal when all variables are set to 1’s and the new deceptive attractor is when the
+sum of 1’s is 1 or alternatively the number of 0’s is 3.</p>
+</div>
+<figure id="S4.F3" class="ltx_figure"><img src="/html/cs/0502022/assets/x4.png" id="S4.F3.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="553" height="304" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3: </span>The modified trap function 4 in a changing environment.</figcaption>
+</figure>
+<div id="S4.SS1.p2" class="ltx_para">
+<p id="S4.SS1.p2.1" class="ltx_p">Figure <a href="#S4.F4" title="Figure 4 ‣ 4.1 Experiment 1 ‣ 4 Experiments ‣ Sub–Structural Niching in Non–Stationary Environments" class="ltx_ref"><span class="ltx_text ltx_ref_tag">4</span></a> depicts the behavior of the three methods using the modified trap–4 function. By
+looking at the results for dcGA, the response rate (<span id="S4.SS1.p2.1.1" class="ltx_text ltx_font_italic">i.e.</span> the time between a change and
+reaching the new optimal solution) is almost at the edge of 5 for 20 building blocks. This means
+that the algorithm requires on average 5 generations to get close to the new optimal. By looking at
+the cycle of length 10, it becomes clearer that the algorithm takes a bit more than 5 generations
+(between 6-7 generations) to converge.</p>
+</div>
+<div id="S4.SS1.p3" class="ltx_para">
+<p id="S4.SS1.p3.1" class="ltx_p">When looking at Schem1, we can see that the algorithm takes longer in the first phase to get to the
+optimal solution. On the average, it takes 30 generations to do so. We will call this period the
+“warming up” phase of the model. The niching method delays the convergence during this stage.
+However, once the warming up stage is completed, the response rate is spontaneous; once the change
+occurs, a drop occurs then the method recovers instantly and gets back to the original optima. By
+comparing Schem1 and Schem2, we find the two methods are very similar except for the warming–up
+stage, where Schem2, which uses the above average schemas only, has a shorter time to warm-up than
+Schem1.
+</p>
+</div>
+<figure id="S4.F4" class="ltx_figure">
+<div class="ltx_flex_figure">
+
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x5.png" id="S4.F4.g1" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x6.png" id="S4.F4.g2" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_break"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x7.png" id="S4.F4.g3" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x8.png" id="S4.F4.g4" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_break"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x9.png" id="S4.F4.g5" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x10.png" id="S4.F4.g6" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_break"></div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4: </span>Modified Trap 4 (left) Cycle 5 (Right)
+Cycle 10, (top) dcGA, (middle) Schem1, (Bottom) Schem2. In each graph, the four curves
+correspond to 5, 10, 15, and 20 building blocks ordered from bottom up.</figcaption>
+</figure>
+</section>
+<section id="S4.SS2" class="ltx_subsection ltx_indent_first">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection">4.2 </span>Experiment 2</h3>
+
+<div id="S4.SS2.p1" class="ltx_para">
+<p id="S4.SS2.p1.1" class="ltx_p">In this experiment, we subjected the environment under a severe change from linkage point of view.
+Here, the linkage boundary changes as well as the attractors. As being depicted in
+Figure <a href="#S4.F5" title="Figure 5 ‣ 4.2 Experiment 2 ‣ 4 Experiments ‣ Sub–Structural Niching in Non–Stationary Environments" class="ltx_ref"><span class="ltx_text ltx_ref_tag">5</span></a>, the environment is switching between trap–3 with all optima at 1’s and
+trap–4 with all optima at 0’s. Moreover, in trap–3, a deceptive attractor exists when the number
+of 1’s is 1 while in trap–4, a deceptive attractor exists when the number of 1’s is 3. This setup
+is tricky in the sense that, if a hill climber gets trapped at the deceptive attractor for trap–4,
+the behavior will be good for trap–3. However, this hill–climber won’t escape this attractor when
+the environment switches back to trap-4 since the solution will be surrounded with solutions of
+lower qualities. This setup tests also whether any of the methods is behaving similar to a
+hill–climber.</p>
+</div>
+<figure id="S4.F5" class="ltx_figure"><img src="/html/cs/0502022/assets/x11.png" id="S4.F5.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="553" height="304" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 5: </span>The switching trap function with k=3,4 in a changing environment.</figcaption>
+</figure>
+<figure id="S4.F6" class="ltx_figure">
+<div class="ltx_flex_figure">
+
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x12.png" id="S4.F6.g1" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x13.png" id="S4.F6.g2" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_break"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x14.png" id="S4.F6.g3" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x15.png" id="S4.F6.g4" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_break"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x16.png" id="S4.F6.g5" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+<div class="ltx_flex_cell 
+                  ltx_flex_size_2"><img src="/html/cs/0502022/assets/x17.png" id="S4.F6.g6" class="ltx_graphics ltx_centering ltx_flex_size_2 ltx_img_square" width="290" height="277" alt="Refer to caption"></div>
+</div>
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 6: </span>Switching Trap 3–4 (left) Cycle 5 (Right)
+Cycle 10, (top) dcGA, (middle) Schem1, (Bottom) Schem2. In each graph,
+the seven curves correspond to strings of length 12, 24, 36, 48, 60, 72,
+and 84 bits ordered from bottom up.</figcaption>
+</figure>
+<div id="S4.SS2.p2" class="ltx_para">
+<p id="S4.SS2.p2.2" class="ltx_p">Figure <a href="#S4.F6" title="Figure 6 ‣ 4.2 Experiment 2 ‣ 4 Experiments ‣ Sub–Structural Niching in Non–Stationary Environments" class="ltx_ref"><span class="ltx_text ltx_ref_tag">6</span></a> shows the performance of dcGA, Schem1, and Schem2. We varied the string length
+between 12 and 84 in a step of 12 so that the string length is dividable by 3 and 4 (the order of
+the trap). For example, if the string length is 84 bits, the optimal solution for trap 4 is <math id="S4.SS2.p2.1.m1.1" class="ltx_Math" alttext="5\times\frac{84}{4}=105" display="inline"><semantics id="S4.SS2.p2.1.m1.1a"><mrow id="S4.SS2.p2.1.m1.1.1" xref="S4.SS2.p2.1.m1.1.1.cmml"><mrow id="S4.SS2.p2.1.m1.1.1.2" xref="S4.SS2.p2.1.m1.1.1.2.cmml"><mn id="S4.SS2.p2.1.m1.1.1.2.2" xref="S4.SS2.p2.1.m1.1.1.2.2.cmml">5</mn><mo lspace="0.222em" rspace="0.222em" id="S4.SS2.p2.1.m1.1.1.2.1" xref="S4.SS2.p2.1.m1.1.1.2.1.cmml">×</mo><mfrac id="S4.SS2.p2.1.m1.1.1.2.3" xref="S4.SS2.p2.1.m1.1.1.2.3.cmml"><mn id="S4.SS2.p2.1.m1.1.1.2.3.2" xref="S4.SS2.p2.1.m1.1.1.2.3.2.cmml">84</mn><mn id="S4.SS2.p2.1.m1.1.1.2.3.3" xref="S4.SS2.p2.1.m1.1.1.2.3.3.cmml">4</mn></mfrac></mrow><mo id="S4.SS2.p2.1.m1.1.1.1" xref="S4.SS2.p2.1.m1.1.1.1.cmml">=</mo><mn id="S4.SS2.p2.1.m1.1.1.3" xref="S4.SS2.p2.1.m1.1.1.3.cmml">105</mn></mrow><annotation-xml encoding="MathML-Content" id="S4.SS2.p2.1.m1.1b"><apply id="S4.SS2.p2.1.m1.1.1.cmml" xref="S4.SS2.p2.1.m1.1.1"><eq id="S4.SS2.p2.1.m1.1.1.1.cmml" xref="S4.SS2.p2.1.m1.1.1.1"></eq><apply id="S4.SS2.p2.1.m1.1.1.2.cmml" xref="S4.SS2.p2.1.m1.1.1.2"><times id="S4.SS2.p2.1.m1.1.1.2.1.cmml" xref="S4.SS2.p2.1.m1.1.1.2.1"></times><cn type="integer" id="S4.SS2.p2.1.m1.1.1.2.2.cmml" xref="S4.SS2.p2.1.m1.1.1.2.2">5</cn><apply id="S4.SS2.p2.1.m1.1.1.2.3.cmml" xref="S4.SS2.p2.1.m1.1.1.2.3"><divide id="S4.SS2.p2.1.m1.1.1.2.3.1.cmml" xref="S4.SS2.p2.1.m1.1.1.2.3"></divide><cn type="integer" id="S4.SS2.p2.1.m1.1.1.2.3.2.cmml" xref="S4.SS2.p2.1.m1.1.1.2.3.2">84</cn><cn type="integer" id="S4.SS2.p2.1.m1.1.1.2.3.3.cmml" xref="S4.SS2.p2.1.m1.1.1.2.3.3">4</cn></apply></apply><cn type="integer" id="S4.SS2.p2.1.m1.1.1.3.cmml" xref="S4.SS2.p2.1.m1.1.1.3">105</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S4.SS2.p2.1.m1.1c">5\times\frac{84}{4}=105</annotation><annotation encoding="application/x-llamapun" id="S4.SS2.p2.1.m1.1d">5 × divide start_ARG 84 end_ARG start_ARG 4 end_ARG = 105</annotation></semantics></math> and for trap 3 is <math id="S4.SS2.p2.2.m2.1" class="ltx_Math" alttext="5\times\frac{84}{3}=120" display="inline"><semantics id="S4.SS2.p2.2.m2.1a"><mrow id="S4.SS2.p2.2.m2.1.1" xref="S4.SS2.p2.2.m2.1.1.cmml"><mrow id="S4.SS2.p2.2.m2.1.1.2" xref="S4.SS2.p2.2.m2.1.1.2.cmml"><mn id="S4.SS2.p2.2.m2.1.1.2.2" xref="S4.SS2.p2.2.m2.1.1.2.2.cmml">5</mn><mo lspace="0.222em" rspace="0.222em" id="S4.SS2.p2.2.m2.1.1.2.1" xref="S4.SS2.p2.2.m2.1.1.2.1.cmml">×</mo><mfrac id="S4.SS2.p2.2.m2.1.1.2.3" xref="S4.SS2.p2.2.m2.1.1.2.3.cmml"><mn id="S4.SS2.p2.2.m2.1.1.2.3.2" xref="S4.SS2.p2.2.m2.1.1.2.3.2.cmml">84</mn><mn id="S4.SS2.p2.2.m2.1.1.2.3.3" xref="S4.SS2.p2.2.m2.1.1.2.3.3.cmml">3</mn></mfrac></mrow><mo id="S4.SS2.p2.2.m2.1.1.1" xref="S4.SS2.p2.2.m2.1.1.1.cmml">=</mo><mn id="S4.SS2.p2.2.m2.1.1.3" xref="S4.SS2.p2.2.m2.1.1.3.cmml">120</mn></mrow><annotation-xml encoding="MathML-Content" id="S4.SS2.p2.2.m2.1b"><apply id="S4.SS2.p2.2.m2.1.1.cmml" xref="S4.SS2.p2.2.m2.1.1"><eq id="S4.SS2.p2.2.m2.1.1.1.cmml" xref="S4.SS2.p2.2.m2.1.1.1"></eq><apply id="S4.SS2.p2.2.m2.1.1.2.cmml" xref="S4.SS2.p2.2.m2.1.1.2"><times id="S4.SS2.p2.2.m2.1.1.2.1.cmml" xref="S4.SS2.p2.2.m2.1.1.2.1"></times><cn type="integer" id="S4.SS2.p2.2.m2.1.1.2.2.cmml" xref="S4.SS2.p2.2.m2.1.1.2.2">5</cn><apply id="S4.SS2.p2.2.m2.1.1.2.3.cmml" xref="S4.SS2.p2.2.m2.1.1.2.3"><divide id="S4.SS2.p2.2.m2.1.1.2.3.1.cmml" xref="S4.SS2.p2.2.m2.1.1.2.3"></divide><cn type="integer" id="S4.SS2.p2.2.m2.1.1.2.3.2.cmml" xref="S4.SS2.p2.2.m2.1.1.2.3.2">84</cn><cn type="integer" id="S4.SS2.p2.2.m2.1.1.2.3.3.cmml" xref="S4.SS2.p2.2.m2.1.1.2.3.3">3</cn></apply></apply><cn type="integer" id="S4.SS2.p2.2.m2.1.1.3.cmml" xref="S4.SS2.p2.2.m2.1.1.3">120</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S4.SS2.p2.2.m2.1c">5\times\frac{84}{3}=120</annotation><annotation encoding="application/x-llamapun" id="S4.SS2.p2.2.m2.1d">5 × divide start_ARG 84 end_ARG start_ARG 3 end_ARG = 120</annotation></semantics></math>. Therefore, the
+objective value will alternate between these two values at the optimal between cycles. The results
+in Figure <a href="#S4.F6" title="Figure 6 ‣ 4.2 Experiment 2 ‣ 4 Experiments ‣ Sub–Structural Niching in Non–Stationary Environments" class="ltx_ref"><span class="ltx_text ltx_ref_tag">6</span></a> are very similar to the previous experiment. The dcGA method responds
+effectively to environmental changes but Schem1 and Schem2 respond faster. Also, the warming up
+period for Schem1 is longer than Schem2.</p>
+</div>
+</section>
+</section>
+<section id="S5" class="ltx_section ltx_indent_first">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5 </span>Conclusion</h2>
+
+<div id="S5.p1" class="ltx_para">
+<p id="S5.p1.1" class="ltx_p">In this paper, we presented a niching method based on an automatic problem decomposition approach
+using competent GAs. We have demonstrated the innovative idea that niching is possible on the
+sub–structural level despite that the learning of these sub–structures is adaptive and may be
+noise. We tested changes where the functions maintain their linkage boundaries but switches between
+optima, as well as drastic changes where the functions change their optima simultaneously with a
+change in their linkage boundaries. In all cases, niching on the sub–structural level is a robust
+mechanism for changing environments.</p>
+</div>
+</section>
+<section id="S6" class="ltx_section ltx_indent_first">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6 </span>Acknowledgment</h2>
+
+<div id="S6.p1" class="ltx_para">
+<p id="S6.p1.1" class="ltx_p"><span id="S6.p1.1.1" class="ltx_text" style="font-size:90%;">This work was sponsored by the Air Force Office of Scientific Research, Air Force Materiel
+Command, USAF, under grant F49620-00-0163 and F49620-03-1-0129, by the Technology Research,
+Education, and Commercialization Center (TRECC), at UIUC by NCSA and funded by the Office of Naval
+Research (grant N00014-01-1-0175), the National Science Foundation under ITR grant DMR-99-76550 (at
+Materials Computation Center), ITR grant DMR-0121695 (at CPSD), the Dept. of Energy under grant
+DEFG02-91ER45439 (at Fredrick Seitz MRL), the University of New South Wales SSP Scheme, and the
+Australian Research Council (ARC) Centre on Complex Systems grant number CEO0348249.</span></p>
+</div>
+</section>
+<section id="bib" class="ltx_bibliography">
+<h2 class="ltx_title ltx_title_bibliography">References</h2>
+
+<ul class="ltx_biblist">
+<li id="bib.bib1" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[1]</span>
+<span class="ltx_bibblock">
+H.A. Abbass, K. Sastry, and D. Goldberg.
+
+</span>
+<span class="ltx_bibblock">Oiling the wheels of change: The role of adaptive automatic problem
+decomposition in non stationary environments.
+
+</span>
+<span class="ltx_bibblock">Technical Report Illigal TR-2004029, University of Illinois,
+Urbana–Champaign, 2004.
+
+</span>
+</li>
+<li id="bib.bib2" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[2]</span>
+<span class="ltx_bibblock">
+D.H. Ackley.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib2.1.1" class="ltx_text ltx_font_italic">A connectionist machine for genetic hill climbing</span>.
+
+</span>
+<span class="ltx_bibblock">Kluwer Academic publishers, 1987.
+
+</span>
+</li>
+<li id="bib.bib3" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[3]</span>
+<span class="ltx_bibblock">
+S. Baluja.
+
+</span>
+<span class="ltx_bibblock">Population–based incremental learning: A method for integrating
+genetic search based function optimization and competitive learning.
+
+</span>
+<span class="ltx_bibblock">Technical Report CMU-CS-94-163, Carnegie Mellon University, 1994.
+
+</span>
+</li>
+<li id="bib.bib4" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[4]</span>
+<span class="ltx_bibblock">
+C. Bierwirth and D.C. Mattfeld.
+
+</span>
+<span class="ltx_bibblock">Production scheduling and rescheduling with genetic algorithms.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib4.1.1" class="ltx_text ltx_font_italic">Evolutionary Computation</span>, 7(1):1–18, 1999.
+
+</span>
+</li>
+<li id="bib.bib5" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[5]</span>
+<span class="ltx_bibblock">
+P. Bosman and D. Thierens.
+
+</span>
+<span class="ltx_bibblock">Linkage information processing in distribution estimation algorithms.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib5.1.1" class="ltx_text ltx_font_italic">Proceedings of the Genetic and Evolutionary Computation
+Conference</span>, pages 60–67, 1999.
+
+</span>
+</li>
+<li id="bib.bib6" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[6]</span>
+<span class="ltx_bibblock">
+J. Branke.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib6.1.1" class="ltx_text ltx_font_italic">Evolutionary Optimization in Dynamic Environments</span>.
+
+</span>
+<span class="ltx_bibblock">Kluwer Academic Publishers, Boston, 2001.
+
+</span>
+</li>
+<li id="bib.bib7" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[7]</span>
+<span class="ltx_bibblock">
+Y.-p. Chen.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib7.1.1" class="ltx_text ltx_font_italic">Extending the Scalability of Linkage Learning Genetic
+Algorithms: Theory and Practice</span>.
+
+</span>
+<span class="ltx_bibblock">PhD thesis, University of Illinois at Urbana-Champaign, Urbana, IL,
+2004.
+
+</span>
+<span class="ltx_bibblock">(Also IlliGAL Report No. 2004018).
+
+</span>
+</li>
+<li id="bib.bib8" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[8]</span>
+<span class="ltx_bibblock">
+H.G. Cobb.
+
+</span>
+<span class="ltx_bibblock">An investigation into the use of hypermutation as an adaptive
+operator in genetic algorithms having continuous, time-dependent
+nonstationary environments.
+
+</span>
+<span class="ltx_bibblock">Technical Report AIC-90-001, Naval Research Laboratory, 1990.
+
+</span>
+</li>
+<li id="bib.bib9" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[9]</span>
+<span class="ltx_bibblock">
+P. Collard, C. Escazut, and E. Gaspar.
+
+</span>
+<span class="ltx_bibblock">An evolutionnary approach for time dependant optimization.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib9.1.1" class="ltx_text ltx_font_italic">International Journal on Artificial Intelligence Tools</span>,
+6(4):665–695, 1997.
+
+</span>
+</li>
+<li id="bib.bib10" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[10]</span>
+<span class="ltx_bibblock">
+D. Dasgupta.
+
+</span>
+<span class="ltx_bibblock">Incorporating redundancy and gene activation mechanisms in genetic
+search.
+
+</span>
+<span class="ltx_bibblock">In L. Chambers, editor, <span id="bib.bib10.1.1" class="ltx_text ltx_font_italic">Practical Handbook of Genetic
+Algorithms</span>, pages 303–316. CRC Press, 1995.
+
+</span>
+</li>
+<li id="bib.bib11" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[11]</span>
+<span class="ltx_bibblock">
+K. Deb and D.E. Goldberg.
+
+</span>
+<span class="ltx_bibblock">Analyzing deception in trap functions.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib11.1.1" class="ltx_text ltx_font_italic">Foundations of Genetic Algorithms</span>, pages
+93–108. Morgan Kaufmann, 1993.
+
+</span>
+</li>
+<li id="bib.bib12" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[12]</span>
+<span class="ltx_bibblock">
+A. Ghosh, S. Tstutsui, and H. Tanaka.
+
+</span>
+<span class="ltx_bibblock">Function optimisation in nonstationary environment using steady state
+genetic algorithms with aging of individuals.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib12.1.1" class="ltx_text ltx_font_italic">IEEE International Conference on Evolutionary Computation</span>,
+pages 666–671. IEEE Publishing, 1998.
+
+</span>
+</li>
+<li id="bib.bib13" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[13]</span>
+<span class="ltx_bibblock">
+D. E. Goldberg, K. Deb, and J. Horn.
+
+</span>
+<span class="ltx_bibblock">Massive multimodality, deception, and genetic algorithms.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib13.1.1" class="ltx_text ltx_font_italic">Proceedings of
+parallel problem solving from nature II</span>, pages
+37–46.
+Elsevier Science Publishers, 1992.
+
+</span>
+</li>
+<li id="bib.bib14" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[14]</span>
+<span class="ltx_bibblock">
+D.E. Goldberg.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib14.1.1" class="ltx_text ltx_font_italic">The design of innovation: lessons from and for competent genetic
+algorithms</span>.
+
+</span>
+<span class="ltx_bibblock">Kluwer Academic Publishers, Massachusetts, USA, 2002.
+
+</span>
+</li>
+<li id="bib.bib15" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[15]</span>
+<span class="ltx_bibblock">
+D.E. Goldberg, K. Deb, H. Kargupta, and G. Harik.
+
+</span>
+<span class="ltx_bibblock">Rapid, accurate optimization of difficult problems using fast messy
+genetic algorithms.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib15.1.1" class="ltx_text ltx_font_italic">Proceedings of the Fifth International Conference on Genetic
+Algorithms, San Mateo, California</span>, pages 56–530. Morgan Kauffman
+Publishers, 1993.
+
+</span>
+</li>
+<li id="bib.bib16" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[16]</span>
+<span class="ltx_bibblock">
+D.E. Goldberg, B. Korb, and K. Deb.
+
+</span>
+<span class="ltx_bibblock">Messy genetic algorithms: motivation, analysis, and first results.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib16.1.1" class="ltx_text ltx_font_italic">Complex Systems</span>, 3(5):493–530, 1989.
+
+</span>
+</li>
+<li id="bib.bib17" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[17]</span>
+<span class="ltx_bibblock">
+D.E. Goldberg and R.E. Smith.
+
+</span>
+<span class="ltx_bibblock">Nonstationary function optimisation using genetic algorithms with
+dominance and diploidy.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib17.1.1" class="ltx_text ltx_font_italic">Second International Conference on
+Genetic Algorithms</span>, pages 59–68. Lawrence Erlbaum Associates, 1987.
+
+</span>
+</li>
+<li id="bib.bib18" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[18]</span>
+<span class="ltx_bibblock">
+J.J. Grefenstette.
+
+</span>
+<span class="ltx_bibblock">Genetic algorithms for changing environments.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib18.1.1" class="ltx_text ltx_font_italic">Proceedings of Parallel
+Problem Solving from Nature</span>, pages 137–144. Elsevier Science Publisher,
+1992.
+
+</span>
+</li>
+<li id="bib.bib19" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[19]</span>
+<span class="ltx_bibblock">
+G. Harik.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib19.1.1" class="ltx_text ltx_font_italic">Linkage Learning via Probabilistic Modeling in the ECGA</span>.
+
+</span>
+<span class="ltx_bibblock">PhD thesis, University of Illinois at Urbana–Champaign, 1999.
+
+</span>
+</li>
+<li id="bib.bib20" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[20]</span>
+<span class="ltx_bibblock">
+R. B. Heckendorn and A. H. Wright.
+
+</span>
+<span class="ltx_bibblock">Efficient linkage discovery by limited probing.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib20.1.1" class="ltx_text ltx_font_italic">Proceedings of the Genetic and Evolutionary Computation
+Conference</span>, pages 1003–1014, 2003.
+
+</span>
+</li>
+<li id="bib.bib21" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[21]</span>
+<span class="ltx_bibblock">
+J. H. Holland.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib21.1.1" class="ltx_text ltx_font_italic">Adaptation in Natural and Artificial Systems</span>.
+
+</span>
+<span class="ltx_bibblock">University of Michigan Press, Ann Arbor, MI, 1975.
+
+</span>
+</li>
+<li id="bib.bib22" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[22]</span>
+<span class="ltx_bibblock">
+H. Kargupta.
+
+</span>
+<span class="ltx_bibblock">The gene expression messy genetic algorithm.
+
+</span>
+<span class="ltx_bibblock">In <span id="bib.bib22.1.1" class="ltx_text ltx_font_italic">Proceedings of the IEEE International Conference on
+Evolutionary Computation</span>, pages 814–819, Piscataway, NJ, 1996. IEEE Service
+Centre.
+
+</span>
+</li>
+<li id="bib.bib23" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[23]</span>
+<span class="ltx_bibblock">
+S.C. Lin, E.D. Goodman, and W.F. Punch.
+
+</span>
+<span class="ltx_bibblock">A genetic algorithm approach to dynamic job shop scheduling problems.
+
+</span>
+<span class="ltx_bibblock">In <span id="bib.bib23.1.1" class="ltx_text ltx_font_italic">Seventh International Conference on Genetic Algorithms</span>,
+pages 139–148. Morgan Kaufmann, 1997.
+
+</span>
+</li>
+<li id="bib.bib24" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[24]</span>
+<span class="ltx_bibblock">
+S.W. Mahfoud.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib24.1.1" class="ltx_text ltx_font_italic">Bayesian</span>.
+
+</span>
+<span class="ltx_bibblock">PhD thesis, University of Illinois at Urbana-Champaign, Urbana, IL,
+1995.
+
+</span>
+<span class="ltx_bibblock">(Also IlliGAL Report No. 95001).
+
+</span>
+</li>
+<li id="bib.bib25" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[25]</span>
+<span class="ltx_bibblock">
+N. Mori, S. Imanishia, H. Kita, and Y. Nishikawa.
+
+</span>
+<span class="ltx_bibblock">Adaptation to changing environments by means of the memory based
+thermodynamical genetic algorithms.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib25.1.1" class="ltx_text ltx_font_italic">Proceedings of the Seventh International Conference on
+Genetic Algorithms</span>, pages 299–306. Morgan Kaufmann, 1997.
+
+</span>
+</li>
+<li id="bib.bib26" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[26]</span>
+<span class="ltx_bibblock">
+N. Mori, H. Kita, and Y. Nishikawa.
+
+</span>
+<span class="ltx_bibblock">Adaptation to changing environments by means of the thermodynamical
+genetic algorithms.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib26.1.1" class="ltx_text ltx_font_italic">Proceedings of Parallel Problem Solving from Nature</span>,
+volume 1411 of <span id="bib.bib26.2.2" class="ltx_text ltx_font_italic">Lecture Notes in Computer Science</span>, pages 513–522,
+Berlin, 1996. Elsevier Science Publisher.
+
+</span>
+</li>
+<li id="bib.bib27" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[27]</span>
+<span class="ltx_bibblock">
+M. Munetomo and D. Goldberg.
+
+</span>
+<span class="ltx_bibblock">Linkage identification by non-monotonicity detection for overlapping
+functions.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib27.1.1" class="ltx_text ltx_font_italic">Evolutionary Computation</span>, 7(4):377–398, 1999.
+
+</span>
+</li>
+<li id="bib.bib28" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[28]</span>
+<span class="ltx_bibblock">
+M. Pelikan, D. E. Goldberg, and E. Cantú-Paz.
+
+</span>
+<span class="ltx_bibblock">Linkage learning, estimation distribution, and Bayesian networks.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib28.1.1" class="ltx_text ltx_font_italic">Evolutionary Computation</span>, 8(3):314–341, 2000.
+
+</span>
+<span class="ltx_bibblock">(Also IlliGAL Report No. 98013).
+
+</span>
+</li>
+<li id="bib.bib29" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[29]</span>
+<span class="ltx_bibblock">
+M. Pelikan and H. Mühlenbein.
+
+</span>
+<span class="ltx_bibblock">The bivariate marginal distribution algorithm.
+
+</span>
+<span class="ltx_bibblock">In R. Roy, T. Furuhashi, and P. K. Chawdhry, editors, <span id="bib.bib29.1.1" class="ltx_text ltx_font_italic">Advances
+in Soft Computing - Engineering Design and Manufacturing</span>, pages 521–535,
+London, 1999. Springer-Verlag.
+
+</span>
+</li>
+<li id="bib.bib30" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[30]</span>
+<span class="ltx_bibblock">
+J. J. Rissanen.
+
+</span>
+<span class="ltx_bibblock">Modelling by shortest data description.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib30.1.1" class="ltx_text ltx_font_italic">Automatica</span>, 14:465–471, 1978.
+
+</span>
+</li>
+<li id="bib.bib31" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[31]</span>
+<span class="ltx_bibblock">
+Claude E. Shannon.
+
+</span>
+<span class="ltx_bibblock">A mathematical theory of communication.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib31.1.1" class="ltx_text ltx_font_italic">The Bell System Technical Journal</span>, 27(3):379–423, 1948.
+
+</span>
+</li>
+<li id="bib.bib32" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[32]</span>
+<span class="ltx_bibblock">
+D. Thierens and D.E. Goldberg.
+
+</span>
+<span class="ltx_bibblock">Mixing in genetic algorithms.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib32.1.1" class="ltx_text ltx_font_italic">Proceedings of the Fifth International
+Conference on Genetic Algorithms (ICGA-93)</span>, pages 38–45, San Mateo, CA,
+1993. Morgan Kaufmann.
+
+</span>
+</li>
+<li id="bib.bib33" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[33]</span>
+<span class="ltx_bibblock">
+F. Vavak, K. Jukes, and T.C. Fogarty.
+
+</span>
+<span class="ltx_bibblock">Learning the local search range for genetic optimisation in
+nonstationary environments.
+
+</span>
+<span class="ltx_bibblock">In <span id="bib.bib33.1.1" class="ltx_text ltx_font_italic">IEEE International Conference on Evolutionary Computation</span>,
+pages 355–360. IEEE Publishing, 1997.
+
+</span>
+</li>
+<li id="bib.bib34" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[34]</span>
+<span class="ltx_bibblock">
+T.-L. Yu, D. E. Goldberg, A. Yassine, and Y.-P. Chen.
+
+</span>
+<span class="ltx_bibblock">A genetic algorithm design inspired by organizational theory: Pilot
+study of a dependency structure matrix driven genetic algorithm.
+
+</span>
+<span class="ltx_bibblock"><span id="bib.bib34.1.1" class="ltx_text ltx_font_italic">Artificial Neural Networks in Engineering</span>, pages 327–332,
+2003.
+
+</span>
+<span class="ltx_bibblock">(Also IlliGAL Report No. 2003007).
+
+</span>
+</li>
+</ul>
+</section>
+</article>
+</div>
+<div class="ar5iv-footer"><a href="/html/cs/0502021" class="ar5iv-nav-button ar5iv-nav-button-prev">◄</a>
+    <a class="ar5iv-home-button" href="/"><img height="40" alt="ar5iv homepage" src="/assets/ar5iv.png"></a>
+    <a href="/feeling_lucky" class="ar5iv-text-button">Feeling<br>lucky?</a>
+    <a href="/log/cs/0502022" class="ar5iv-text-button ar5iv-severity-warning">Conversion<br>report</a>
+    <a class="ar5iv-text-button" target="_blank" href="https://github.com/dginev/ar5iv/issues/new?template=improve-article--arxiv-id-.md&title=Improve+article+cs/0502022">Report<br>an issue</a>
+    <a href="https://arxiv.org/abs/cs/0502022" class="ar5iv-text-button arxiv-ui-theme">View&nbsp;original<br>on&nbsp;arXiv</a><a href="/html/cs/0502023" class="ar5iv-nav-button ar5iv-nav-button-next">►</a>
+</div><footer class="ltx_page_footer">
+<a class="ar5iv-toggle-color-scheme" href="javascript:toggleColorScheme()" title="Toggle ar5iv color scheme"><span class="color-scheme-icon"></span></a>
+<a class="ar5iv-footer-button" href="https://arxiv.org/help/license" target="_blank">Copyright</a>
+<a class="ar5iv-footer-button" href="https://arxiv.org/help/policies/privacy_policy" target="_blank">Privacy Policy</a>
+
+<div class="ltx_page_logo">Generated  on Tue Dec 20 12:04:50 2022 by <a target="_blank" href="http://dlmf.nist.gov/LaTeXML/" class="ltx_LaTeXML_logo"><span style="letter-spacing:-0.2em; margin-right:0.1em;">L<span style="font-size:70%;position:relative; bottom:2.2pt;">A</span>T<span style="position:relative; bottom:-0.4ex;">E</span></span><span class="ltx_font_smallcaps">xml</span><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOCAYAAAD5YeaVAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wKExQZLWTEaOUAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAdpJREFUKM9tkL+L2nAARz9fPZNCKFapUn8kyI0e4iRHSR1Kb8ng0lJw6FYHFwv2LwhOpcWxTjeUunYqOmqd6hEoRDhtDWdA8ApRYsSUCDHNt5ul13vz4w0vWCgUnnEc975arX6ORqN3VqtVZbfbTQC4uEHANM3jSqXymFI6yWazP2KxWAXAL9zCUa1Wy2tXVxheKA9YNoR8Pt+aTqe4FVVVvz05O6MBhqUIBGk8Hn8HAOVy+T+XLJfLS4ZhTiRJgqIoVBRFIoric47jPnmeB1mW/9rr9ZpSSn3Lsmir1fJZlqWlUonKsvwWwD8ymc/nXwVBeLjf7xEKhdBut9Hr9WgmkyGEkJwsy5eHG5vN5g0AKIoCAEgkEkin0wQAfN9/cXPdheu6P33fBwB4ngcAcByHJpPJl+fn54mD3Gg0NrquXxeLRQAAwzAYj8cwTZPwPH9/sVg8PXweDAauqqr2cDjEer1GJBLBZDJBs9mE4zjwfZ85lAGg2+06hmGgXq+j3+/DsixYlgVN03a9Xu8jgCNCyIegIAgx13Vfd7vdu+FweG8YRkjXdWy329+dTgeSJD3ieZ7RNO0VAXAPwDEAO5VKndi2fWrb9jWl9Esul6PZbDY9Go1OZ7PZ9z/lyuD3OozU2wAAAABJRU5ErkJggg==" alt="[LOGO]"></a>
+</div></footer>
+</div>
+
+    <script>
+      var canMathML = typeof(MathMLElement) == "function";
+      if (!canMathML) {
+        var body = document.querySelector("body");
+        body.firstElementChild.setAttribute('style', 'opacity: 0;');
+        var loading = document.createElement("div");
+        loading.setAttribute("id", "mathjax-loading-spinner");
+        var message = document.createElement("div");
+        message.setAttribute("id", "mathjax-loading-message");
+        message.innerText = "Typesetting Equations...";
+        body.prepend(loading);
+        body.prepend(message);
+
+        var el = document.createElement("script");
+        el.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+        document.querySelector("head").appendChild(el);
+
+        window.MathJax = {
+          startup: {
+            pageReady: () => {
+              return MathJax.startup.defaultPageReady().then(() => {
+                body.removeChild(loading);
+                body.removeChild(message);
+                body.firstElementChild.removeAttribute('style');
+              }); } } };
+      }
+    </script>
+    <script>
+    // Auxiliary function, building the preview feature when
+    // an inline citation is clicked
+    function clicked_cite(e) {
+      e.preventDefault();
+      let cite = this.closest('.ltx_cite');
+      let next = cite.nextSibling;
+      if (next && next.nodeType == Node.ELEMENT_NODE && next.getAttribute('class') == "ar5iv-bibitem-preview") {
+        next.remove();
+        return; }
+      // Before adding a preview modal,
+      // cleanup older previews, in case they're still open
+      document.querySelectorAll('span.ar5iv-bibitem-preview').forEach(function(node) {
+        node.remove();
+      })
+
+      // Create the preview
+      preview = document.createElement('span');
+      preview.setAttribute('class','ar5iv-bibitem-preview');
+      let target = document.getElementById(this.getAttribute('href').slice(1));
+      target.childNodes.forEach(function (child) {
+        preview.append(child.cloneNode(true));
+      });
+      let close_x = document.createElement('button');
+      close_x.setAttribute("aria-label","Close modal for bibliography item preview");
+      close_x.textContent = "×";
+      close_x.setAttribute('class', 'ar5iv-button-close-preview');
+      close_x.setAttribute('onclick','this.parentNode.remove()');
+      preview.append(close_x);
+      preview.querySelectorAll('.ltx_tag_bibitem').forEach(function(node) {
+        node.remove();
+      });
+      cite.parentNode.insertBefore(preview, cite.nextSibling);
+      return;
+    }
+    // Global Document initialization:
+    // - assign the preview feature to all inline citation links
+    document.querySelectorAll(".ltx_cite .ltx_ref").forEach(function (link) {
+      link.addEventListener("click", clicked_cite);
+    });
+    </script>
+    </body>
+</html>

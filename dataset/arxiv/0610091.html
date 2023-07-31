@@ -1,0 +1,940 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>[cs/0610091] On the Behavior of Journal Impact Factor Rank-Order Distribution</title><meta property="og:description" content="An empirical law for the rank-order behavior of journal impact factors is
+found. Using an extensive data base on
+impact factors including journals on Education, Agrosciences,
+Geosciences,Mathematics, Chemistry, Medicin…">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="On the Behavior of Journal Impact Factor Rank-Order Distribution">
+<meta name="twitter:image:src" content="https://ar5iv.labs.arxiv.org/assets/ar5iv_card.png">
+<meta name="twitter:image:alt" content="ar5iv logo">
+<meta property="og:title" content="On the Behavior of Journal Impact Factor Rank-Order Distribution">
+<meta property="og:site_name" content="ar5iv">
+<meta property="og:image" content="https://ar5iv.labs.arxiv.org/assets/ar5iv_card.png">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ar5iv.labs.arxiv.org/html/cs/0610091">
+
+<!--Generated on Wed Dec 14 13:23:23 2022 by LaTeXML (version 0.8.6) http://dlmf.nist.gov/LaTeXML/.-->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<script>
+  function detectColorScheme(){
+    var theme="light";
+    var current_theme = localStorage.getItem("ar5iv_theme");
+    if(current_theme){
+      if(current_theme == "dark"){
+        theme = "dark";
+      } }
+    else if(!window.matchMedia) { return false; }
+    else if(window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      theme = "dark"; }
+    if (theme=="dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light"); } }
+
+  detectColorScheme();
+
+  function toggleColorScheme(){
+    var current_theme = localStorage.getItem("ar5iv_theme");
+    if (current_theme) {
+      if (current_theme == "light") {
+        localStorage.setItem("ar5iv_theme", "dark"); }
+      else {
+        localStorage.setItem("ar5iv_theme", "light"); } }
+    else {
+        localStorage.setItem("ar5iv_theme", "dark"); }
+    detectColorScheme(); }
+</script>
+<link media="all" rel="stylesheet" href="/assets/ar5iv.0.7.6.min.css"><link media="all" rel="stylesheet" href="/assets/ar5iv-site.0.2.1.css">
+</head>
+<body>
+<div class="ltx_page_main">
+<div class="ltx_page_content">
+<article class="ltx_document ltx_authors_1line">
+<h1 class="ltx_title ltx_title_document">On the Behavior of Journal Impact Factor Rank-Order Distribution</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Mansilla, R.(1), Köppen, E.(2) Cocho, G.(2) and Miramontes, P.(3,*)
+<br class="ltx_break">1. Centro de Investigaciones
+Interdisciplinarias. Universidad
+Nacional 
+<br class="ltx_break">Autónoma de México. México 04510, DF. México
+<br class="ltx_break">2. Instituto de Física.
+Universidad Nacional Autónoma de México
+<br class="ltx_break">México 04510, DF. México
+<br class="ltx_break">3. Facultad de Ciencias. Universidad Nacional Autónoma de México
+<br class="ltx_break">México 04510, DF. México
+<br class="ltx_break">* Corresponding author. Email: pmv@fciencias.unam.mx
+</span></span>
+</div>
+
+<div class="ltx_abstract">
+<h6 class="ltx_title ltx_title_abstract">Abstract</h6>
+<p id="id1.id1" class="ltx_p">An empirical law for the rank-order behavior of journal impact factors is
+found. Using an extensive data base on
+impact factors including journals on Education, Agrosciences,
+Geosciences,Mathematics, Chemistry, Medicine, Engineering, Physics, Biosciences
+and Environmental, Computer and Material Sciences, we have found extremely good
+fittings outperforming other rank-order models. Based in our results we propose
+a two-exponent Lotkaian Informetrics. Some extensions to other areas of
+knowledge are discussed.</p>
+</div>
+<section id="S1" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1 </span>Introduction</h2>
+
+<div id="S1.p1" class="ltx_para">
+<p id="S1.p1.2" class="ltx_p">Quantitative studies in linguistics have a long lineage. Due
+to the extreme complexity of languages, these studies have been mainly based on
+statistical
+properties of words in literary corpora. Outstanding early examples of these
+studies are J. B. Estoup (1916), G. Dewey (1923) and E. V. Condon (1928).
+However the most influential contribution on this topic is by G. K. Zipf (1949).
+In his work appears what is today known as <span id="S1.p1.2.1" class="ltx_text ltx_font_italic">Zipf’s law</span> which can be
+formulated as follows: Let <math id="S1.p1.1.m1.1" class="ltx_Math" alttext="f(r)" display="inline"><semantics id="S1.p1.1.m1.1a"><mrow id="S1.p1.1.m1.1.2" xref="S1.p1.1.m1.1.2.cmml"><mi id="S1.p1.1.m1.1.2.2" xref="S1.p1.1.m1.1.2.2.cmml">f</mi><mo id="S1.p1.1.m1.1.2.1" xref="S1.p1.1.m1.1.2.1.cmml">⁢</mo><mrow id="S1.p1.1.m1.1.2.3.2" xref="S1.p1.1.m1.1.2.cmml"><mo stretchy="false" id="S1.p1.1.m1.1.2.3.2.1" xref="S1.p1.1.m1.1.2.cmml">(</mo><mi id="S1.p1.1.m1.1.1" xref="S1.p1.1.m1.1.1.cmml">r</mi><mo stretchy="false" id="S1.p1.1.m1.1.2.3.2.2" xref="S1.p1.1.m1.1.2.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S1.p1.1.m1.1b"><apply id="S1.p1.1.m1.1.2.cmml" xref="S1.p1.1.m1.1.2"><times id="S1.p1.1.m1.1.2.1.cmml" xref="S1.p1.1.m1.1.2.1"></times><ci id="S1.p1.1.m1.1.2.2.cmml" xref="S1.p1.1.m1.1.2.2">𝑓</ci><ci id="S1.p1.1.m1.1.1.cmml" xref="S1.p1.1.m1.1.1">𝑟</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p1.1.m1.1c">f(r)</annotation><annotation encoding="application/x-llamapun" id="S1.p1.1.m1.1d">italic_f ( italic_r )</annotation></semantics></math>; <math id="S1.p1.2.m2.3" class="ltx_Math" alttext="r=1,\ldots,N" display="inline"><semantics id="S1.p1.2.m2.3a"><mrow id="S1.p1.2.m2.3.4" xref="S1.p1.2.m2.3.4.cmml"><mi id="S1.p1.2.m2.3.4.2" xref="S1.p1.2.m2.3.4.2.cmml">r</mi><mo id="S1.p1.2.m2.3.4.1" xref="S1.p1.2.m2.3.4.1.cmml">=</mo><mrow id="S1.p1.2.m2.3.4.3.2" xref="S1.p1.2.m2.3.4.3.1.cmml"><mn id="S1.p1.2.m2.1.1" xref="S1.p1.2.m2.1.1.cmml">1</mn><mo id="S1.p1.2.m2.3.4.3.2.1" xref="S1.p1.2.m2.3.4.3.1.cmml">,</mo><mi mathvariant="normal" id="S1.p1.2.m2.2.2" xref="S1.p1.2.m2.2.2.cmml">…</mi><mo id="S1.p1.2.m2.3.4.3.2.2" xref="S1.p1.2.m2.3.4.3.1.cmml">,</mo><mi id="S1.p1.2.m2.3.3" xref="S1.p1.2.m2.3.3.cmml">N</mi></mrow></mrow><annotation-xml encoding="MathML-Content" id="S1.p1.2.m2.3b"><apply id="S1.p1.2.m2.3.4.cmml" xref="S1.p1.2.m2.3.4"><eq id="S1.p1.2.m2.3.4.1.cmml" xref="S1.p1.2.m2.3.4.1"></eq><ci id="S1.p1.2.m2.3.4.2.cmml" xref="S1.p1.2.m2.3.4.2">𝑟</ci><list id="S1.p1.2.m2.3.4.3.1.cmml" xref="S1.p1.2.m2.3.4.3.2"><cn type="integer" id="S1.p1.2.m2.1.1.cmml" xref="S1.p1.2.m2.1.1">1</cn><ci id="S1.p1.2.m2.2.2.cmml" xref="S1.p1.2.m2.2.2">…</ci><ci id="S1.p1.2.m2.3.3.cmml" xref="S1.p1.2.m2.3.3">𝑁</ci></list></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p1.2.m2.3c">r=1,\ldots,N</annotation><annotation encoding="application/x-llamapun" id="S1.p1.2.m2.3d">italic_r = 1 , … , italic_N</annotation></semantics></math>, be the relative frequency
+of the words in a text in decreasing order. Then Zipf’s law states that:</p>
+</div>
+<div id="S1.p2" class="ltx_para">
+<table id="S1.E1" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S1.E1.m1.1" class="ltx_Math" alttext="f(r)=\frac{K}{r^{\alpha}}" display="block"><semantics id="S1.E1.m1.1a"><mrow id="S1.E1.m1.1.2" xref="S1.E1.m1.1.2.cmml"><mrow id="S1.E1.m1.1.2.2" xref="S1.E1.m1.1.2.2.cmml"><mi id="S1.E1.m1.1.2.2.2" xref="S1.E1.m1.1.2.2.2.cmml">f</mi><mo id="S1.E1.m1.1.2.2.1" xref="S1.E1.m1.1.2.2.1.cmml">⁢</mo><mrow id="S1.E1.m1.1.2.2.3.2" xref="S1.E1.m1.1.2.2.cmml"><mo stretchy="false" id="S1.E1.m1.1.2.2.3.2.1" xref="S1.E1.m1.1.2.2.cmml">(</mo><mi id="S1.E1.m1.1.1" xref="S1.E1.m1.1.1.cmml">r</mi><mo stretchy="false" id="S1.E1.m1.1.2.2.3.2.2" xref="S1.E1.m1.1.2.2.cmml">)</mo></mrow></mrow><mo id="S1.E1.m1.1.2.1" xref="S1.E1.m1.1.2.1.cmml">=</mo><mfrac id="S1.E1.m1.1.2.3" xref="S1.E1.m1.1.2.3.cmml"><mi id="S1.E1.m1.1.2.3.2" xref="S1.E1.m1.1.2.3.2.cmml">K</mi><msup id="S1.E1.m1.1.2.3.3" xref="S1.E1.m1.1.2.3.3.cmml"><mi id="S1.E1.m1.1.2.3.3.2" xref="S1.E1.m1.1.2.3.3.2.cmml">r</mi><mi id="S1.E1.m1.1.2.3.3.3" xref="S1.E1.m1.1.2.3.3.3.cmml">α</mi></msup></mfrac></mrow><annotation-xml encoding="MathML-Content" id="S1.E1.m1.1b"><apply id="S1.E1.m1.1.2.cmml" xref="S1.E1.m1.1.2"><eq id="S1.E1.m1.1.2.1.cmml" xref="S1.E1.m1.1.2.1"></eq><apply id="S1.E1.m1.1.2.2.cmml" xref="S1.E1.m1.1.2.2"><times id="S1.E1.m1.1.2.2.1.cmml" xref="S1.E1.m1.1.2.2.1"></times><ci id="S1.E1.m1.1.2.2.2.cmml" xref="S1.E1.m1.1.2.2.2">𝑓</ci><ci id="S1.E1.m1.1.1.cmml" xref="S1.E1.m1.1.1">𝑟</ci></apply><apply id="S1.E1.m1.1.2.3.cmml" xref="S1.E1.m1.1.2.3"><divide id="S1.E1.m1.1.2.3.1.cmml" xref="S1.E1.m1.1.2.3"></divide><ci id="S1.E1.m1.1.2.3.2.cmml" xref="S1.E1.m1.1.2.3.2">𝐾</ci><apply id="S1.E1.m1.1.2.3.3.cmml" xref="S1.E1.m1.1.2.3.3"><csymbol cd="ambiguous" id="S1.E1.m1.1.2.3.3.1.cmml" xref="S1.E1.m1.1.2.3.3">superscript</csymbol><ci id="S1.E1.m1.1.2.3.3.2.cmml" xref="S1.E1.m1.1.2.3.3.2">𝑟</ci><ci id="S1.E1.m1.1.2.3.3.3.cmml" xref="S1.E1.m1.1.2.3.3.3">𝛼</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.E1.m1.1c">f(r)=\frac{K}{r^{\alpha}}</annotation><annotation encoding="application/x-llamapun" id="S1.E1.m1.1d">italic_f ( italic_r ) = divide start_ARG italic_K end_ARG start_ARG italic_r start_POSTSUPERSCRIPT italic_α end_POSTSUPERSCRIPT end_ARG</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(1)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S1.p3" class="ltx_para">
+<p id="S1.p3.5" class="ltx_p">In this case, the items are words taken from a given text, the
+most abundant
+word takes the first place (<math id="S1.p3.1.m1.1" class="ltx_Math" alttext="r=1" display="inline"><semantics id="S1.p3.1.m1.1a"><mrow id="S1.p3.1.m1.1.1" xref="S1.p3.1.m1.1.1.cmml"><mi id="S1.p3.1.m1.1.1.2" xref="S1.p3.1.m1.1.1.2.cmml">r</mi><mo id="S1.p3.1.m1.1.1.1" xref="S1.p3.1.m1.1.1.1.cmml">=</mo><mn id="S1.p3.1.m1.1.1.3" xref="S1.p3.1.m1.1.1.3.cmml">1</mn></mrow><annotation-xml encoding="MathML-Content" id="S1.p3.1.m1.1b"><apply id="S1.p3.1.m1.1.1.cmml" xref="S1.p3.1.m1.1.1"><eq id="S1.p3.1.m1.1.1.1.cmml" xref="S1.p3.1.m1.1.1.1"></eq><ci id="S1.p3.1.m1.1.1.2.cmml" xref="S1.p3.1.m1.1.1.2">𝑟</ci><cn type="integer" id="S1.p3.1.m1.1.1.3.cmml" xref="S1.p3.1.m1.1.1.3">1</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p3.1.m1.1c">r=1</annotation><annotation encoding="application/x-llamapun" id="S1.p3.1.m1.1d">italic_r = 1</annotation></semantics></math>), the second one takes the following place
+(<math id="S1.p3.2.m2.1" class="ltx_Math" alttext="r=2" display="inline"><semantics id="S1.p3.2.m2.1a"><mrow id="S1.p3.2.m2.1.1" xref="S1.p3.2.m2.1.1.cmml"><mi id="S1.p3.2.m2.1.1.2" xref="S1.p3.2.m2.1.1.2.cmml">r</mi><mo id="S1.p3.2.m2.1.1.1" xref="S1.p3.2.m2.1.1.1.cmml">=</mo><mn id="S1.p3.2.m2.1.1.3" xref="S1.p3.2.m2.1.1.3.cmml">2</mn></mrow><annotation-xml encoding="MathML-Content" id="S1.p3.2.m2.1b"><apply id="S1.p3.2.m2.1.1.cmml" xref="S1.p3.2.m2.1.1"><eq id="S1.p3.2.m2.1.1.1.cmml" xref="S1.p3.2.m2.1.1.1"></eq><ci id="S1.p3.2.m2.1.1.2.cmml" xref="S1.p3.2.m2.1.1.2">𝑟</ci><cn type="integer" id="S1.p3.2.m2.1.1.3.cmml" xref="S1.p3.2.m2.1.1.3">2</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p3.2.m2.1c">r=2</annotation><annotation encoding="application/x-llamapun" id="S1.p3.2.m2.1d">italic_r = 2</annotation></semantics></math>) and so on. The fact that the mathematical expression of the law is a
+negative exponent power law implies that the law is a straight line with
+negative slope <math id="S1.p3.3.m3.1" class="ltx_Math" alttext="\alpha" display="inline"><semantics id="S1.p3.3.m3.1a"><mi id="S1.p3.3.m3.1.1" xref="S1.p3.3.m3.1.1.cmml">α</mi><annotation-xml encoding="MathML-Content" id="S1.p3.3.m3.1b"><ci id="S1.p3.3.m3.1.1.cmml" xref="S1.p3.3.m3.1.1">𝛼</ci></annotation-xml><annotation encoding="application/x-tex" id="S1.p3.3.m3.1c">\alpha</annotation><annotation encoding="application/x-llamapun" id="S1.p3.3.m3.1d">italic_α</annotation></semantics></math> when plotted in log-log scales. <math id="S1.p3.4.m4.1" class="ltx_Math" alttext="K" display="inline"><semantics id="S1.p3.4.m4.1a"><mi id="S1.p3.4.m4.1.1" xref="S1.p3.4.m4.1.1.cmml">K</mi><annotation-xml encoding="MathML-Content" id="S1.p3.4.m4.1b"><ci id="S1.p3.4.m4.1.1.cmml" xref="S1.p3.4.m4.1.1">𝐾</ci></annotation-xml><annotation encoding="application/x-tex" id="S1.p3.4.m4.1c">K</annotation><annotation encoding="application/x-llamapun" id="S1.p3.4.m4.1d">italic_K</annotation></semantics></math> is a
+proportionality constant with no phenomenological interest.
+This empirical law has found
+applications in a wide range of natural and human phenomena (Li, 2003). The case
+when <math id="S1.p3.5.m5.1" class="ltx_Math" alttext="\alpha\simeq 1" display="inline"><semantics id="S1.p3.5.m5.1a"><mrow id="S1.p3.5.m5.1.1" xref="S1.p3.5.m5.1.1.cmml"><mi id="S1.p3.5.m5.1.1.2" xref="S1.p3.5.m5.1.1.2.cmml">α</mi><mo id="S1.p3.5.m5.1.1.1" xref="S1.p3.5.m5.1.1.1.cmml">≃</mo><mn id="S1.p3.5.m5.1.1.3" xref="S1.p3.5.m5.1.1.3.cmml">1</mn></mrow><annotation-xml encoding="MathML-Content" id="S1.p3.5.m5.1b"><apply id="S1.p3.5.m5.1.1.cmml" xref="S1.p3.5.m5.1.1"><csymbol cd="latexml" id="S1.p3.5.m5.1.1.1.cmml" xref="S1.p3.5.m5.1.1.1">similar-to-or-equals</csymbol><ci id="S1.p3.5.m5.1.1.2.cmml" xref="S1.p3.5.m5.1.1.2">𝛼</ci><cn type="integer" id="S1.p3.5.m5.1.1.3.cmml" xref="S1.p3.5.m5.1.1.3">1</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p3.5.m5.1c">\alpha\simeq 1</annotation><annotation encoding="application/x-llamapun" id="S1.p3.5.m5.1d">italic_α ≃ 1</annotation></semantics></math> is of particular
+interest because it implies self-similarity . The exact mechanism behind
+Zipf’s law still remains a mystery so far. However it is important to remark
+that the presence of power laws implies in general that the underlying
+mechanism is neither stochastic or regular. Power laws are the signature of
+correlated noise possibly associated to and ”edge of chaos” dynamics (REF) or
+could be a clue to self-organized criticality (Bak et al, 1989)</p>
+</div>
+<div id="S1.p4" class="ltx_para">
+<p id="S1.p4.1" class="ltx_p">The main drawback of Zipf’s law was the bad fitting at very high and very low
+frequencies in the word counting problem. An improvement over the
+Zipf’s law was proposed by B. Mandelbrot (1954):</p>
+</div>
+<div id="S1.p5" class="ltx_para">
+<table id="S1.E2" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S1.E2.m1.2" class="ltx_Math" alttext="f(r)=\left[\frac{N+\rho}{r+\rho}\right]^{1+\epsilon}" display="block"><semantics id="S1.E2.m1.2a"><mrow id="S1.E2.m1.2.3" xref="S1.E2.m1.2.3.cmml"><mrow id="S1.E2.m1.2.3.2" xref="S1.E2.m1.2.3.2.cmml"><mi id="S1.E2.m1.2.3.2.2" xref="S1.E2.m1.2.3.2.2.cmml">f</mi><mo id="S1.E2.m1.2.3.2.1" xref="S1.E2.m1.2.3.2.1.cmml">⁢</mo><mrow id="S1.E2.m1.2.3.2.3.2" xref="S1.E2.m1.2.3.2.cmml"><mo stretchy="false" id="S1.E2.m1.2.3.2.3.2.1" xref="S1.E2.m1.2.3.2.cmml">(</mo><mi id="S1.E2.m1.1.1" xref="S1.E2.m1.1.1.cmml">r</mi><mo stretchy="false" id="S1.E2.m1.2.3.2.3.2.2" xref="S1.E2.m1.2.3.2.cmml">)</mo></mrow></mrow><mo id="S1.E2.m1.2.3.1" xref="S1.E2.m1.2.3.1.cmml">=</mo><msup id="S1.E2.m1.2.3.3" xref="S1.E2.m1.2.3.3.cmml"><mrow id="S1.E2.m1.2.3.3.2.2" xref="S1.E2.m1.2.3.3.2.1.cmml"><mo id="S1.E2.m1.2.3.3.2.2.1" xref="S1.E2.m1.2.3.3.2.1.1.cmml">[</mo><mfrac id="S1.E2.m1.2.2" xref="S1.E2.m1.2.2.cmml"><mrow id="S1.E2.m1.2.2.2" xref="S1.E2.m1.2.2.2.cmml"><mi id="S1.E2.m1.2.2.2.2" xref="S1.E2.m1.2.2.2.2.cmml">N</mi><mo id="S1.E2.m1.2.2.2.1" xref="S1.E2.m1.2.2.2.1.cmml">+</mo><mi id="S1.E2.m1.2.2.2.3" xref="S1.E2.m1.2.2.2.3.cmml">ρ</mi></mrow><mrow id="S1.E2.m1.2.2.3" xref="S1.E2.m1.2.2.3.cmml"><mi id="S1.E2.m1.2.2.3.2" xref="S1.E2.m1.2.2.3.2.cmml">r</mi><mo id="S1.E2.m1.2.2.3.1" xref="S1.E2.m1.2.2.3.1.cmml">+</mo><mi id="S1.E2.m1.2.2.3.3" xref="S1.E2.m1.2.2.3.3.cmml">ρ</mi></mrow></mfrac><mo id="S1.E2.m1.2.3.3.2.2.2" xref="S1.E2.m1.2.3.3.2.1.1.cmml">]</mo></mrow><mrow id="S1.E2.m1.2.3.3.3" xref="S1.E2.m1.2.3.3.3.cmml"><mn id="S1.E2.m1.2.3.3.3.2" xref="S1.E2.m1.2.3.3.3.2.cmml">1</mn><mo id="S1.E2.m1.2.3.3.3.1" xref="S1.E2.m1.2.3.3.3.1.cmml">+</mo><mi id="S1.E2.m1.2.3.3.3.3" xref="S1.E2.m1.2.3.3.3.3.cmml">ϵ</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S1.E2.m1.2b"><apply id="S1.E2.m1.2.3.cmml" xref="S1.E2.m1.2.3"><eq id="S1.E2.m1.2.3.1.cmml" xref="S1.E2.m1.2.3.1"></eq><apply id="S1.E2.m1.2.3.2.cmml" xref="S1.E2.m1.2.3.2"><times id="S1.E2.m1.2.3.2.1.cmml" xref="S1.E2.m1.2.3.2.1"></times><ci id="S1.E2.m1.2.3.2.2.cmml" xref="S1.E2.m1.2.3.2.2">𝑓</ci><ci id="S1.E2.m1.1.1.cmml" xref="S1.E2.m1.1.1">𝑟</ci></apply><apply id="S1.E2.m1.2.3.3.cmml" xref="S1.E2.m1.2.3.3"><csymbol cd="ambiguous" id="S1.E2.m1.2.3.3.1.cmml" xref="S1.E2.m1.2.3.3">superscript</csymbol><apply id="S1.E2.m1.2.3.3.2.1.cmml" xref="S1.E2.m1.2.3.3.2.2"><csymbol cd="latexml" id="S1.E2.m1.2.3.3.2.1.1.cmml" xref="S1.E2.m1.2.3.3.2.2.1">delimited-[]</csymbol><apply id="S1.E2.m1.2.2.cmml" xref="S1.E2.m1.2.2"><divide id="S1.E2.m1.2.2.1.cmml" xref="S1.E2.m1.2.2"></divide><apply id="S1.E2.m1.2.2.2.cmml" xref="S1.E2.m1.2.2.2"><plus id="S1.E2.m1.2.2.2.1.cmml" xref="S1.E2.m1.2.2.2.1"></plus><ci id="S1.E2.m1.2.2.2.2.cmml" xref="S1.E2.m1.2.2.2.2">𝑁</ci><ci id="S1.E2.m1.2.2.2.3.cmml" xref="S1.E2.m1.2.2.2.3">𝜌</ci></apply><apply id="S1.E2.m1.2.2.3.cmml" xref="S1.E2.m1.2.2.3"><plus id="S1.E2.m1.2.2.3.1.cmml" xref="S1.E2.m1.2.2.3.1"></plus><ci id="S1.E2.m1.2.2.3.2.cmml" xref="S1.E2.m1.2.2.3.2">𝑟</ci><ci id="S1.E2.m1.2.2.3.3.cmml" xref="S1.E2.m1.2.2.3.3">𝜌</ci></apply></apply></apply><apply id="S1.E2.m1.2.3.3.3.cmml" xref="S1.E2.m1.2.3.3.3"><plus id="S1.E2.m1.2.3.3.3.1.cmml" xref="S1.E2.m1.2.3.3.3.1"></plus><cn type="integer" id="S1.E2.m1.2.3.3.3.2.cmml" xref="S1.E2.m1.2.3.3.3.2">1</cn><ci id="S1.E2.m1.2.3.3.3.3.cmml" xref="S1.E2.m1.2.3.3.3.3">italic-ϵ</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.E2.m1.2c">f(r)=\left[\frac{N+\rho}{r+\rho}\right]^{1+\epsilon}</annotation><annotation encoding="application/x-llamapun" id="S1.E2.m1.2d">italic_f ( italic_r ) = [ divide start_ARG italic_N + italic_ρ end_ARG start_ARG italic_r + italic_ρ end_ARG ] start_POSTSUPERSCRIPT 1 + italic_ϵ end_POSTSUPERSCRIPT</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(2)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S1.p6" class="ltx_para">
+<p id="S1.p6.3" class="ltx_p">Where <math id="S1.p6.1.m1.1" class="ltx_Math" alttext="N" display="inline"><semantics id="S1.p6.1.m1.1a"><mi id="S1.p6.1.m1.1.1" xref="S1.p6.1.m1.1.1.cmml">N</mi><annotation-xml encoding="MathML-Content" id="S1.p6.1.m1.1b"><ci id="S1.p6.1.m1.1.1.cmml" xref="S1.p6.1.m1.1.1">𝑁</ci></annotation-xml><annotation encoding="application/x-tex" id="S1.p6.1.m1.1c">N</annotation><annotation encoding="application/x-llamapun" id="S1.p6.1.m1.1d">italic_N</annotation></semantics></math> is the number of different words in the text and <math id="S1.p6.2.m2.1" class="ltx_Math" alttext="\rho" display="inline"><semantics id="S1.p6.2.m2.1a"><mi id="S1.p6.2.m2.1.1" xref="S1.p6.2.m2.1.1.cmml">ρ</mi><annotation-xml encoding="MathML-Content" id="S1.p6.2.m2.1b"><ci id="S1.p6.2.m2.1.1.cmml" xref="S1.p6.2.m2.1.1">𝜌</ci></annotation-xml><annotation encoding="application/x-tex" id="S1.p6.2.m2.1c">\rho</annotation><annotation encoding="application/x-llamapun" id="S1.p6.2.m2.1d">italic_ρ</annotation></semantics></math>, <math id="S1.p6.3.m3.1" class="ltx_Math" alttext="\epsilon" display="inline"><semantics id="S1.p6.3.m3.1a"><mi id="S1.p6.3.m3.1.1" xref="S1.p6.3.m3.1.1.cmml">ϵ</mi><annotation-xml encoding="MathML-Content" id="S1.p6.3.m3.1b"><ci id="S1.p6.3.m3.1.1.cmml" xref="S1.p6.3.m3.1.1">italic-ϵ</ci></annotation-xml><annotation encoding="application/x-tex" id="S1.p6.3.m3.1c">\epsilon</annotation><annotation encoding="application/x-llamapun" id="S1.p6.3.m3.1d">italic_ϵ</annotation></semantics></math>
+are parameters to be adjusted.</p>
+</div>
+<div id="S1.p7" class="ltx_para">
+<p id="S1.p7.1" class="ltx_p">Zip’s law is a special case of Mandelbrot’s. This fact, along with a complete
+discussion of the role of power laws in the field of Informetrics can be found
+in (Egghe, 2005).</p>
+</div>
+<div id="S1.p8" class="ltx_para">
+<p id="S1.p8.1" class="ltx_p">Recently it has been reported (Le Quan; 2002) that what Zipf found is valid for
+small corpora (for the size of the text that were analyzable at that time), and
+that today that the computer allows the analysis of huge texts, the log-log plot
+shows a clear downwards bending tail instead of the predicted straight line.</p>
+</div>
+<div id="S1.p9" class="ltx_para">
+<p id="S1.p9.2" class="ltx_p">Scientific productivity is another topic where the first studies date back
+almost a century with the works of A. Dresden (1922) and A. J. Lotka (1926).
+The law of Lotka has the same mathematical form of eq (1) but he already
+introduced bibliometric variables by using <math id="S1.p9.1.m1.1" class="ltx_Math" alttext="r" display="inline"><semantics id="S1.p9.1.m1.1a"><mi id="S1.p9.1.m1.1.1" xref="S1.p9.1.m1.1.1.cmml">r</mi><annotation-xml encoding="MathML-Content" id="S1.p9.1.m1.1b"><ci id="S1.p9.1.m1.1.1.cmml" xref="S1.p9.1.m1.1.1">𝑟</ci></annotation-xml><annotation encoding="application/x-tex" id="S1.p9.1.m1.1c">r</annotation><annotation encoding="application/x-llamapun" id="S1.p9.1.m1.1d">italic_r</annotation></semantics></math> as contributors or authors of
+a given paper and <math id="S1.p9.2.m2.1" class="ltx_Math" alttext="f(r)" display="inline"><semantics id="S1.p9.2.m2.1a"><mrow id="S1.p9.2.m2.1.2" xref="S1.p9.2.m2.1.2.cmml"><mi id="S1.p9.2.m2.1.2.2" xref="S1.p9.2.m2.1.2.2.cmml">f</mi><mo id="S1.p9.2.m2.1.2.1" xref="S1.p9.2.m2.1.2.1.cmml">⁢</mo><mrow id="S1.p9.2.m2.1.2.3.2" xref="S1.p9.2.m2.1.2.cmml"><mo stretchy="false" id="S1.p9.2.m2.1.2.3.2.1" xref="S1.p9.2.m2.1.2.cmml">(</mo><mi id="S1.p9.2.m2.1.1" xref="S1.p9.2.m2.1.1.cmml">r</mi><mo stretchy="false" id="S1.p9.2.m2.1.2.3.2.2" xref="S1.p9.2.m2.1.2.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S1.p9.2.m2.1b"><apply id="S1.p9.2.m2.1.2.cmml" xref="S1.p9.2.m2.1.2"><times id="S1.p9.2.m2.1.2.1.cmml" xref="S1.p9.2.m2.1.2.1"></times><ci id="S1.p9.2.m2.1.2.2.cmml" xref="S1.p9.2.m2.1.2.2">𝑓</ci><ci id="S1.p9.2.m2.1.1.cmml" xref="S1.p9.2.m2.1.1">𝑟</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p9.2.m2.1c">f(r)</annotation><annotation encoding="application/x-llamapun" id="S1.p9.2.m2.1d">italic_f ( italic_r )</annotation></semantics></math> as articles or papers themselves. Since Lotka, it is
+common to call “sources” the independent variable and “item” the dependent
+one. This way, Lotka’s law states that the number of items is a power law of the
+sources. The branch of Informetrics related to the study of power laws is
+called <span id="S1.p9.2.1" class="ltx_text ltx_font_italic">Lotkaian Informetrics</span> (Egghe, 2005).</p>
+</div>
+<div id="S1.p10" class="ltx_para">
+<p id="S1.p10.1" class="ltx_p">Informetrics mainly deals with the relationships between sources and items.
+It is normal to find the pairs authors-journals or journals-bibliographies as
+sources and items. In this paper we explore the possibility of extending the
+Lotkaian Informetrics to the realm of Journal Impact Factors (JIFs). We show as
+well that the rank-order JIFs plots deviate from a traditional Lotkaian
+equation and
+propose an extension to what it could be called <span id="S1.p10.1.1" class="ltx_text ltx_font_italic">two-exponent Lotkaian
+laws</span>.</p>
+</div>
+</section>
+<section id="S2" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2 </span>Impact Factors</h2>
+
+<div id="S2.p1" class="ltx_para">
+<p id="S2.p1.1" class="ltx_p">Impact Factor is a measure of the frequency with which the ”average article” in
+a journal has been cited in a particular year or period (Garfield; 1994), it
+is calculated ”by dividing the number of times a journal has been cited by
+the number of articles it has published during some specific period of time.
+The journal impact factor will thus reflect an average citation rate per
+published article” (Garfield; 1955). The impact factor of journals is an attempt
+to evaluate the knowledge production published among different journals of a
+given field. Mainly
+covered by the<span id="S2.p1.1.1" class="ltx_text ltx_font_italic"> Science Citation Index</span> database, it is published
+annually since 1975 in the <span id="S2.p1.1.2" class="ltx_text ltx_font_italic">Journal Citation Reports</span>.</p>
+</div>
+<div id="S2.p2" class="ltx_para">
+<p id="S2.p2.1" class="ltx_p">JIFs has been the target of many criticisms (Soegler; 1997, Fröhlich, 1996)
+and there is a
+debate about its usage as a tool to evaluate research. Even the
+influential journal <span id="S2.p2.1.1" class="ltx_text ltx_font_italic">Nature</span> states that the JIFs figures should
+be handled carefully (Nature; 2005). Regardless its pros and
+cons, the fact is that it is an every day measure of the importance of a
+journal and it is worlwide used (de Marchi and Rocchi; 2001).</p>
+</div>
+<div id="S2.p3" class="ltx_para">
+<p id="S2.p3.1" class="ltx_p">While keeping a skeptical attitude towards the use of the JIFs to evaluate
+scientific research, it should be recognized that it is an outcome of the
+process of publication and it has became by itself a subject of
+scientific study.</p>
+</div>
+<div id="S2.p4" class="ltx_para">
+<p id="S2.p4.1" class="ltx_p">Rank-order distribution of JIFs attracted the attention of D. Lavalette who
+(mentioned in Popescu (2003) proposed the following law:
+</p>
+</div>
+<div id="S2.p5" class="ltx_para">
+<table id="S2.E3" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E3.m1.2" class="ltx_Math" alttext="f(r)=K\left[\frac{N+1-r}{r}\right]^{b}" display="block"><semantics id="S2.E3.m1.2a"><mrow id="S2.E3.m1.2.3" xref="S2.E3.m1.2.3.cmml"><mrow id="S2.E3.m1.2.3.2" xref="S2.E3.m1.2.3.2.cmml"><mi id="S2.E3.m1.2.3.2.2" xref="S2.E3.m1.2.3.2.2.cmml">f</mi><mo id="S2.E3.m1.2.3.2.1" xref="S2.E3.m1.2.3.2.1.cmml">⁢</mo><mrow id="S2.E3.m1.2.3.2.3.2" xref="S2.E3.m1.2.3.2.cmml"><mo stretchy="false" id="S2.E3.m1.2.3.2.3.2.1" xref="S2.E3.m1.2.3.2.cmml">(</mo><mi id="S2.E3.m1.1.1" xref="S2.E3.m1.1.1.cmml">r</mi><mo stretchy="false" id="S2.E3.m1.2.3.2.3.2.2" xref="S2.E3.m1.2.3.2.cmml">)</mo></mrow></mrow><mo id="S2.E3.m1.2.3.1" xref="S2.E3.m1.2.3.1.cmml">=</mo><mrow id="S2.E3.m1.2.3.3" xref="S2.E3.m1.2.3.3.cmml"><mi id="S2.E3.m1.2.3.3.2" xref="S2.E3.m1.2.3.3.2.cmml">K</mi><mo id="S2.E3.m1.2.3.3.1" xref="S2.E3.m1.2.3.3.1.cmml">⁢</mo><msup id="S2.E3.m1.2.3.3.3" xref="S2.E3.m1.2.3.3.3.cmml"><mrow id="S2.E3.m1.2.3.3.3.2.2" xref="S2.E3.m1.2.3.3.3.2.1.cmml"><mo id="S2.E3.m1.2.3.3.3.2.2.1" xref="S2.E3.m1.2.3.3.3.2.1.1.cmml">[</mo><mfrac id="S2.E3.m1.2.2" xref="S2.E3.m1.2.2.cmml"><mrow id="S2.E3.m1.2.2.2" xref="S2.E3.m1.2.2.2.cmml"><mrow id="S2.E3.m1.2.2.2.2" xref="S2.E3.m1.2.2.2.2.cmml"><mi id="S2.E3.m1.2.2.2.2.2" xref="S2.E3.m1.2.2.2.2.2.cmml">N</mi><mo id="S2.E3.m1.2.2.2.2.1" xref="S2.E3.m1.2.2.2.2.1.cmml">+</mo><mn id="S2.E3.m1.2.2.2.2.3" xref="S2.E3.m1.2.2.2.2.3.cmml">1</mn></mrow><mo id="S2.E3.m1.2.2.2.1" xref="S2.E3.m1.2.2.2.1.cmml">−</mo><mi id="S2.E3.m1.2.2.2.3" xref="S2.E3.m1.2.2.2.3.cmml">r</mi></mrow><mi id="S2.E3.m1.2.2.3" xref="S2.E3.m1.2.2.3.cmml">r</mi></mfrac><mo id="S2.E3.m1.2.3.3.3.2.2.2" xref="S2.E3.m1.2.3.3.3.2.1.1.cmml">]</mo></mrow><mi id="S2.E3.m1.2.3.3.3.3" xref="S2.E3.m1.2.3.3.3.3.cmml">b</mi></msup></mrow></mrow><annotation-xml encoding="MathML-Content" id="S2.E3.m1.2b"><apply id="S2.E3.m1.2.3.cmml" xref="S2.E3.m1.2.3"><eq id="S2.E3.m1.2.3.1.cmml" xref="S2.E3.m1.2.3.1"></eq><apply id="S2.E3.m1.2.3.2.cmml" xref="S2.E3.m1.2.3.2"><times id="S2.E3.m1.2.3.2.1.cmml" xref="S2.E3.m1.2.3.2.1"></times><ci id="S2.E3.m1.2.3.2.2.cmml" xref="S2.E3.m1.2.3.2.2">𝑓</ci><ci id="S2.E3.m1.1.1.cmml" xref="S2.E3.m1.1.1">𝑟</ci></apply><apply id="S2.E3.m1.2.3.3.cmml" xref="S2.E3.m1.2.3.3"><times id="S2.E3.m1.2.3.3.1.cmml" xref="S2.E3.m1.2.3.3.1"></times><ci id="S2.E3.m1.2.3.3.2.cmml" xref="S2.E3.m1.2.3.3.2">𝐾</ci><apply id="S2.E3.m1.2.3.3.3.cmml" xref="S2.E3.m1.2.3.3.3"><csymbol cd="ambiguous" id="S2.E3.m1.2.3.3.3.1.cmml" xref="S2.E3.m1.2.3.3.3">superscript</csymbol><apply id="S2.E3.m1.2.3.3.3.2.1.cmml" xref="S2.E3.m1.2.3.3.3.2.2"><csymbol cd="latexml" id="S2.E3.m1.2.3.3.3.2.1.1.cmml" xref="S2.E3.m1.2.3.3.3.2.2.1">delimited-[]</csymbol><apply id="S2.E3.m1.2.2.cmml" xref="S2.E3.m1.2.2"><divide id="S2.E3.m1.2.2.1.cmml" xref="S2.E3.m1.2.2"></divide><apply id="S2.E3.m1.2.2.2.cmml" xref="S2.E3.m1.2.2.2"><minus id="S2.E3.m1.2.2.2.1.cmml" xref="S2.E3.m1.2.2.2.1"></minus><apply id="S2.E3.m1.2.2.2.2.cmml" xref="S2.E3.m1.2.2.2.2"><plus id="S2.E3.m1.2.2.2.2.1.cmml" xref="S2.E3.m1.2.2.2.2.1"></plus><ci id="S2.E3.m1.2.2.2.2.2.cmml" xref="S2.E3.m1.2.2.2.2.2">𝑁</ci><cn type="integer" id="S2.E3.m1.2.2.2.2.3.cmml" xref="S2.E3.m1.2.2.2.2.3">1</cn></apply><ci id="S2.E3.m1.2.2.2.3.cmml" xref="S2.E3.m1.2.2.2.3">𝑟</ci></apply><ci id="S2.E3.m1.2.2.3.cmml" xref="S2.E3.m1.2.2.3">𝑟</ci></apply></apply><ci id="S2.E3.m1.2.3.3.3.3.cmml" xref="S2.E3.m1.2.3.3.3.3">𝑏</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E3.m1.2c">f(r)=K\left[\frac{N+1-r}{r}\right]^{b}</annotation><annotation encoding="application/x-llamapun" id="S2.E3.m1.2d">italic_f ( italic_r ) = italic_K [ divide start_ARG italic_N + 1 - italic_r end_ARG start_ARG italic_r end_ARG ] start_POSTSUPERSCRIPT italic_b end_POSTSUPERSCRIPT</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(3)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S2.p6" class="ltx_para">
+<p id="S2.p6.4" class="ltx_p">Where <math id="S2.p6.1.m1.1" class="ltx_Math" alttext="N" display="inline"><semantics id="S2.p6.1.m1.1a"><mi id="S2.p6.1.m1.1.1" xref="S2.p6.1.m1.1.1.cmml">N</mi><annotation-xml encoding="MathML-Content" id="S2.p6.1.m1.1b"><ci id="S2.p6.1.m1.1.1.cmml" xref="S2.p6.1.m1.1.1">𝑁</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p6.1.m1.1c">N</annotation><annotation encoding="application/x-llamapun" id="S2.p6.1.m1.1d">italic_N</annotation></semantics></math> is the number of journals, <math id="S2.p6.2.m2.1" class="ltx_Math" alttext="r" display="inline"><semantics id="S2.p6.2.m2.1a"><mi id="S2.p6.2.m2.1.1" xref="S2.p6.2.m2.1.1.cmml">r</mi><annotation-xml encoding="MathML-Content" id="S2.p6.2.m2.1b"><ci id="S2.p6.2.m2.1.1.cmml" xref="S2.p6.2.m2.1.1">𝑟</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p6.2.m2.1c">r</annotation><annotation encoding="application/x-llamapun" id="S2.p6.2.m2.1d">italic_r</annotation></semantics></math> is the ranking number, <math id="S2.p6.3.m3.1" class="ltx_Math" alttext="f(r)" display="inline"><semantics id="S2.p6.3.m3.1a"><mrow id="S2.p6.3.m3.1.2" xref="S2.p6.3.m3.1.2.cmml"><mi id="S2.p6.3.m3.1.2.2" xref="S2.p6.3.m3.1.2.2.cmml">f</mi><mo id="S2.p6.3.m3.1.2.1" xref="S2.p6.3.m3.1.2.1.cmml">⁢</mo><mrow id="S2.p6.3.m3.1.2.3.2" xref="S2.p6.3.m3.1.2.cmml"><mo stretchy="false" id="S2.p6.3.m3.1.2.3.2.1" xref="S2.p6.3.m3.1.2.cmml">(</mo><mi id="S2.p6.3.m3.1.1" xref="S2.p6.3.m3.1.1.cmml">r</mi><mo stretchy="false" id="S2.p6.3.m3.1.2.3.2.2" xref="S2.p6.3.m3.1.2.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S2.p6.3.m3.1b"><apply id="S2.p6.3.m3.1.2.cmml" xref="S2.p6.3.m3.1.2"><times id="S2.p6.3.m3.1.2.1.cmml" xref="S2.p6.3.m3.1.2.1"></times><ci id="S2.p6.3.m3.1.2.2.cmml" xref="S2.p6.3.m3.1.2.2">𝑓</ci><ci id="S2.p6.3.m3.1.1.cmml" xref="S2.p6.3.m3.1.1">𝑟</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.p6.3.m3.1c">f(r)</annotation><annotation encoding="application/x-llamapun" id="S2.p6.3.m3.1d">italic_f ( italic_r )</annotation></semantics></math>
+is the impact factor, <math id="S2.p6.4.m4.1" class="ltx_Math" alttext="b" display="inline"><semantics id="S2.p6.4.m4.1a"><mi id="S2.p6.4.m4.1.1" xref="S2.p6.4.m4.1.1.cmml">b</mi><annotation-xml encoding="MathML-Content" id="S2.p6.4.m4.1b"><ci id="S2.p6.4.m4.1.1.cmml" xref="S2.p6.4.m4.1.1">𝑏</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.p6.4.m4.1c">b</annotation><annotation encoding="application/x-llamapun" id="S2.p6.4.m4.1d">italic_b</annotation></semantics></math> is a parameter to be fitted.</p>
+</div>
+<div id="S2.p7" class="ltx_para">
+<p id="S2.p7.1" class="ltx_p">In the next section we propose a law that outperforms Lavalette’s (see
+Concluding Remarks).</p>
+</div>
+</section>
+<section id="S3" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3 </span>Analytical expression of the law</h2>
+
+<div id="S3.p1" class="ltx_para">
+<p id="S3.p1.1" class="ltx_p">Figure 1 shows the log-log plot of the IF of a randomly taken field from
+Popescu’s database (2003)</p>
+</div>
+<div id="S3.p2" class="ltx_para">
+<br class="ltx_break">
+<p id="S3.p2.1" class="ltx_p ltx_align_center">Figure 1</p>
+</div>
+<div id="S3.p3" class="ltx_para">
+<p id="S3.p3.1" class="ltx_p">It is evident that it is not a power law because of the
+bending tail in the right side of the plot. This fact motivated us to propose a
+Beta-like function:</p>
+</div>
+<div id="S3.p4" class="ltx_para">
+<table id="S3.E4" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S3.E4.m1.2" class="ltx_Math" alttext="f(r)=K\frac{(N+1-r)^{b}}{r^{a}}" display="block"><semantics id="S3.E4.m1.2a"><mrow id="S3.E4.m1.2.3" xref="S3.E4.m1.2.3.cmml"><mrow id="S3.E4.m1.2.3.2" xref="S3.E4.m1.2.3.2.cmml"><mi id="S3.E4.m1.2.3.2.2" xref="S3.E4.m1.2.3.2.2.cmml">f</mi><mo id="S3.E4.m1.2.3.2.1" xref="S3.E4.m1.2.3.2.1.cmml">⁢</mo><mrow id="S3.E4.m1.2.3.2.3.2" xref="S3.E4.m1.2.3.2.cmml"><mo stretchy="false" id="S3.E4.m1.2.3.2.3.2.1" xref="S3.E4.m1.2.3.2.cmml">(</mo><mi id="S3.E4.m1.2.2" xref="S3.E4.m1.2.2.cmml">r</mi><mo stretchy="false" id="S3.E4.m1.2.3.2.3.2.2" xref="S3.E4.m1.2.3.2.cmml">)</mo></mrow></mrow><mo id="S3.E4.m1.2.3.1" xref="S3.E4.m1.2.3.1.cmml">=</mo><mrow id="S3.E4.m1.2.3.3" xref="S3.E4.m1.2.3.3.cmml"><mi id="S3.E4.m1.2.3.3.2" xref="S3.E4.m1.2.3.3.2.cmml">K</mi><mo id="S3.E4.m1.2.3.3.1" xref="S3.E4.m1.2.3.3.1.cmml">⁢</mo><mfrac id="S3.E4.m1.1.1" xref="S3.E4.m1.1.1.cmml"><msup id="S3.E4.m1.1.1.1" xref="S3.E4.m1.1.1.1.cmml"><mrow id="S3.E4.m1.1.1.1.1.1" xref="S3.E4.m1.1.1.1.1.1.1.cmml"><mo stretchy="false" id="S3.E4.m1.1.1.1.1.1.2" xref="S3.E4.m1.1.1.1.1.1.1.cmml">(</mo><mrow id="S3.E4.m1.1.1.1.1.1.1" xref="S3.E4.m1.1.1.1.1.1.1.cmml"><mrow id="S3.E4.m1.1.1.1.1.1.1.2" xref="S3.E4.m1.1.1.1.1.1.1.2.cmml"><mi id="S3.E4.m1.1.1.1.1.1.1.2.2" xref="S3.E4.m1.1.1.1.1.1.1.2.2.cmml">N</mi><mo id="S3.E4.m1.1.1.1.1.1.1.2.1" xref="S3.E4.m1.1.1.1.1.1.1.2.1.cmml">+</mo><mn id="S3.E4.m1.1.1.1.1.1.1.2.3" xref="S3.E4.m1.1.1.1.1.1.1.2.3.cmml">1</mn></mrow><mo id="S3.E4.m1.1.1.1.1.1.1.1" xref="S3.E4.m1.1.1.1.1.1.1.1.cmml">−</mo><mi id="S3.E4.m1.1.1.1.1.1.1.3" xref="S3.E4.m1.1.1.1.1.1.1.3.cmml">r</mi></mrow><mo stretchy="false" id="S3.E4.m1.1.1.1.1.1.3" xref="S3.E4.m1.1.1.1.1.1.1.cmml">)</mo></mrow><mi id="S3.E4.m1.1.1.1.3" xref="S3.E4.m1.1.1.1.3.cmml">b</mi></msup><msup id="S3.E4.m1.1.1.3" xref="S3.E4.m1.1.1.3.cmml"><mi id="S3.E4.m1.1.1.3.2" xref="S3.E4.m1.1.1.3.2.cmml">r</mi><mi id="S3.E4.m1.1.1.3.3" xref="S3.E4.m1.1.1.3.3.cmml">a</mi></msup></mfrac></mrow></mrow><annotation-xml encoding="MathML-Content" id="S3.E4.m1.2b"><apply id="S3.E4.m1.2.3.cmml" xref="S3.E4.m1.2.3"><eq id="S3.E4.m1.2.3.1.cmml" xref="S3.E4.m1.2.3.1"></eq><apply id="S3.E4.m1.2.3.2.cmml" xref="S3.E4.m1.2.3.2"><times id="S3.E4.m1.2.3.2.1.cmml" xref="S3.E4.m1.2.3.2.1"></times><ci id="S3.E4.m1.2.3.2.2.cmml" xref="S3.E4.m1.2.3.2.2">𝑓</ci><ci id="S3.E4.m1.2.2.cmml" xref="S3.E4.m1.2.2">𝑟</ci></apply><apply id="S3.E4.m1.2.3.3.cmml" xref="S3.E4.m1.2.3.3"><times id="S3.E4.m1.2.3.3.1.cmml" xref="S3.E4.m1.2.3.3.1"></times><ci id="S3.E4.m1.2.3.3.2.cmml" xref="S3.E4.m1.2.3.3.2">𝐾</ci><apply id="S3.E4.m1.1.1.cmml" xref="S3.E4.m1.1.1"><divide id="S3.E4.m1.1.1.2.cmml" xref="S3.E4.m1.1.1"></divide><apply id="S3.E4.m1.1.1.1.cmml" xref="S3.E4.m1.1.1.1"><csymbol cd="ambiguous" id="S3.E4.m1.1.1.1.2.cmml" xref="S3.E4.m1.1.1.1">superscript</csymbol><apply id="S3.E4.m1.1.1.1.1.1.1.cmml" xref="S3.E4.m1.1.1.1.1.1"><minus id="S3.E4.m1.1.1.1.1.1.1.1.cmml" xref="S3.E4.m1.1.1.1.1.1.1.1"></minus><apply id="S3.E4.m1.1.1.1.1.1.1.2.cmml" xref="S3.E4.m1.1.1.1.1.1.1.2"><plus id="S3.E4.m1.1.1.1.1.1.1.2.1.cmml" xref="S3.E4.m1.1.1.1.1.1.1.2.1"></plus><ci id="S3.E4.m1.1.1.1.1.1.1.2.2.cmml" xref="S3.E4.m1.1.1.1.1.1.1.2.2">𝑁</ci><cn type="integer" id="S3.E4.m1.1.1.1.1.1.1.2.3.cmml" xref="S3.E4.m1.1.1.1.1.1.1.2.3">1</cn></apply><ci id="S3.E4.m1.1.1.1.1.1.1.3.cmml" xref="S3.E4.m1.1.1.1.1.1.1.3">𝑟</ci></apply><ci id="S3.E4.m1.1.1.1.3.cmml" xref="S3.E4.m1.1.1.1.3">𝑏</ci></apply><apply id="S3.E4.m1.1.1.3.cmml" xref="S3.E4.m1.1.1.3"><csymbol cd="ambiguous" id="S3.E4.m1.1.1.3.1.cmml" xref="S3.E4.m1.1.1.3">superscript</csymbol><ci id="S3.E4.m1.1.1.3.2.cmml" xref="S3.E4.m1.1.1.3.2">𝑟</ci><ci id="S3.E4.m1.1.1.3.3.cmml" xref="S3.E4.m1.1.1.3.3">𝑎</ci></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.E4.m1.2c">f(r)=K\frac{(N+1-r)^{b}}{r^{a}}</annotation><annotation encoding="application/x-llamapun" id="S3.E4.m1.2d">italic_f ( italic_r ) = italic_K divide start_ARG ( italic_N + 1 - italic_r ) start_POSTSUPERSCRIPT italic_b end_POSTSUPERSCRIPT end_ARG start_ARG italic_r start_POSTSUPERSCRIPT italic_a end_POSTSUPERSCRIPT end_ARG</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(4)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S3.p5" class="ltx_para">
+<p id="S3.p5.7" class="ltx_p"><math id="S3.p5.1.m1.1" class="ltx_Math" alttext="f(r)" display="inline"><semantics id="S3.p5.1.m1.1a"><mrow id="S3.p5.1.m1.1.2" xref="S3.p5.1.m1.1.2.cmml"><mi id="S3.p5.1.m1.1.2.2" xref="S3.p5.1.m1.1.2.2.cmml">f</mi><mo id="S3.p5.1.m1.1.2.1" xref="S3.p5.1.m1.1.2.1.cmml">⁢</mo><mrow id="S3.p5.1.m1.1.2.3.2" xref="S3.p5.1.m1.1.2.cmml"><mo stretchy="false" id="S3.p5.1.m1.1.2.3.2.1" xref="S3.p5.1.m1.1.2.cmml">(</mo><mi id="S3.p5.1.m1.1.1" xref="S3.p5.1.m1.1.1.cmml">r</mi><mo stretchy="false" id="S3.p5.1.m1.1.2.3.2.2" xref="S3.p5.1.m1.1.2.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S3.p5.1.m1.1b"><apply id="S3.p5.1.m1.1.2.cmml" xref="S3.p5.1.m1.1.2"><times id="S3.p5.1.m1.1.2.1.cmml" xref="S3.p5.1.m1.1.2.1"></times><ci id="S3.p5.1.m1.1.2.2.cmml" xref="S3.p5.1.m1.1.2.2">𝑓</ci><ci id="S3.p5.1.m1.1.1.cmml" xref="S3.p5.1.m1.1.1">𝑟</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.p5.1.m1.1c">f(r)</annotation><annotation encoding="application/x-llamapun" id="S3.p5.1.m1.1d">italic_f ( italic_r )</annotation></semantics></math>, <math id="S3.p5.2.m2.2" class="ltx_Math" alttext="r=1\ldots,N" display="inline"><semantics id="S3.p5.2.m2.2a"><mrow id="S3.p5.2.m2.2.2" xref="S3.p5.2.m2.2.2.cmml"><mi id="S3.p5.2.m2.2.2.3" xref="S3.p5.2.m2.2.2.3.cmml">r</mi><mo id="S3.p5.2.m2.2.2.2" xref="S3.p5.2.m2.2.2.2.cmml">=</mo><mrow id="S3.p5.2.m2.2.2.1.1" xref="S3.p5.2.m2.2.2.1.2.cmml"><mrow id="S3.p5.2.m2.2.2.1.1.1" xref="S3.p5.2.m2.2.2.1.1.1.cmml"><mn id="S3.p5.2.m2.2.2.1.1.1.2" xref="S3.p5.2.m2.2.2.1.1.1.2.cmml">1</mn><mo id="S3.p5.2.m2.2.2.1.1.1.1" xref="S3.p5.2.m2.2.2.1.1.1.1.cmml">⁢</mo><mi mathvariant="normal" id="S3.p5.2.m2.2.2.1.1.1.3" xref="S3.p5.2.m2.2.2.1.1.1.3.cmml">…</mi></mrow><mo id="S3.p5.2.m2.2.2.1.1.2" xref="S3.p5.2.m2.2.2.1.2.cmml">,</mo><mi id="S3.p5.2.m2.1.1" xref="S3.p5.2.m2.1.1.cmml">N</mi></mrow></mrow><annotation-xml encoding="MathML-Content" id="S3.p5.2.m2.2b"><apply id="S3.p5.2.m2.2.2.cmml" xref="S3.p5.2.m2.2.2"><eq id="S3.p5.2.m2.2.2.2.cmml" xref="S3.p5.2.m2.2.2.2"></eq><ci id="S3.p5.2.m2.2.2.3.cmml" xref="S3.p5.2.m2.2.2.3">𝑟</ci><list id="S3.p5.2.m2.2.2.1.2.cmml" xref="S3.p5.2.m2.2.2.1.1"><apply id="S3.p5.2.m2.2.2.1.1.1.cmml" xref="S3.p5.2.m2.2.2.1.1.1"><times id="S3.p5.2.m2.2.2.1.1.1.1.cmml" xref="S3.p5.2.m2.2.2.1.1.1.1"></times><cn type="integer" id="S3.p5.2.m2.2.2.1.1.1.2.cmml" xref="S3.p5.2.m2.2.2.1.1.1.2">1</cn><ci id="S3.p5.2.m2.2.2.1.1.1.3.cmml" xref="S3.p5.2.m2.2.2.1.1.1.3">…</ci></apply><ci id="S3.p5.2.m2.1.1.cmml" xref="S3.p5.2.m2.1.1">𝑁</ci></list></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.p5.2.m2.2c">r=1\ldots,N</annotation><annotation encoding="application/x-llamapun" id="S3.p5.2.m2.2d">italic_r = 1 … , italic_N</annotation></semantics></math> represents the rank-order impact factors; <math id="S3.p5.3.m3.1" class="ltx_Math" alttext="K" display="inline"><semantics id="S3.p5.3.m3.1a"><mi id="S3.p5.3.m3.1.1" xref="S3.p5.3.m3.1.1.cmml">K</mi><annotation-xml encoding="MathML-Content" id="S3.p5.3.m3.1b"><ci id="S3.p5.3.m3.1.1.cmml" xref="S3.p5.3.m3.1.1">𝐾</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p5.3.m3.1c">K</annotation><annotation encoding="application/x-llamapun" id="S3.p5.3.m3.1d">italic_K</annotation></semantics></math>,
+<math id="S3.p5.4.m4.1" class="ltx_Math" alttext="a" display="inline"><semantics id="S3.p5.4.m4.1a"><mi id="S3.p5.4.m4.1.1" xref="S3.p5.4.m4.1.1.cmml">a</mi><annotation-xml encoding="MathML-Content" id="S3.p5.4.m4.1b"><ci id="S3.p5.4.m4.1.1.cmml" xref="S3.p5.4.m4.1.1">𝑎</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p5.4.m4.1c">a</annotation><annotation encoding="application/x-llamapun" id="S3.p5.4.m4.1d">italic_a</annotation></semantics></math> and <math id="S3.p5.5.m5.1" class="ltx_Math" alttext="b" display="inline"><semantics id="S3.p5.5.m5.1a"><mi id="S3.p5.5.m5.1.1" xref="S3.p5.5.m5.1.1.cmml">b</mi><annotation-xml encoding="MathML-Content" id="S3.p5.5.m5.1b"><ci id="S3.p5.5.m5.1.1.cmml" xref="S3.p5.5.m5.1.1">𝑏</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p5.5.m5.1c">b</annotation><annotation encoding="application/x-llamapun" id="S3.p5.5.m5.1d">italic_b</annotation></semantics></math> are three parameters to fit. <math id="S3.p5.6.m6.1" class="ltx_Math" alttext="K" display="inline"><semantics id="S3.p5.6.m6.1a"><mi id="S3.p5.6.m6.1.1" xref="S3.p5.6.m6.1.1.cmml">K</mi><annotation-xml encoding="MathML-Content" id="S3.p5.6.m6.1b"><ci id="S3.p5.6.m6.1.1.cmml" xref="S3.p5.6.m6.1.1">𝐾</ci></annotation-xml><annotation encoding="application/x-tex" id="S3.p5.6.m6.1c">K</annotation><annotation encoding="application/x-llamapun" id="S3.p5.6.m6.1d">italic_K</annotation></semantics></math> is a meaningless scaling factor.
+Notice that when <math id="S3.p5.7.m7.1" class="ltx_Math" alttext="b=0" display="inline"><semantics id="S3.p5.7.m7.1a"><mrow id="S3.p5.7.m7.1.1" xref="S3.p5.7.m7.1.1.cmml"><mi id="S3.p5.7.m7.1.1.2" xref="S3.p5.7.m7.1.1.2.cmml">b</mi><mo id="S3.p5.7.m7.1.1.1" xref="S3.p5.7.m7.1.1.1.cmml">=</mo><mn id="S3.p5.7.m7.1.1.3" xref="S3.p5.7.m7.1.1.3.cmml">0</mn></mrow><annotation-xml encoding="MathML-Content" id="S3.p5.7.m7.1b"><apply id="S3.p5.7.m7.1.1.cmml" xref="S3.p5.7.m7.1.1"><eq id="S3.p5.7.m7.1.1.1.cmml" xref="S3.p5.7.m7.1.1.1"></eq><ci id="S3.p5.7.m7.1.1.2.cmml" xref="S3.p5.7.m7.1.1.2">𝑏</ci><cn type="integer" id="S3.p5.7.m7.1.1.3.cmml" xref="S3.p5.7.m7.1.1.3">0</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.p5.7.m7.1c">b=0</annotation><annotation encoding="application/x-llamapun" id="S3.p5.7.m7.1d">italic_b = 0</annotation></semantics></math> this equation becomes Lotka’s law.</p>
+</div>
+</section>
+<section id="S4" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4 </span>Results</h2>
+
+<div id="S4.p1" class="ltx_para">
+<p id="S4.p1.1" class="ltx_p">For every set of data, we find the
+parameters values using a linear least squares method on the logarithmic
+variable:</p>
+</div>
+<div id="S4.p2" class="ltx_para">
+<table id="S4.E5" class="ltx_equation ltx_eqn_table">
+
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S4.E5.m1.5" class="ltx_Math" alttext="log(f(r))=log(K)+blog(N+1-r)-alog(r)" display="block"><semantics id="S4.E5.m1.5a"><mrow id="S4.E5.m1.5.5" xref="S4.E5.m1.5.5.cmml"><mrow id="S4.E5.m1.4.4.1" xref="S4.E5.m1.4.4.1.cmml"><mi id="S4.E5.m1.4.4.1.3" xref="S4.E5.m1.4.4.1.3.cmml">l</mi><mo id="S4.E5.m1.4.4.1.2" xref="S4.E5.m1.4.4.1.2.cmml">⁢</mo><mi id="S4.E5.m1.4.4.1.4" xref="S4.E5.m1.4.4.1.4.cmml">o</mi><mo id="S4.E5.m1.4.4.1.2a" xref="S4.E5.m1.4.4.1.2.cmml">⁢</mo><mi id="S4.E5.m1.4.4.1.5" xref="S4.E5.m1.4.4.1.5.cmml">g</mi><mo id="S4.E5.m1.4.4.1.2b" xref="S4.E5.m1.4.4.1.2.cmml">⁢</mo><mrow id="S4.E5.m1.4.4.1.1.1" xref="S4.E5.m1.4.4.1.1.1.1.cmml"><mo stretchy="false" id="S4.E5.m1.4.4.1.1.1.2" xref="S4.E5.m1.4.4.1.1.1.1.cmml">(</mo><mrow id="S4.E5.m1.4.4.1.1.1.1" xref="S4.E5.m1.4.4.1.1.1.1.cmml"><mi id="S4.E5.m1.4.4.1.1.1.1.2" xref="S4.E5.m1.4.4.1.1.1.1.2.cmml">f</mi><mo id="S4.E5.m1.4.4.1.1.1.1.1" xref="S4.E5.m1.4.4.1.1.1.1.1.cmml">⁢</mo><mrow id="S4.E5.m1.4.4.1.1.1.1.3.2" xref="S4.E5.m1.4.4.1.1.1.1.cmml"><mo stretchy="false" id="S4.E5.m1.4.4.1.1.1.1.3.2.1" xref="S4.E5.m1.4.4.1.1.1.1.cmml">(</mo><mi id="S4.E5.m1.1.1" xref="S4.E5.m1.1.1.cmml">r</mi><mo stretchy="false" id="S4.E5.m1.4.4.1.1.1.1.3.2.2" xref="S4.E5.m1.4.4.1.1.1.1.cmml">)</mo></mrow></mrow><mo stretchy="false" id="S4.E5.m1.4.4.1.1.1.3" xref="S4.E5.m1.4.4.1.1.1.1.cmml">)</mo></mrow></mrow><mo id="S4.E5.m1.5.5.3" xref="S4.E5.m1.5.5.3.cmml">=</mo><mrow id="S4.E5.m1.5.5.2" xref="S4.E5.m1.5.5.2.cmml"><mrow id="S4.E5.m1.5.5.2.1" xref="S4.E5.m1.5.5.2.1.cmml"><mrow id="S4.E5.m1.5.5.2.1.3" xref="S4.E5.m1.5.5.2.1.3.cmml"><mi id="S4.E5.m1.5.5.2.1.3.2" xref="S4.E5.m1.5.5.2.1.3.2.cmml">l</mi><mo id="S4.E5.m1.5.5.2.1.3.1" xref="S4.E5.m1.5.5.2.1.3.1.cmml">⁢</mo><mi id="S4.E5.m1.5.5.2.1.3.3" xref="S4.E5.m1.5.5.2.1.3.3.cmml">o</mi><mo id="S4.E5.m1.5.5.2.1.3.1a" xref="S4.E5.m1.5.5.2.1.3.1.cmml">⁢</mo><mi id="S4.E5.m1.5.5.2.1.3.4" xref="S4.E5.m1.5.5.2.1.3.4.cmml">g</mi><mo id="S4.E5.m1.5.5.2.1.3.1b" xref="S4.E5.m1.5.5.2.1.3.1.cmml">⁢</mo><mrow id="S4.E5.m1.5.5.2.1.3.5.2" xref="S4.E5.m1.5.5.2.1.3.cmml"><mo stretchy="false" id="S4.E5.m1.5.5.2.1.3.5.2.1" xref="S4.E5.m1.5.5.2.1.3.cmml">(</mo><mi id="S4.E5.m1.2.2" xref="S4.E5.m1.2.2.cmml">K</mi><mo stretchy="false" id="S4.E5.m1.5.5.2.1.3.5.2.2" xref="S4.E5.m1.5.5.2.1.3.cmml">)</mo></mrow></mrow><mo id="S4.E5.m1.5.5.2.1.2" xref="S4.E5.m1.5.5.2.1.2.cmml">+</mo><mrow id="S4.E5.m1.5.5.2.1.1" xref="S4.E5.m1.5.5.2.1.1.cmml"><mi id="S4.E5.m1.5.5.2.1.1.3" xref="S4.E5.m1.5.5.2.1.1.3.cmml">b</mi><mo id="S4.E5.m1.5.5.2.1.1.2" xref="S4.E5.m1.5.5.2.1.1.2.cmml">⁢</mo><mi id="S4.E5.m1.5.5.2.1.1.4" xref="S4.E5.m1.5.5.2.1.1.4.cmml">l</mi><mo id="S4.E5.m1.5.5.2.1.1.2a" xref="S4.E5.m1.5.5.2.1.1.2.cmml">⁢</mo><mi id="S4.E5.m1.5.5.2.1.1.5" xref="S4.E5.m1.5.5.2.1.1.5.cmml">o</mi><mo id="S4.E5.m1.5.5.2.1.1.2b" xref="S4.E5.m1.5.5.2.1.1.2.cmml">⁢</mo><mi id="S4.E5.m1.5.5.2.1.1.6" xref="S4.E5.m1.5.5.2.1.1.6.cmml">g</mi><mo id="S4.E5.m1.5.5.2.1.1.2c" xref="S4.E5.m1.5.5.2.1.1.2.cmml">⁢</mo><mrow id="S4.E5.m1.5.5.2.1.1.1.1" xref="S4.E5.m1.5.5.2.1.1.1.1.1.cmml"><mo stretchy="false" id="S4.E5.m1.5.5.2.1.1.1.1.2" xref="S4.E5.m1.5.5.2.1.1.1.1.1.cmml">(</mo><mrow id="S4.E5.m1.5.5.2.1.1.1.1.1" xref="S4.E5.m1.5.5.2.1.1.1.1.1.cmml"><mrow id="S4.E5.m1.5.5.2.1.1.1.1.1.2" xref="S4.E5.m1.5.5.2.1.1.1.1.1.2.cmml"><mi id="S4.E5.m1.5.5.2.1.1.1.1.1.2.2" xref="S4.E5.m1.5.5.2.1.1.1.1.1.2.2.cmml">N</mi><mo id="S4.E5.m1.5.5.2.1.1.1.1.1.2.1" xref="S4.E5.m1.5.5.2.1.1.1.1.1.2.1.cmml">+</mo><mn id="S4.E5.m1.5.5.2.1.1.1.1.1.2.3" xref="S4.E5.m1.5.5.2.1.1.1.1.1.2.3.cmml">1</mn></mrow><mo id="S4.E5.m1.5.5.2.1.1.1.1.1.1" xref="S4.E5.m1.5.5.2.1.1.1.1.1.1.cmml">−</mo><mi id="S4.E5.m1.5.5.2.1.1.1.1.1.3" xref="S4.E5.m1.5.5.2.1.1.1.1.1.3.cmml">r</mi></mrow><mo stretchy="false" id="S4.E5.m1.5.5.2.1.1.1.1.3" xref="S4.E5.m1.5.5.2.1.1.1.1.1.cmml">)</mo></mrow></mrow></mrow><mo id="S4.E5.m1.5.5.2.2" xref="S4.E5.m1.5.5.2.2.cmml">−</mo><mrow id="S4.E5.m1.5.5.2.3" xref="S4.E5.m1.5.5.2.3.cmml"><mi id="S4.E5.m1.5.5.2.3.2" xref="S4.E5.m1.5.5.2.3.2.cmml">a</mi><mo id="S4.E5.m1.5.5.2.3.1" xref="S4.E5.m1.5.5.2.3.1.cmml">⁢</mo><mi id="S4.E5.m1.5.5.2.3.3" xref="S4.E5.m1.5.5.2.3.3.cmml">l</mi><mo id="S4.E5.m1.5.5.2.3.1a" xref="S4.E5.m1.5.5.2.3.1.cmml">⁢</mo><mi id="S4.E5.m1.5.5.2.3.4" xref="S4.E5.m1.5.5.2.3.4.cmml">o</mi><mo id="S4.E5.m1.5.5.2.3.1b" xref="S4.E5.m1.5.5.2.3.1.cmml">⁢</mo><mi id="S4.E5.m1.5.5.2.3.5" xref="S4.E5.m1.5.5.2.3.5.cmml">g</mi><mo id="S4.E5.m1.5.5.2.3.1c" xref="S4.E5.m1.5.5.2.3.1.cmml">⁢</mo><mrow id="S4.E5.m1.5.5.2.3.6.2" xref="S4.E5.m1.5.5.2.3.cmml"><mo stretchy="false" id="S4.E5.m1.5.5.2.3.6.2.1" xref="S4.E5.m1.5.5.2.3.cmml">(</mo><mi id="S4.E5.m1.3.3" xref="S4.E5.m1.3.3.cmml">r</mi><mo stretchy="false" id="S4.E5.m1.5.5.2.3.6.2.2" xref="S4.E5.m1.5.5.2.3.cmml">)</mo></mrow></mrow></mrow></mrow><annotation-xml encoding="MathML-Content" id="S4.E5.m1.5b"><apply id="S4.E5.m1.5.5.cmml" xref="S4.E5.m1.5.5"><eq id="S4.E5.m1.5.5.3.cmml" xref="S4.E5.m1.5.5.3"></eq><apply id="S4.E5.m1.4.4.1.cmml" xref="S4.E5.m1.4.4.1"><times id="S4.E5.m1.4.4.1.2.cmml" xref="S4.E5.m1.4.4.1.2"></times><ci id="S4.E5.m1.4.4.1.3.cmml" xref="S4.E5.m1.4.4.1.3">𝑙</ci><ci id="S4.E5.m1.4.4.1.4.cmml" xref="S4.E5.m1.4.4.1.4">𝑜</ci><ci id="S4.E5.m1.4.4.1.5.cmml" xref="S4.E5.m1.4.4.1.5">𝑔</ci><apply id="S4.E5.m1.4.4.1.1.1.1.cmml" xref="S4.E5.m1.4.4.1.1.1"><times id="S4.E5.m1.4.4.1.1.1.1.1.cmml" xref="S4.E5.m1.4.4.1.1.1.1.1"></times><ci id="S4.E5.m1.4.4.1.1.1.1.2.cmml" xref="S4.E5.m1.4.4.1.1.1.1.2">𝑓</ci><ci id="S4.E5.m1.1.1.cmml" xref="S4.E5.m1.1.1">𝑟</ci></apply></apply><apply id="S4.E5.m1.5.5.2.cmml" xref="S4.E5.m1.5.5.2"><minus id="S4.E5.m1.5.5.2.2.cmml" xref="S4.E5.m1.5.5.2.2"></minus><apply id="S4.E5.m1.5.5.2.1.cmml" xref="S4.E5.m1.5.5.2.1"><plus id="S4.E5.m1.5.5.2.1.2.cmml" xref="S4.E5.m1.5.5.2.1.2"></plus><apply id="S4.E5.m1.5.5.2.1.3.cmml" xref="S4.E5.m1.5.5.2.1.3"><times id="S4.E5.m1.5.5.2.1.3.1.cmml" xref="S4.E5.m1.5.5.2.1.3.1"></times><ci id="S4.E5.m1.5.5.2.1.3.2.cmml" xref="S4.E5.m1.5.5.2.1.3.2">𝑙</ci><ci id="S4.E5.m1.5.5.2.1.3.3.cmml" xref="S4.E5.m1.5.5.2.1.3.3">𝑜</ci><ci id="S4.E5.m1.5.5.2.1.3.4.cmml" xref="S4.E5.m1.5.5.2.1.3.4">𝑔</ci><ci id="S4.E5.m1.2.2.cmml" xref="S4.E5.m1.2.2">𝐾</ci></apply><apply id="S4.E5.m1.5.5.2.1.1.cmml" xref="S4.E5.m1.5.5.2.1.1"><times id="S4.E5.m1.5.5.2.1.1.2.cmml" xref="S4.E5.m1.5.5.2.1.1.2"></times><ci id="S4.E5.m1.5.5.2.1.1.3.cmml" xref="S4.E5.m1.5.5.2.1.1.3">𝑏</ci><ci id="S4.E5.m1.5.5.2.1.1.4.cmml" xref="S4.E5.m1.5.5.2.1.1.4">𝑙</ci><ci id="S4.E5.m1.5.5.2.1.1.5.cmml" xref="S4.E5.m1.5.5.2.1.1.5">𝑜</ci><ci id="S4.E5.m1.5.5.2.1.1.6.cmml" xref="S4.E5.m1.5.5.2.1.1.6">𝑔</ci><apply id="S4.E5.m1.5.5.2.1.1.1.1.1.cmml" xref="S4.E5.m1.5.5.2.1.1.1.1"><minus id="S4.E5.m1.5.5.2.1.1.1.1.1.1.cmml" xref="S4.E5.m1.5.5.2.1.1.1.1.1.1"></minus><apply id="S4.E5.m1.5.5.2.1.1.1.1.1.2.cmml" xref="S4.E5.m1.5.5.2.1.1.1.1.1.2"><plus id="S4.E5.m1.5.5.2.1.1.1.1.1.2.1.cmml" xref="S4.E5.m1.5.5.2.1.1.1.1.1.2.1"></plus><ci id="S4.E5.m1.5.5.2.1.1.1.1.1.2.2.cmml" xref="S4.E5.m1.5.5.2.1.1.1.1.1.2.2">𝑁</ci><cn type="integer" id="S4.E5.m1.5.5.2.1.1.1.1.1.2.3.cmml" xref="S4.E5.m1.5.5.2.1.1.1.1.1.2.3">1</cn></apply><ci id="S4.E5.m1.5.5.2.1.1.1.1.1.3.cmml" xref="S4.E5.m1.5.5.2.1.1.1.1.1.3">𝑟</ci></apply></apply></apply><apply id="S4.E5.m1.5.5.2.3.cmml" xref="S4.E5.m1.5.5.2.3"><times id="S4.E5.m1.5.5.2.3.1.cmml" xref="S4.E5.m1.5.5.2.3.1"></times><ci id="S4.E5.m1.5.5.2.3.2.cmml" xref="S4.E5.m1.5.5.2.3.2">𝑎</ci><ci id="S4.E5.m1.5.5.2.3.3.cmml" xref="S4.E5.m1.5.5.2.3.3">𝑙</ci><ci id="S4.E5.m1.5.5.2.3.4.cmml" xref="S4.E5.m1.5.5.2.3.4">𝑜</ci><ci id="S4.E5.m1.5.5.2.3.5.cmml" xref="S4.E5.m1.5.5.2.3.5">𝑔</ci><ci id="S4.E5.m1.3.3.cmml" xref="S4.E5.m1.3.3">𝑟</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S4.E5.m1.5c">log(f(r))=log(K)+blog(N+1-r)-alog(r)</annotation><annotation encoding="application/x-llamapun" id="S4.E5.m1.5d">italic_l italic_o italic_g ( italic_f ( italic_r ) ) = italic_l italic_o italic_g ( italic_K ) + italic_b italic_l italic_o italic_g ( italic_N + 1 - italic_r ) - italic_a italic_l italic_o italic_g ( italic_r )</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(5)</span></td>
+</tr></tbody>
+</table>
+</div>
+<div id="S4.p3" class="ltx_para">
+<p id="S4.p3.4" class="ltx_p">Table 1 shows the values of <math id="S4.p3.1.m1.1" class="ltx_Math" alttext="K" display="inline"><semantics id="S4.p3.1.m1.1a"><mi id="S4.p3.1.m1.1.1" xref="S4.p3.1.m1.1.1.cmml">K</mi><annotation-xml encoding="MathML-Content" id="S4.p3.1.m1.1b"><ci id="S4.p3.1.m1.1.1.cmml" xref="S4.p3.1.m1.1.1">𝐾</ci></annotation-xml><annotation encoding="application/x-tex" id="S4.p3.1.m1.1c">K</annotation><annotation encoding="application/x-llamapun" id="S4.p3.1.m1.1d">italic_K</annotation></semantics></math>, <math id="S4.p3.2.m2.1" class="ltx_Math" alttext="b" display="inline"><semantics id="S4.p3.2.m2.1a"><mi id="S4.p3.2.m2.1.1" xref="S4.p3.2.m2.1.1.cmml">b</mi><annotation-xml encoding="MathML-Content" id="S4.p3.2.m2.1b"><ci id="S4.p3.2.m2.1.1.cmml" xref="S4.p3.2.m2.1.1">𝑏</ci></annotation-xml><annotation encoding="application/x-tex" id="S4.p3.2.m2.1c">b</annotation><annotation encoding="application/x-llamapun" id="S4.p3.2.m2.1d">italic_b</annotation></semantics></math> and <math id="S4.p3.3.m3.1" class="ltx_Math" alttext="a" display="inline"><semantics id="S4.p3.3.m3.1a"><mi id="S4.p3.3.m3.1.1" xref="S4.p3.3.m3.1.1.cmml">a</mi><annotation-xml encoding="MathML-Content" id="S4.p3.3.m3.1b"><ci id="S4.p3.3.m3.1.1.cmml" xref="S4.p3.3.m3.1.1">𝑎</ci></annotation-xml><annotation encoding="application/x-tex" id="S4.p3.3.m3.1c">a</annotation><annotation encoding="application/x-llamapun" id="S4.p3.3.m3.1d">italic_a</annotation></semantics></math>, as well as the coefficient of
+regression <math id="S4.p3.4.m4.1" class="ltx_Math" alttext="r^{2}" display="inline"><semantics id="S4.p3.4.m4.1a"><msup id="S4.p3.4.m4.1.1" xref="S4.p3.4.m4.1.1.cmml"><mi id="S4.p3.4.m4.1.1.2" xref="S4.p3.4.m4.1.1.2.cmml">r</mi><mn id="S4.p3.4.m4.1.1.3" xref="S4.p3.4.m4.1.1.3.cmml">2</mn></msup><annotation-xml encoding="MathML-Content" id="S4.p3.4.m4.1b"><apply id="S4.p3.4.m4.1.1.cmml" xref="S4.p3.4.m4.1.1"><csymbol cd="ambiguous" id="S4.p3.4.m4.1.1.1.cmml" xref="S4.p3.4.m4.1.1">superscript</csymbol><ci id="S4.p3.4.m4.1.1.2.cmml" xref="S4.p3.4.m4.1.1.2">𝑟</ci><cn type="integer" id="S4.p3.4.m4.1.1.3.cmml" xref="S4.p3.4.m4.1.1.3">2</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S4.p3.4.m4.1c">r^{2}</annotation><annotation encoding="application/x-llamapun" id="S4.p3.4.m4.1d">italic_r start_POSTSUPERSCRIPT 2 end_POSTSUPERSCRIPT</annotation></semantics></math> for impact factors of twelve disciplines. In Figs 2, 3 and 4
+the
+impact factors data as well as our theoretical curve for the fields of Physical,
+Mathematical and Environmental Sciences are shown. We used semilog plots
+because they are more natural when the abscissa is a rank-order variable.</p>
+</div>
+<div id="S4.p4" class="ltx_para">
+<br class="ltx_break">
+<p id="S4.p4.1" class="ltx_p ltx_align_center">Table 1.</p>
+</div>
+<div id="S4.p5" class="ltx_para ltx_align_center">
+<p id="S4.p5.1" class="ltx_p">Figures 2, 3 and 4.</p>
+</div>
+</section>
+<section id="S5" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5 </span>Concluding remarks</h2>
+
+<div id="S5.p1" class="ltx_para">
+<p id="S5.p1.1" class="ltx_p">We have shown the excellent agreement of the data with our model. The quality of
+the fitting is superior to the proposal of Lavalette. From the
+comparison of eqs 3 and 4, it is evident that Lavalette’s law is a
+particular case of ours when <math id="S5.p1.1.m1.1" class="ltx_Math" alttext="a=b" display="inline"><semantics id="S5.p1.1.m1.1a"><mrow id="S5.p1.1.m1.1.1" xref="S5.p1.1.m1.1.1.cmml"><mi id="S5.p1.1.m1.1.1.2" xref="S5.p1.1.m1.1.1.2.cmml">a</mi><mo id="S5.p1.1.m1.1.1.1" xref="S5.p1.1.m1.1.1.1.cmml">=</mo><mi id="S5.p1.1.m1.1.1.3" xref="S5.p1.1.m1.1.1.3.cmml">b</mi></mrow><annotation-xml encoding="MathML-Content" id="S5.p1.1.m1.1b"><apply id="S5.p1.1.m1.1.1.cmml" xref="S5.p1.1.m1.1.1"><eq id="S5.p1.1.m1.1.1.1.cmml" xref="S5.p1.1.m1.1.1.1"></eq><ci id="S5.p1.1.m1.1.1.2.cmml" xref="S5.p1.1.m1.1.1.2">𝑎</ci><ci id="S5.p1.1.m1.1.1.3.cmml" xref="S5.p1.1.m1.1.1.3">𝑏</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S5.p1.1.m1.1c">a=b</annotation><annotation encoding="application/x-llamapun" id="S5.p1.1.m1.1d">italic_a = italic_b</annotation></semantics></math>. Unfortunately, it is not possible to
+discuss the rationale behind Lavalette’s law because the original paper is not
+available and all we know about it is a mention in Popescu’s
+paper (2003).</p>
+</div>
+<div id="S5.p2" class="ltx_para">
+<p id="S5.p2.1" class="ltx_p">The underlying proposed mechanism yielding the above discussed behaviors often
+assumes a kind of “biological evolution form”. For instance, G. Yule (1924)
+working in a model suggested by J. Willis (1922) managed to prove that assuming
+a single ancestral specie and probabilities of mutation and duplication a power
+law
+behavior is obtained. Expansion-modification systems proposed by W. Li (1991),
+which take into account the basic features of DNA mutation processes (R.
+Mansilla and Cocho, 2000), are also able to predict this behaviour.</p>
+</div>
+<div id="S5.p3" class="ltx_para">
+<p id="S5.p3.1" class="ltx_p">When discussing journal impact factors, a balance between the importance to the
+researchers of publish their work in high ranked journal, the difficulties
+associated with doing this and the increase of impact received by journals with
+high impact factor, seems to create a “rich gets richer” (the ”Matthew
+Effect”, see (Merton; 1968 and Egghe and Rousseau; 1999) mechanism also
+observed in complex networks (Barabasi, 2002). More than 49 years ago, H. Simon
+(1955, 1957) proposed a model which produces similar distributions. It is also
+interesting to notice that the bending of the tail of JIFs rank-order
+distribution means that after a critical zone of JIFs values is smooth thus
+discarding the possibility of the existence of multifractality.</p>
+</div>
+<div id="S5.p4" class="ltx_para">
+<p id="S5.p4.1" class="ltx_p">Power-laws seem to be ubiquitous in physics, biology, geography, economics,
+linguistics, etcetera (see Li, W., 2003). We consider “linguistic studies” not
+only those related with natural languages but also arbitrary languages over
+abstract finite alphabets. When the number of possible “words” is large, as it
+is the case for natural languages, it is expected to have a good fitness with a
+one-parameter power law. However, when the number of words is rather
+small, as it is the case of programing languages, one-exponent power
+laws absolutely fails and more parameters are necessary for a suitable fit. New
+elements to this considerations have been given by LeQuan et al (2002). They
+showed that there is a serious deviation when the size of the sample is huge.</p>
+</div>
+<div id="S5.p5" class="ltx_para">
+<p id="S5.p5.1" class="ltx_p">We expect that the increase in computing power will show that the deviation
+of Zipf’s and Lotka’s laws is a generic phenomenon. Then, a two-exponent
+Lotkaian and Zipfian infometrics and linguistics should be welcome.</p>
+</div>
+</section>
+<section id="S6" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">6 </span>Acknowledgements</h2>
+
+<div id="S6.p1" class="ltx_para">
+<p id="S6.p1.1" class="ltx_p">This work has been partially supported by the UNAM-PAPIIT grant IN-111003. The
+authors thank the sound comments of two anonymous referees.</p>
+</div>
+</section>
+<section id="S7" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">7 </span>Bibliography</h2>
+
+</section>
+<section id="bib" class="ltx_bibliography">
+<h2 class="ltx_title ltx_title_bibliography">References</h2>
+
+<ul class="ltx_biblist">
+<li id="bib.bib1" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[1]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib2" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[2]</span>
+<span class="ltx_bibblock">Bak, P., Tang, C. and Wiesenfeld, K. (1987). Self-organized criticality:
+an explanation of 1/f noise. Physical Review Letters. 59, pp381–384
+
+</span>
+</li>
+<li id="bib.bib3" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[3]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib4" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[4]</span>
+<span class="ltx_bibblock">Barabasi, A.L. (2002). Linked: The New Science of networks, Perseus.
+Cambridge Massachusetts.
+
+</span>
+</li>
+<li id="bib.bib5" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[5]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib6" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[6]</span>
+<span class="ltx_bibblock">Condon, E. V. (1928). Statistics of Vocabulary. Science. 67, pp300.
+
+</span>
+</li>
+<li id="bib.bib7" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[7]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib8" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[8]</span>
+<span class="ltx_bibblock">Dewey, G. (1923). Relative frequency of English speech sounds. Harvard
+University Press. Cambridge Massachusetts.
+
+</span>
+</li>
+<li id="bib.bib9" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[9]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib10" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[10]</span>
+<span class="ltx_bibblock">de Marchi, M. and M. Rocchi. (2001). The editorial policies of scientific
+journals: Testing an impact factor model. Scientometrics. 51(2), pp395–404.
+
+</span>
+</li>
+<li id="bib.bib11" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[11]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib12" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[12]</span>
+<span class="ltx_bibblock">Dresden, A. (1922). A report on the scientific work of the Chicago
+section, 1897-1922. Bulletin of the American Mathematical Society. 28, pp303.
+
+</span>
+</li>
+<li id="bib.bib13" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[13]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib14" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[14]</span>
+<span class="ltx_bibblock">Egghe, L. (2005). Power laws in the information production process:
+Lotkaian Informatrics. Elsevier. Amsterdam.
+
+</span>
+</li>
+<li id="bib.bib15" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[15]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib16" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[16]</span>
+<span class="ltx_bibblock">Egghe, L. and R. Rousseau. (1990). Introduction de Informetrics.
+Elsevier. Amsterdam
+
+</span>
+</li>
+<li id="bib.bib17" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[17]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib18" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[18]</span>
+<span class="ltx_bibblock">Estoup, J. B. (1916). Gammes Stenographiques. Institut Stenographique de
+France. Paris.
+
+</span>
+</li>
+<li id="bib.bib19" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[19]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib20" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[20]</span>
+<span class="ltx_bibblock">Fröhlich, G. (1996). The (surplus value of scientific communication.
+Review of Information Science. 1(2), pp1-13.
+
+</span>
+</li>
+<li id="bib.bib21" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[21]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib22" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[22]</span>
+<span class="ltx_bibblock">Garfield E. (1994). The impact factor. Current Contents. 25, pp3-7.
+
+</span>
+</li>
+<li id="bib.bib23" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[23]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib24" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[24]</span>
+<span class="ltx_bibblock">25. Hoeffel C. (1998). Journal impact factors [letter]. Allergy. 53(12),
+pp1225.
+
+</span>
+</li>
+<li id="bib.bib25" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[25]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib26" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[26]</span>
+<span class="ltx_bibblock">Lavalette D. (1996) Facteur d’impact: impartialité ou impuissance?,
+Internal Report, INSERM U350, Institut Curie, France. (<span id="bib.bib26.1.1" class="ltx_text ltx_font_italic">non vidi</span>, cited
+in Popescu (2003)).
+
+</span>
+</li>
+<li id="bib.bib27" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[27]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib28" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[28]</span>
+<span class="ltx_bibblock">Le Quan Ha, Sicilia-García E.I., Ming J. and F.J. Smith. (2002).
+Entension of Zipf’s law to words and phrases. Proceedings of the 17th
+International Conference on Computer Linguistics.
+
+</span>
+</li>
+<li id="bib.bib29" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[29]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib30" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[30]</span>
+<span class="ltx_bibblock">Li, W. (1991). Expansion-modification systems: A model for spatial <math id="bib.bib30.1.m1.1" class="ltx_Math" alttext="1/f" display="inline"><semantics id="bib.bib30.1.m1.1a"><mrow id="bib.bib30.1.m1.1.1" xref="bib.bib30.1.m1.1.1.cmml"><mn id="bib.bib30.1.m1.1.1.2" xref="bib.bib30.1.m1.1.1.2.cmml">1</mn><mo id="bib.bib30.1.m1.1.1.1" xref="bib.bib30.1.m1.1.1.1.cmml">/</mo><mi id="bib.bib30.1.m1.1.1.3" xref="bib.bib30.1.m1.1.1.3.cmml">f</mi></mrow><annotation-xml encoding="MathML-Content" id="bib.bib30.1.m1.1b"><apply id="bib.bib30.1.m1.1.1.cmml" xref="bib.bib30.1.m1.1.1"><divide id="bib.bib30.1.m1.1.1.1.cmml" xref="bib.bib30.1.m1.1.1.1"></divide><cn type="integer" id="bib.bib30.1.m1.1.1.2.cmml" xref="bib.bib30.1.m1.1.1.2">1</cn><ci id="bib.bib30.1.m1.1.1.3.cmml" xref="bib.bib30.1.m1.1.1.3">𝑓</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="bib.bib30.1.m1.1c">1/f</annotation><annotation encoding="application/x-llamapun" id="bib.bib30.1.m1.1d">1 / italic_f</annotation></semantics></math>
+spectra. Physical Review E. 43, pp5240.
+
+</span>
+</li>
+<li id="bib.bib31" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[31]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib32" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[32]</span>
+<span class="ltx_bibblock">Li, W. (2003). http://linkage.rockefeller.edu/wli/zipf/
+
+</span>
+</li>
+<li id="bib.bib33" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[33]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib34" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[34]</span>
+<span class="ltx_bibblock">Lotka, A. J. (1926). The frequency distribution of scientific
+productivity. Journal of the Washington Academy of Science. 16, pp317.
+
+</span>
+</li>
+<li id="bib.bib35" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[35]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib36" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[36]</span>
+<span class="ltx_bibblock">Mandelbrot B. B. (1954) Structure formelle des textes et
+communication. Word. 10, pp1-27.
+
+</span>
+</li>
+<li id="bib.bib37" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[37]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib38" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[38]</span>
+<span class="ltx_bibblock">Mansilla, R. Cocho, G. (2000). Multiscaling in expansion-modification
+systems: an explanation for the long-range correlation in DNA. Complex Systems.
+12, pp207.
+
+</span>
+</li>
+<li id="bib.bib39" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[39]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib40" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[40]</span>
+<span class="ltx_bibblock">Merton, Robert K. (1968). The Matthew Effect in Science. Science.
+159, pp56-63.
+
+</span>
+</li>
+<li id="bib.bib41" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[41]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib42" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[42]</span>
+<span class="ltx_bibblock">Nature (2005). Editorial. 435, pp1003-1004.
+
+</span>
+</li>
+<li id="bib.bib43" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[43]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib44" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[44]</span>
+<span class="ltx_bibblock">Popescu, I. (2003). On a Zipf’s Law Extension to Impact Factors
+Glottometrics. 6, 83-93.
+
+</span>
+</li>
+<li id="bib.bib45" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[45]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib46" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[46]</span>
+<span class="ltx_bibblock">Seglen PO. (1997). Why the impact factor of journals should not be used
+for evaluating research. BMJ 1997. pp314:497.
+
+</span>
+</li>
+<li id="bib.bib47" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[47]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib48" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[48]</span>
+<span class="ltx_bibblock">Simon, H. (1955). On a class of skew distribution functions. Biometrika.
+42, pp425.
+
+</span>
+</li>
+<li id="bib.bib49" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[49]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib50" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[50]</span>
+<span class="ltx_bibblock">Simon, H. (1957). Models of Man. Wiley and Sons. New York.
+
+</span>
+</li>
+<li id="bib.bib51" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[51]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib52" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[52]</span>
+<span class="ltx_bibblock">Willis, J (1922). Age and area. Cambridge University Press. Cambridge UK.
+
+</span>
+</li>
+<li id="bib.bib53" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[53]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib54" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[54]</span>
+<span class="ltx_bibblock">Yule, G. (1924). A mathematical theory of evolution. Philosophical
+Transactions of the Royal Society. 213, pp21-87.
+
+</span>
+</li>
+<li id="bib.bib55" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[55]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+<li id="bib.bib56" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[56]</span>
+<span class="ltx_bibblock">Zipf, G. K. (1949) Human behavior and the principle of least effort,
+Addison-Wesley Press. Cambridge Massachusetts.
+
+</span>
+</li>
+<li id="bib.bib57" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[57]</span>
+<span class="ltx_bibblock">
+</span>
+</li>
+</ul>
+</section>
+<div class="ltx_pagination ltx_role_newpage"></div>
+<section id="S8" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">8 </span>Table 1 </h2>
+
+<div id="S8.p1" class="ltx_para">
+<table id="S8.p1.4" class="ltx_tabular ltx_guessed_headers ltx_align_middle">
+<thead class="ltx_thead">
+<tr id="S8.p1.4.4" class="ltx_tr">
+<th id="S8.p1.4.4.5" class="ltx_td ltx_align_center ltx_th ltx_th_column ltx_th_row">Scientific Field</th>
+<th id="S8.p1.1.1.1" class="ltx_td ltx_align_center ltx_th ltx_th_column"><math id="S8.p1.1.1.1.m1.1" class="ltx_Math" alttext="k" display="inline"><semantics id="S8.p1.1.1.1.m1.1a"><mi id="S8.p1.1.1.1.m1.1.1" xref="S8.p1.1.1.1.m1.1.1.cmml">k</mi><annotation-xml encoding="MathML-Content" id="S8.p1.1.1.1.m1.1b"><ci id="S8.p1.1.1.1.m1.1.1.cmml" xref="S8.p1.1.1.1.m1.1.1">𝑘</ci></annotation-xml><annotation encoding="application/x-tex" id="S8.p1.1.1.1.m1.1c">k</annotation><annotation encoding="application/x-llamapun" id="S8.p1.1.1.1.m1.1d">italic_k</annotation></semantics></math></th>
+<th id="S8.p1.2.2.2" class="ltx_td ltx_align_center ltx_th ltx_th_column"><math id="S8.p1.2.2.2.m1.1" class="ltx_Math" alttext="b" display="inline"><semantics id="S8.p1.2.2.2.m1.1a"><mi id="S8.p1.2.2.2.m1.1.1" xref="S8.p1.2.2.2.m1.1.1.cmml">b</mi><annotation-xml encoding="MathML-Content" id="S8.p1.2.2.2.m1.1b"><ci id="S8.p1.2.2.2.m1.1.1.cmml" xref="S8.p1.2.2.2.m1.1.1">𝑏</ci></annotation-xml><annotation encoding="application/x-tex" id="S8.p1.2.2.2.m1.1c">b</annotation><annotation encoding="application/x-llamapun" id="S8.p1.2.2.2.m1.1d">italic_b</annotation></semantics></math></th>
+<th id="S8.p1.3.3.3" class="ltx_td ltx_align_center ltx_th ltx_th_column"><math id="S8.p1.3.3.3.m1.1" class="ltx_Math" alttext="a" display="inline"><semantics id="S8.p1.3.3.3.m1.1a"><mi id="S8.p1.3.3.3.m1.1.1" xref="S8.p1.3.3.3.m1.1.1.cmml">a</mi><annotation-xml encoding="MathML-Content" id="S8.p1.3.3.3.m1.1b"><ci id="S8.p1.3.3.3.m1.1.1.cmml" xref="S8.p1.3.3.3.m1.1.1">𝑎</ci></annotation-xml><annotation encoding="application/x-tex" id="S8.p1.3.3.3.m1.1c">a</annotation><annotation encoding="application/x-llamapun" id="S8.p1.3.3.3.m1.1d">italic_a</annotation></semantics></math></th>
+<th id="S8.p1.4.4.4" class="ltx_td ltx_align_center ltx_th ltx_th_column"><math id="S8.p1.4.4.4.m1.1" class="ltx_Math" alttext="R^{2}" display="inline"><semantics id="S8.p1.4.4.4.m1.1a"><msup id="S8.p1.4.4.4.m1.1.1" xref="S8.p1.4.4.4.m1.1.1.cmml"><mi id="S8.p1.4.4.4.m1.1.1.2" xref="S8.p1.4.4.4.m1.1.1.2.cmml">R</mi><mn id="S8.p1.4.4.4.m1.1.1.3" xref="S8.p1.4.4.4.m1.1.1.3.cmml">2</mn></msup><annotation-xml encoding="MathML-Content" id="S8.p1.4.4.4.m1.1b"><apply id="S8.p1.4.4.4.m1.1.1.cmml" xref="S8.p1.4.4.4.m1.1.1"><csymbol cd="ambiguous" id="S8.p1.4.4.4.m1.1.1.1.cmml" xref="S8.p1.4.4.4.m1.1.1">superscript</csymbol><ci id="S8.p1.4.4.4.m1.1.1.2.cmml" xref="S8.p1.4.4.4.m1.1.1.2">𝑅</ci><cn type="integer" id="S8.p1.4.4.4.m1.1.1.3.cmml" xref="S8.p1.4.4.4.m1.1.1.3">2</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S8.p1.4.4.4.m1.1c">R^{2}</annotation><annotation encoding="application/x-llamapun" id="S8.p1.4.4.4.m1.1d">italic_R start_POSTSUPERSCRIPT 2 end_POSTSUPERSCRIPT</annotation></semantics></math></th>
+</tr>
+</thead>
+<tbody class="ltx_tbody">
+<tr id="S8.p1.4.5.1" class="ltx_tr">
+<th id="S8.p1.4.5.1.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">—–</th>
+<td id="S8.p1.4.5.1.2" class="ltx_td ltx_align_center">—–</td>
+<td id="S8.p1.4.5.1.3" class="ltx_td ltx_align_center">—–</td>
+<td id="S8.p1.4.5.1.4" class="ltx_td ltx_align_center">—–</td>
+<td id="S8.p1.4.5.1.5" class="ltx_td ltx_align_center">—–</td>
+</tr>
+<tr id="S8.p1.4.6.2" class="ltx_tr">
+<th id="S8.p1.4.6.2.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Physics</th>
+<td id="S8.p1.4.6.2.2" class="ltx_td ltx_align_center">0.0273</td>
+<td id="S8.p1.4.6.2.3" class="ltx_td ltx_align_center">0.991</td>
+<td id="S8.p1.4.6.2.4" class="ltx_td ltx_align_center">0.4058</td>
+<td id="S8.p1.4.6.2.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.7.3" class="ltx_tr">
+<th id="S8.p1.4.7.3.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Mathematics</th>
+<td id="S8.p1.4.7.3.2" class="ltx_td ltx_align_center">0.0437</td>
+<td id="S8.p1.4.7.3.3" class="ltx_td ltx_align_center">0.676</td>
+<td id="S8.p1.4.7.3.4" class="ltx_td ltx_align_center">0.2622</td>
+<td id="S8.p1.4.7.3.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.8.4" class="ltx_tr">
+<th id="S8.p1.4.8.4.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Computer Science</th>
+<td id="S8.p1.4.8.4.2" class="ltx_td ltx_align_center">0.0066</td>
+<td id="S8.p1.4.8.4.3" class="ltx_td ltx_align_center">1.0626</td>
+<td id="S8.p1.4.8.4.4" class="ltx_td ltx_align_center">0.2840</td>
+<td id="S8.p1.4.8.4.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.9.5" class="ltx_tr">
+<th id="S8.p1.4.9.5.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Agroscience</th>
+<td id="S8.p1.4.9.5.2" class="ltx_td ltx_align_center">0.0070</td>
+<td id="S8.p1.4.9.5.3" class="ltx_td ltx_align_center">0.9597</td>
+<td id="S8.p1.4.9.5.4" class="ltx_td ltx_align_center">0.2210</td>
+<td id="S8.p1.4.9.5.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.10.6" class="ltx_tr">
+<th id="S8.p1.4.10.6.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Environmental Sc.</th>
+<td id="S8.p1.4.10.6.2" class="ltx_td ltx_align_center">0.0358</td>
+<td id="S8.p1.4.10.6.3" class="ltx_td ltx_align_center">0.9357</td>
+<td id="S8.p1.4.10.6.4" class="ltx_td ltx_align_center">0.2781</td>
+<td id="S8.p1.4.10.6.5" class="ltx_td ltx_align_center">0.9800</td>
+</tr>
+<tr id="S8.p1.4.11.7" class="ltx_tr">
+<th id="S8.p1.4.11.7.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Biosciences</th>
+<td id="S8.p1.4.11.7.2" class="ltx_td ltx_align_center">0.0304</td>
+<td id="S8.p1.4.11.7.3" class="ltx_td ltx_align_center">1.0161</td>
+<td id="S8.p1.4.11.7.4" class="ltx_td ltx_align_center">0.5140</td>
+<td id="S8.p1.4.11.7.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.12.8" class="ltx_tr">
+<th id="S8.p1.4.12.8.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Chemistry</th>
+<td id="S8.p1.4.12.8.2" class="ltx_td ltx_align_center">0.0549</td>
+<td id="S8.p1.4.12.8.3" class="ltx_td ltx_align_center">0.9733</td>
+<td id="S8.p1.4.12.8.4" class="ltx_td ltx_align_center">0.4560</td>
+<td id="S8.p1.4.12.8.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.13.9" class="ltx_tr">
+<th id="S8.p1.4.13.9.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Engineering</th>
+<td id="S8.p1.4.13.9.2" class="ltx_td ltx_align_center">0.0033</td>
+<td id="S8.p1.4.13.9.3" class="ltx_td ltx_align_center">1.0472</td>
+<td id="S8.p1.4.13.9.4" class="ltx_td ltx_align_center">0.3522</td>
+<td id="S8.p1.4.13.9.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.14.10" class="ltx_tr">
+<th id="S8.p1.4.14.10.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Geosciences</th>
+<td id="S8.p1.4.14.10.2" class="ltx_td ltx_align_center">0.0463</td>
+<td id="S8.p1.4.14.10.3" class="ltx_td ltx_align_center">0.8739</td>
+<td id="S8.p1.4.14.10.4" class="ltx_td ltx_align_center">0.3505</td>
+<td id="S8.p1.4.14.10.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.15.11" class="ltx_tr">
+<th id="S8.p1.4.15.11.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Material Science</th>
+<td id="S8.p1.4.15.11.2" class="ltx_td ltx_align_center">0.0408</td>
+<td id="S8.p1.4.15.11.3" class="ltx_td ltx_align_center">0.9072</td>
+<td id="S8.p1.4.15.11.4" class="ltx_td ltx_align_center">0.4477</td>
+<td id="S8.p1.4.15.11.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.16.12" class="ltx_tr">
+<th id="S8.p1.4.16.12.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Medicine</th>
+<td id="S8.p1.4.16.12.2" class="ltx_td ltx_align_center">0.0819</td>
+<td id="S8.p1.4.16.12.3" class="ltx_td ltx_align_center">0.7735</td>
+<td id="S8.p1.4.16.12.4" class="ltx_td ltx_align_center">0.4307</td>
+<td id="S8.p1.4.16.12.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+<tr id="S8.p1.4.17.13" class="ltx_tr">
+<th id="S8.p1.4.17.13.1" class="ltx_td ltx_align_center ltx_th ltx_th_row">Education</th>
+<td id="S8.p1.4.17.13.2" class="ltx_td ltx_align_center">0.0819</td>
+<td id="S8.p1.4.17.13.3" class="ltx_td ltx_align_center">0.7735</td>
+<td id="S8.p1.4.17.13.4" class="ltx_td ltx_align_center">0.4307</td>
+<td id="S8.p1.4.17.13.5" class="ltx_td ltx_align_center">0.9999</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="ltx_pagination ltx_role_newpage"></div>
+<div id="S8.p2" class="ltx_para">
+<br class="ltx_break">
+</div>
+<figure id="S8.F1" class="ltx_figure"><img src="/html/cs/0610091/assets/x1.png" id="S8.F1.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="484" height="300" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span>Log-log rank-order plot of the Impact Factor data for Physics
+Journals. Notice the drop of the tail of the curve (see text)</figcaption>
+</figure>
+<figure id="S8.F2" class="ltx_figure"><img src="/html/cs/0610091/assets/x2.png" id="S8.F2.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="484" height="364" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2: </span>Semi-log Impact factor rank-order distribution for Physics journals.
+Solid circles
+represent raw data. Hollow circles are the ouput of the model</figcaption>
+</figure>
+<figure id="S8.F3" class="ltx_figure"><img src="/html/cs/0610091/assets/x3.png" id="S8.F3.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="484" height="364" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3: </span>Semi-log Impact factor rank-order distribution for Mathematics
+journals. Solid circles
+represent raw data. Hollow circles are the ouput of the model</figcaption>
+</figure>
+<figure id="S8.F4" class="ltx_figure"><img src="/html/cs/0610091/assets/x4.png" id="S8.F4.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="484" height="364" alt="Refer to caption">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4: </span>Semi-log Impact factor rank-order distribution for Environmental
+sciences. Solid circles
+represent raw data. Hollow circles are the ouput of the model</figcaption>
+</figure>
+</section>
+</article>
+</div>
+<div class="ar5iv-footer"><a href="/html/cs/0610086" class="ar5iv-nav-button ar5iv-nav-button-prev">◄</a>
+    <a class="ar5iv-home-button" href="/"><img height="40" alt="ar5iv homepage" src="/assets/ar5iv.png"></a>
+    <a href="/feeling_lucky" class="ar5iv-text-button">Feeling<br>lucky?</a>
+    <a href="/log/cs/0610091" class="ar5iv-text-button ar5iv-severity-ok">Conversion<br>report</a>
+    <a class="ar5iv-text-button" target="_blank" href="https://github.com/dginev/ar5iv/issues/new?template=improve-article--arxiv-id-.md&title=Improve+article+cs/0610091">Report<br>an issue</a>
+    <a href="https://arxiv.org/abs/cs/0610091" class="ar5iv-text-button arxiv-ui-theme">View&nbsp;original<br>on&nbsp;arXiv</a><a href="/html/cs/0610092" class="ar5iv-nav-button ar5iv-nav-button-next">►</a>
+</div><footer class="ltx_page_footer">
+<a class="ar5iv-toggle-color-scheme" href="javascript:toggleColorScheme()" title="Toggle ar5iv color scheme"><span class="color-scheme-icon"></span></a>
+<a class="ar5iv-footer-button" href="https://arxiv.org/help/license" target="_blank">Copyright</a>
+<a class="ar5iv-footer-button" href="https://arxiv.org/help/policies/privacy_policy" target="_blank">Privacy Policy</a>
+
+<div class="ltx_page_logo">Generated  on Wed Dec 14 13:23:23 2022 by <a target="_blank" href="http://dlmf.nist.gov/LaTeXML/" class="ltx_LaTeXML_logo"><span style="letter-spacing:-0.2em; margin-right:0.1em;">L<span style="font-size:70%;position:relative; bottom:2.2pt;">A</span>T<span style="position:relative; bottom:-0.4ex;">E</span></span><span class="ltx_font_smallcaps">xml</span><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOCAYAAAD5YeaVAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wKExQZLWTEaOUAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAdpJREFUKM9tkL+L2nAARz9fPZNCKFapUn8kyI0e4iRHSR1Kb8ng0lJw6FYHFwv2LwhOpcWxTjeUunYqOmqd6hEoRDhtDWdA8ApRYsSUCDHNt5ul13vz4w0vWCgUnnEc975arX6ORqN3VqtVZbfbTQC4uEHANM3jSqXymFI6yWazP2KxWAXAL9zCUa1Wy2tXVxheKA9YNoR8Pt+aTqe4FVVVvz05O6MBhqUIBGk8Hn8HAOVy+T+XLJfLS4ZhTiRJgqIoVBRFIoric47jPnmeB1mW/9rr9ZpSSn3Lsmir1fJZlqWlUonKsvwWwD8ymc/nXwVBeLjf7xEKhdBut9Hr9WgmkyGEkJwsy5eHG5vN5g0AKIoCAEgkEkin0wQAfN9/cXPdheu6P33fBwB4ngcAcByHJpPJl+fn54mD3Gg0NrquXxeLRQAAwzAYj8cwTZPwPH9/sVg8PXweDAauqqr2cDjEer1GJBLBZDJBs9mE4zjwfZ85lAGg2+06hmGgXq+j3+/DsixYlgVN03a9Xu8jgCNCyIegIAgx13Vfd7vdu+FweG8YRkjXdWy329+dTgeSJD3ieZ7RNO0VAXAPwDEAO5VKndi2fWrb9jWl9Esul6PZbDY9Go1OZ7PZ9z/lyuD3OozU2wAAAABJRU5ErkJggg==" alt="[LOGO]"></a>
+</div></footer>
+</div>
+
+    <script>
+      var canMathML = typeof(MathMLElement) == "function";
+      if (!canMathML) {
+        var body = document.querySelector("body");
+        body.firstElementChild.setAttribute('style', 'opacity: 0;');
+        var loading = document.createElement("div");
+        loading.setAttribute("id", "mathjax-loading-spinner");
+        var message = document.createElement("div");
+        message.setAttribute("id", "mathjax-loading-message");
+        message.innerText = "Typesetting Equations...";
+        body.prepend(loading);
+        body.prepend(message);
+
+        var el = document.createElement("script");
+        el.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+        document.querySelector("head").appendChild(el);
+
+        window.MathJax = {
+          startup: {
+            pageReady: () => {
+              return MathJax.startup.defaultPageReady().then(() => {
+                body.removeChild(loading);
+                body.removeChild(message);
+                body.firstElementChild.removeAttribute('style');
+              }); } } };
+      }
+    </script>
+    <script>
+    // Auxiliary function, building the preview feature when
+    // an inline citation is clicked
+    function clicked_cite(e) {
+      e.preventDefault();
+      let cite = this.closest('.ltx_cite');
+      let next = cite.nextSibling;
+      if (next && next.nodeType == Node.ELEMENT_NODE && next.getAttribute('class') == "ar5iv-bibitem-preview") {
+        next.remove();
+        return; }
+      // Before adding a preview modal,
+      // cleanup older previews, in case they're still open
+      document.querySelectorAll('span.ar5iv-bibitem-preview').forEach(function(node) {
+        node.remove();
+      })
+
+      // Create the preview
+      preview = document.createElement('span');
+      preview.setAttribute('class','ar5iv-bibitem-preview');
+      let target = document.getElementById(this.getAttribute('href').slice(1));
+      target.childNodes.forEach(function (child) {
+        preview.append(child.cloneNode(true));
+      });
+      let close_x = document.createElement('button');
+      close_x.setAttribute("aria-label","Close modal for bibliography item preview");
+      close_x.textContent = "×";
+      close_x.setAttribute('class', 'ar5iv-button-close-preview');
+      close_x.setAttribute('onclick','this.parentNode.remove()');
+      preview.append(close_x);
+      preview.querySelectorAll('.ltx_tag_bibitem').forEach(function(node) {
+        node.remove();
+      });
+      cite.parentNode.insertBefore(preview, cite.nextSibling);
+      return;
+    }
+    // Global Document initialization:
+    // - assign the preview feature to all inline citation links
+    document.querySelectorAll(".ltx_cite .ltx_ref").forEach(function (link) {
+      link.addEventListener("click", clicked_cite);
+    });
+    </script>
+    </body>
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>[2205.04885] Adaptive Graph Convolutional Network Framework for Multidimensional Time Series Prediction</title><meta property="og:description" content="In the real world, long sequence time-series forecasting (LSTF) is needed in many cases, such as power consumption prediction and air quality prediction.Multi-dimensional long time series model has more strict requirem…">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Adaptive Graph Convolutional Network Framework for Multidimensional Time Series Prediction">
+<meta name="twitter:image:src" content="https://ar5iv.labs.arxiv.org/assets/ar5iv_card.png">
+<meta name="twitter:image:alt" content="ar5iv logo">
+<meta property="og:title" content="Adaptive Graph Convolutional Network Framework for Multidimensional Time Series Prediction">
+<meta property="og:site_name" content="ar5iv">
+<meta property="og:image" content="https://ar5iv.labs.arxiv.org/assets/ar5iv_card.png">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ar5iv.labs.arxiv.org/html/2205.04885">
+
+<!--Generated on Sun Jun  5 22:38:02 2022 by LaTeXML (version 0.8.6) http://dlmf.nist.gov/LaTeXML/.-->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="keywords" lang="en" content="
+Multi-dimensional forecast,  Transofrmer,  Autoformer, Informer,  GCN,  self-attention
+">
+
+<script>
+  function detectColorScheme(){
+    var theme="dark";
+    var current_theme = localStorage.getItem("halloween_theme");
+    if(current_theme){
+      if(current_theme == "light"){
+        theme = "light";
+      } }
+    else if(!window.matchMedia) { return false; }
+    if (theme=="dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light"); } }
+
+  detectColorScheme();
+
+  function toggleColorScheme(){
+    var current_theme = localStorage.getItem("halloween_theme");
+    if (current_theme) {
+      if (current_theme == "light") {
+        localStorage.setItem("halloween_theme", "dark"); }
+      else {
+        localStorage.setItem("halloween_theme", "light"); } }
+    else {
+        localStorage.setItem("halloween_theme", "dark"); }
+    detectColorScheme(); }
+</script>
+<link media="all" rel="stylesheet" href="/assets/ar5iv.0.7.5.min.css"><link media="all" rel="stylesheet" href="/assets/ar5iv-site.0.2.1.css">
+</head>
+<body>
+<div class="ltx_page_main">
+<div class="ltx_page_content">
+<article class="ltx_document ltx_authors_1line">
+<h1 class="ltx_title ltx_title_document">Adaptive Graph Convolutional Network Framework for Multidimensional Time Series Prediction</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Ning Wang
+</span><span class="ltx_author_notes"><em id="id1.1.id1" class="ltx_emph ltx_font_italic">(Corresponding author: Ning Wang)</em></span></span>
+</div>
+
+<div class="ltx_abstract">
+<h6 class="ltx_title ltx_title_abstract">Abstract</h6>
+<p id="id2.id1" class="ltx_p">In the real world, long sequence time-series forecasting (LSTF) is needed in many cases, such as power consumption prediction and air quality prediction.Multi-dimensional long time series model has more strict requirements on the model, which not only needs to effectively capture the accurate long-term dependence between input and output, but also needs to capture the relationship between data of different dimensions.Recent research shows that the Informer model based on Transformer has achieved excellent performance in long time series prediction.However, this model still has some deficiencies in multidimensional prediction,it cannot capture the relationship between different dimensions well.
+We improved Informer to address its shortcomings in multidimensional forecasting.
+First,we introduce an adaptive graph neural network to capture hidden dimension dependencies in mostly time series prediction. Secondly,we integrate adaptive graph convolutional networks into various spatio-temporal series prediction models to solve the defect that they cannot capture the relationship between different dimensions. Thirdly,After experimental testing with multiple data sets, the accuracy of our framework improved by about 10% after being introduced into the model.</p>
+</div>
+<div class="ltx_keywords">
+<h6 class="ltx_title ltx_title_keywords">Index Terms: </h6>
+Multi-dimensional forecast, Transofrmer, Autoformer,Informer, GCN, self-attention
+
+</div>
+<section id="S1" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">I </span><span id="S1.1.1" class="ltx_text ltx_font_smallcaps">Introduction</span>
+</h2>
+
+<div id="S1.p1" class="ltx_para">
+<p id="S1.p1.1" class="ltx_p">Time-series prediction plays an important role in many fields, such as sensor network monitoring<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib1" title="" class="ltx_ref">1</a>]</cite>,energy and smart grid management,economics and finance<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib2" title="" class="ltx_ref">2</a>]</cite>,and disease propagation analysis<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib3" title="" class="ltx_ref">3</a>]</cite>. In each of the previous scenarios, we can make long-term predictions using a large number of past time series,namely long sequence time-series forecastin(LSTF). Multidimensional time series prediction is an important part of it. The so-called multidimensional time series prediction refers to the generation of multiple kinds of data at the same time, using this datas at the historical moment to predict the data at the future moment. This paper mainly discusses the different types of time series data detected in the same place at the same time. However, existing models cannot learn the hidden relationship between different dimensions well. In the previous period,vector autoregression(VAR) is arguably the most widely used models in multivariate time series<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib4" title="" class="ltx_ref">4</a>]</cite><cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib5" title="" class="ltx_ref">5</a>]</cite><cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib6" title="" class="ltx_ref">6</a>]</cite> due to its simplicity. In recent years, various VAR models have made significant progress,including the elliptical VAR<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib7" title="" class="ltx_ref">7</a>]</cite> model for heavy-tail time series and structured VAR<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib8" title="" class="ltx_ref">8</a>]</cite> model in order to better explain the dependence between high dimensional variables. However,the model capacity of VAR grows linearly over the temporal window size and quadratically over the number of variables. This means that the model is easy to overfit when it deals with long time series. In order to alleviate this problem,<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib9" title="" class="ltx_ref">9</a>]</cite>proposed to reduce the original high-dimensional signal to low-dimensional implicit representation, and then use VAR to perform a variety of regularization prediction.</p>
+</div>
+<div id="S1.p2" class="ltx_para">
+<p id="S1.p2.1" class="ltx_p">The time series prediction problem can also be regarded as the standard regression problem with time-varying parameters. Therefore, there is a lot of work to apply various regression models with different loss functions and regularization terms to time series prediction tasks. For example,linear support vector regression(SVR) learns a hyperplane based on regression loss and controls the threshold of prediction error with the hyperparameter E.Lastly,<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib10" title="" class="ltx_ref">10</a>]</cite> used LASSO models to encourage sparsity in the model parameters so that interesting patterns among different input signals can be manifest. These linear methods are actually more efficient in multivariate time series prediction due to high-quality off-the-shelf solvers in the machine learning community. However,like VAR,these models cannot capture the complex nonlinear relationship between multiple dimensions, resulting in low performance. And the power of GP comes at the cost of high computational complexity. Due to the inverse of kernel matrix, the prediction of multivariate time series using this model has cubic complexity.</p>
+</div>
+<div id="S1.p3" class="ltx_para">
+<p id="S1.p3.1" class="ltx_p">Gaussian Processes(GP) is a nonparametric method for modeling distributions over a continuous domain of functions. GP can be applied to the multivariate time series prediction task suggested in <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib11" title="" class="ltx_ref">11</a>]</cite>. For example,<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib12" title="" class="ltx_ref">12</a>]</cite>proposes a full Bayesian method with GP priors for nonlinear state space models, which can capture complex dynamic phenomena.</p>
+</div>
+<div id="S1.p4" class="ltx_para">
+<p id="S1.p4.1" class="ltx_p">In the LSTNet model<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib13" title="" class="ltx_ref">13</a>]</cite>, the convolutional network layer used cannot solve this problem well.As for the model LSTMa originally used for text translation<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib14" title="" class="ltx_ref">14</a>]</cite>, its Recurrent Neural Network module cannot deal with the problem of multi-dimensional dependence well when it is transferred to time series prediction. There is another serious problem with the model based on LSTM. <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib15" title="" class="ltx_ref">15</a>]</cite> points out that the accuracy of LSTM prediction will decrease greatly when the prediction length reaches a certain length. Therefore, the model does not perform well in the prediction of long time series.</p>
+</div>
+<div id="S1.p5" class="ltx_para">
+<p id="S1.p5.4" class="ltx_p">At present, there are two main challenges in multi-dimensional long time series prediction. The first is that the model should be able to deal with the increasingly long prediction series. Second, as there are dependencies between different dimensions in multidimensional sequence data, the model needs to capture this dependencies. Recently emerged Transformer models perform well in the task of capturing long-range dependency than recurrent neural networks models(RNN). The self-attention mechanism can reduce the transmission distance of signals from the maximum length to the minimum <math id="S1.p5.1.m1.1" class="ltx_Math" alttext="\mathcal{O}(1)" display="inline"><semantics id="S1.p5.1.m1.1a"><mrow id="S1.p5.1.m1.1.2" xref="S1.p5.1.m1.1.2.cmml"><mi class="ltx_font_mathcaligraphic" id="S1.p5.1.m1.1.2.2" xref="S1.p5.1.m1.1.2.2.cmml">𝒪</mi><mo id="S1.p5.1.m1.1.2.1" xref="S1.p5.1.m1.1.2.1.cmml">⁢</mo><mrow id="S1.p5.1.m1.1.2.3.2" xref="S1.p5.1.m1.1.2.cmml"><mo stretchy="false" id="S1.p5.1.m1.1.2.3.2.1" xref="S1.p5.1.m1.1.2.cmml">(</mo><mn id="S1.p5.1.m1.1.1" xref="S1.p5.1.m1.1.1.cmml">1</mn><mo stretchy="false" id="S1.p5.1.m1.1.2.3.2.2" xref="S1.p5.1.m1.1.2.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S1.p5.1.m1.1b"><apply id="S1.p5.1.m1.1.2.cmml" xref="S1.p5.1.m1.1.2"><times id="S1.p5.1.m1.1.2.1.cmml" xref="S1.p5.1.m1.1.2.1"></times><ci id="S1.p5.1.m1.1.2.2.cmml" xref="S1.p5.1.m1.1.2.2">𝒪</ci><cn type="integer" id="S1.p5.1.m1.1.1.cmml" xref="S1.p5.1.m1.1.1">1</cn></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p5.1.m1.1c">\mathcal{O}(1)</annotation><annotation encoding="application/x-llamapun" id="S1.p5.1.m1.1d">caligraphic_O ( 1 )</annotation></semantics></math> and avoid the recurrent structure, thus Transformer has greater potential than RNN in dealing with LSTF problem. However, due to its <em id="S1.p5.4.1" class="ltx_emph ltx_font_italic">L</em>-quadratic computation and memory consumption on <em id="S1.p5.4.2" class="ltx_emph ltx_font_italic">L</em>-length inputs/outputs of Transformer model, it has a large cost for long time series prediction. In order to solve these problems,Reformer<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib16" title="" class="ltx_ref">16</a>]</cite> achieves <math id="S1.p5.2.m2.1" class="ltx_Math" alttext="\mathcal{O}(L\log L)" display="inline"><semantics id="S1.p5.2.m2.1a"><mrow id="S1.p5.2.m2.1.1" xref="S1.p5.2.m2.1.1.cmml"><mi class="ltx_font_mathcaligraphic" id="S1.p5.2.m2.1.1.3" xref="S1.p5.2.m2.1.1.3.cmml">𝒪</mi><mo id="S1.p5.2.m2.1.1.2" xref="S1.p5.2.m2.1.1.2.cmml">⁢</mo><mrow id="S1.p5.2.m2.1.1.1.1" xref="S1.p5.2.m2.1.1.1.1.1.cmml"><mo stretchy="false" id="S1.p5.2.m2.1.1.1.1.2" xref="S1.p5.2.m2.1.1.1.1.1.cmml">(</mo><mrow id="S1.p5.2.m2.1.1.1.1.1" xref="S1.p5.2.m2.1.1.1.1.1.cmml"><mi id="S1.p5.2.m2.1.1.1.1.1.2" xref="S1.p5.2.m2.1.1.1.1.1.2.cmml">L</mi><mo id="S1.p5.2.m2.1.1.1.1.1.1" xref="S1.p5.2.m2.1.1.1.1.1.1.cmml">⁢</mo><mrow id="S1.p5.2.m2.1.1.1.1.1.3" xref="S1.p5.2.m2.1.1.1.1.1.3.cmml"><mi id="S1.p5.2.m2.1.1.1.1.1.3.1" xref="S1.p5.2.m2.1.1.1.1.1.3.1.cmml">log</mi><mo id="S1.p5.2.m2.1.1.1.1.1.3a" xref="S1.p5.2.m2.1.1.1.1.1.3.cmml">⁡</mo><mi id="S1.p5.2.m2.1.1.1.1.1.3.2" xref="S1.p5.2.m2.1.1.1.1.1.3.2.cmml">L</mi></mrow></mrow><mo stretchy="false" id="S1.p5.2.m2.1.1.1.1.3" xref="S1.p5.2.m2.1.1.1.1.1.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S1.p5.2.m2.1b"><apply id="S1.p5.2.m2.1.1.cmml" xref="S1.p5.2.m2.1.1"><times id="S1.p5.2.m2.1.1.2.cmml" xref="S1.p5.2.m2.1.1.2"></times><ci id="S1.p5.2.m2.1.1.3.cmml" xref="S1.p5.2.m2.1.1.3">𝒪</ci><apply id="S1.p5.2.m2.1.1.1.1.1.cmml" xref="S1.p5.2.m2.1.1.1.1"><times id="S1.p5.2.m2.1.1.1.1.1.1.cmml" xref="S1.p5.2.m2.1.1.1.1.1.1"></times><ci id="S1.p5.2.m2.1.1.1.1.1.2.cmml" xref="S1.p5.2.m2.1.1.1.1.1.2">𝐿</ci><apply id="S1.p5.2.m2.1.1.1.1.1.3.cmml" xref="S1.p5.2.m2.1.1.1.1.1.3"><log id="S1.p5.2.m2.1.1.1.1.1.3.1.cmml" xref="S1.p5.2.m2.1.1.1.1.1.3.1"></log><ci id="S1.p5.2.m2.1.1.1.1.1.3.2.cmml" xref="S1.p5.2.m2.1.1.1.1.1.3.2">𝐿</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p5.2.m2.1c">\mathcal{O}(L\log L)</annotation><annotation encoding="application/x-llamapun" id="S1.p5.2.m2.1d">caligraphic_O ( italic_L roman_log italic_L )</annotation></semantics></math> with locally-sensitive hashing self-attention,but it only works on extremely long sequences. Linformer claims a linear complexity <math id="S1.p5.3.m3.1" class="ltx_Math" alttext="\mathcal{O}(L)" display="inline"><semantics id="S1.p5.3.m3.1a"><mrow id="S1.p5.3.m3.1.2" xref="S1.p5.3.m3.1.2.cmml"><mi class="ltx_font_mathcaligraphic" id="S1.p5.3.m3.1.2.2" xref="S1.p5.3.m3.1.2.2.cmml">𝒪</mi><mo id="S1.p5.3.m3.1.2.1" xref="S1.p5.3.m3.1.2.1.cmml">⁢</mo><mrow id="S1.p5.3.m3.1.2.3.2" xref="S1.p5.3.m3.1.2.cmml"><mo stretchy="false" id="S1.p5.3.m3.1.2.3.2.1" xref="S1.p5.3.m3.1.2.cmml">(</mo><mi id="S1.p5.3.m3.1.1" xref="S1.p5.3.m3.1.1.cmml">L</mi><mo stretchy="false" id="S1.p5.3.m3.1.2.3.2.2" xref="S1.p5.3.m3.1.2.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S1.p5.3.m3.1b"><apply id="S1.p5.3.m3.1.2.cmml" xref="S1.p5.3.m3.1.2"><times id="S1.p5.3.m3.1.2.1.cmml" xref="S1.p5.3.m3.1.2.1"></times><ci id="S1.p5.3.m3.1.2.2.cmml" xref="S1.p5.3.m3.1.2.2">𝒪</ci><ci id="S1.p5.3.m3.1.1.cmml" xref="S1.p5.3.m3.1.1">𝐿</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p5.3.m3.1c">\mathcal{O}(L)</annotation><annotation encoding="application/x-llamapun" id="S1.p5.3.m3.1d">caligraphic_O ( italic_L )</annotation></semantics></math>,but the project matrix can not be fixed for real-world long sequence input, which may have the risk of degradation to <math id="S1.p5.4.m4.1" class="ltx_Math" alttext="\mathcal{O}\left(L^{2}\right)" display="inline"><semantics id="S1.p5.4.m4.1a"><mrow id="S1.p5.4.m4.1.1" xref="S1.p5.4.m4.1.1.cmml"><mi class="ltx_font_mathcaligraphic" id="S1.p5.4.m4.1.1.3" xref="S1.p5.4.m4.1.1.3.cmml">𝒪</mi><mo id="S1.p5.4.m4.1.1.2" xref="S1.p5.4.m4.1.1.2.cmml">⁢</mo><mrow id="S1.p5.4.m4.1.1.1.1" xref="S1.p5.4.m4.1.1.1.1.1.cmml"><mo id="S1.p5.4.m4.1.1.1.1.2" xref="S1.p5.4.m4.1.1.1.1.1.cmml">(</mo><msup id="S1.p5.4.m4.1.1.1.1.1" xref="S1.p5.4.m4.1.1.1.1.1.cmml"><mi id="S1.p5.4.m4.1.1.1.1.1.2" xref="S1.p5.4.m4.1.1.1.1.1.2.cmml">L</mi><mn id="S1.p5.4.m4.1.1.1.1.1.3" xref="S1.p5.4.m4.1.1.1.1.1.3.cmml">2</mn></msup><mo id="S1.p5.4.m4.1.1.1.1.3" xref="S1.p5.4.m4.1.1.1.1.1.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S1.p5.4.m4.1b"><apply id="S1.p5.4.m4.1.1.cmml" xref="S1.p5.4.m4.1.1"><times id="S1.p5.4.m4.1.1.2.cmml" xref="S1.p5.4.m4.1.1.2"></times><ci id="S1.p5.4.m4.1.1.3.cmml" xref="S1.p5.4.m4.1.1.3">𝒪</ci><apply id="S1.p5.4.m4.1.1.1.1.1.cmml" xref="S1.p5.4.m4.1.1.1.1"><csymbol cd="ambiguous" id="S1.p5.4.m4.1.1.1.1.1.1.cmml" xref="S1.p5.4.m4.1.1.1.1">superscript</csymbol><ci id="S1.p5.4.m4.1.1.1.1.1.2.cmml" xref="S1.p5.4.m4.1.1.1.1.1.2">𝐿</ci><cn type="integer" id="S1.p5.4.m4.1.1.1.1.1.3.cmml" xref="S1.p5.4.m4.1.1.1.1.1.3">2</cn></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S1.p5.4.m4.1c">\mathcal{O}\left(L^{2}\right)</annotation><annotation encoding="application/x-llamapun" id="S1.p5.4.m4.1d">caligraphic_O ( italic_L start_POSTSUPERSCRIPT 2 end_POSTSUPERSCRIPT )</annotation></semantics></math>. Transformer-XL<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib17" title="" class="ltx_ref">17</a>]</cite> and Compressive Transformer<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib18" title="" class="ltx_ref">18</a>]</cite> use auxiliary hidden states to capture long-range dependency. These efforts are mainly focused on the quadratic computation of self-attention,thus neglecting the memory bottleneck in stacking layers for long inputs which limits the model scalability in receiving long sequence inputs.</p>
+</div>
+<div id="S1.p6" class="ltx_para">
+<p id="S1.p6.1" class="ltx_p"><cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib15" title="" class="ltx_ref">15</a>]</cite> proposed ProbSparse self-attention mechanism and self-attention distilling on this basis, which greatly reduced the time and space complexity of the model. Since then,one pressing demand
+is to extend the forecast time into the far future, which is quite meaningful for the long-term planning and early warning.</p>
+</div>
+<div id="S1.p7" class="ltx_para">
+<p id="S1.p7.1" class="ltx_p">However, this model only solves the first problem and still cannot model the dependency between different dimensions.</p>
+</div>
+<div id="S1.p8" class="ltx_para">
+<p id="S1.p8.1" class="ltx_p">Recently, graph convolutional neural(GCN) networks have shown superior performance in capturing spatial dependencies compared to convolutional neural networks(CNN). In GCN network, when updating node information, the updated information can be obtained by weighted summation of the node information around the node and the node itself.As is shown in<a href="#S1.F1" title="Figure 1 ‣ I Introduction ‣ Adaptive Graph Convolutional Network Framework for Multidimensional Time Series Prediction" class="ltx_ref"><span class="ltx_text ltx_ref_tag">1</span></a>. In the spatiotemporal graph neural network model, GCN generally models sensors scattered in different Spaces, and each sensor corresponds to a graph node. So GCN can aggregate these spatial information by using known adjacency matrix. It occurred to us that since GCN was able to model different sensors, could sensors be replaced with each dimension of the multidimensional data? So that raises the question, what about the adjacency matrix? Because in the sensor scenario, the adjacency matrix is constructed according to the distance, if the two sensors are close enough, we can set the corresponding position of the adjacency matrix to 1. Inspired by Wu<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib19" title="" class="ltx_ref">19</a>]</cite> et al. ’s work, we know that the adjacency matrix can be learned by the model itself. So we thought, since we can’t calculate the dependencies between different dimensions in advance, then we can make the model learn this dependency on its own. The nodes used to correspond to sensors at different locations, but now we replace the sensors with one of the multiple dimensions.</p>
+</div>
+<div id="S1.p9" class="ltx_para">
+<p id="S1.p9.1" class="ltx_p">To this end,Our work addresses the above multidimensional prediction problem.
+We find that almost all the multidimensional time prediction models do not take into account the dependence between different dimensions,and we solved this problem by introducing self-adaption graph convolution network,and conduct extensive experiments. The contributions of this paper are summarized as follows:</p>
+</div>
+<figure id="S1.F1" class="ltx_figure"><img src="/html/2205.04885/assets/x1.png" id="S1.F1.g1" class="ltx_graphics ltx_centering ltx_img_landscape" width="170" height="83" alt="Left:This is the process of information aggregation in convolutional network.CNN transmits the information of the surrounding nodes to the red node.Right:This is how graph convolutional networks aggregate information.The biggest difference between two methods is that the network structure on the right is more free, and even different nodes can be in the same plane, while the structure on the left must be arranged in the norm.">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span>Left:This is the process of information aggregation in convolutional network.CNN transmits the information of the surrounding nodes to the red node.Right:This is how graph convolutional networks aggregate information.The biggest difference between two methods is that the network structure on the right is more free, and even different nodes can be in the same plane, while the structure on the left must be arranged in the norm.</figcaption>
+</figure>
+<div id="S1.p10" class="ltx_para">
+<ul id="S1.I1" class="ltx_itemize">
+<li id="S1.I1.i1" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i1.p1" class="ltx_para">
+<p id="S1.I1.i1.p1.1" class="ltx_p">We introduce adaptive GCN into the multi-dimensional time series prediction model so that the model can deal with the dependence between different dimensions.</p>
+</div>
+</li>
+<li id="S1.I1.i2" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i2.p1" class="ltx_para">
+<p id="S1.I1.i2.p1.1" class="ltx_p">We took Adaptive GCN as a framework alone and fused it with the existing multidimensional time series model.</p>
+</div>
+</li>
+<li id="S1.I1.i3" class="ltx_item" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span> 
+<div id="S1.I1.i3.p1" class="ltx_para">
+<p id="S1.I1.i3.p1.1" class="ltx_p">We tested the fused models on several recognized data sets and got good result (about 10%)s.</p>
+</div>
+</li>
+</ul>
+</div>
+<div id="S1.p11" class="ltx_para">
+<p id="S1.p11.1" class="ltx_p"><a href="#S1.F2" title="Figure 2 ‣ I Introduction ‣ Adaptive Graph Convolutional Network Framework for Multidimensional Time Series Prediction" class="ltx_ref"><span class="ltx_text ltx_ref_tag">2</span></a></p>
+</div>
+<figure id="S1.F2" class="ltx_figure"><img src="/html/2205.04885/assets/x2.png" id="S1.F2.g1" class="ltx_graphics ltx_centering ltx_img_square" width="194" height="202" alt="GCN-Informer model overview. Left:The encoder receives time series data of N dimensions. Before entering the decoder, it first learns the dependence of different dimensions through the stacked GCN layer (model details are given later), and then enters the encoder layer of Informer for information extraction of time features.Right:The same GCN operation is required to aggregate information from different dimensions before entering the decoder.The decoder receives the result of the previous layer and pads the target elements into zero,calculates the weighted attention composition of the feature map.Finally, output results(orange series) through the full connection layer.">
+<figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2: </span>GCN-Informer model overview. Left:The encoder receives time series data of N dimensions. Before entering the decoder, it first learns the dependence of different dimensions through the stacked GCN layer (model details are given later), and then enters the encoder layer of Informer for information extraction of time features.Right:The same GCN operation is required to aggregate information from different dimensions before entering the decoder.The decoder receives the result of the previous layer and pads the target elements into zero,calculates the weighted attention composition of the feature map.Finally, output results(orange series) through the full connection layer.</figcaption>
+</figure>
+</section>
+<section id="S2" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">II </span><span id="S2.1.1" class="ltx_text ltx_font_smallcaps">Method</span>
+</h2>
+
+<div id="S2.p1" class="ltx_para">
+<p id="S2.p1.1" class="ltx_p">In this section, we first give a mathematical definition of the problem we are trying to solve. Next, we will introduce two components of the framework, graph convolution layer and Attention layer,which GCN needs to be mainly described. Finally, summarize the overall framework model.</p>
+</div>
+<section id="S2.SS1" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S2.SS1.5.1.1" class="ltx_text">II-A</span> </span><span id="S2.SS1.6.2" class="ltx_text ltx_font_italic">Problem Definition</span>
+</h3>
+
+<div id="S2.SS1.p1" class="ltx_para">
+<p id="S2.SS1.p1.12" class="ltx_p">The multidimensional time series data prediction problem is defined on the graph <math id="S2.SS1.p1.1.m1.3" class="ltx_Math" alttext="G=(V,E,\mathbf{A})" display="inline"><semantics id="S2.SS1.p1.1.m1.3a"><mrow id="S2.SS1.p1.1.m1.3.4" xref="S2.SS1.p1.1.m1.3.4.cmml"><mi id="S2.SS1.p1.1.m1.3.4.2" xref="S2.SS1.p1.1.m1.3.4.2.cmml">G</mi><mo id="S2.SS1.p1.1.m1.3.4.1" xref="S2.SS1.p1.1.m1.3.4.1.cmml">=</mo><mrow id="S2.SS1.p1.1.m1.3.4.3.2" xref="S2.SS1.p1.1.m1.3.4.3.1.cmml"><mo stretchy="false" id="S2.SS1.p1.1.m1.3.4.3.2.1" xref="S2.SS1.p1.1.m1.3.4.3.1.cmml">(</mo><mi id="S2.SS1.p1.1.m1.1.1" xref="S2.SS1.p1.1.m1.1.1.cmml">V</mi><mo id="S2.SS1.p1.1.m1.3.4.3.2.2" xref="S2.SS1.p1.1.m1.3.4.3.1.cmml">,</mo><mi id="S2.SS1.p1.1.m1.2.2" xref="S2.SS1.p1.1.m1.2.2.cmml">E</mi><mo id="S2.SS1.p1.1.m1.3.4.3.2.3" xref="S2.SS1.p1.1.m1.3.4.3.1.cmml">,</mo><mi id="S2.SS1.p1.1.m1.3.3" xref="S2.SS1.p1.1.m1.3.3.cmml">𝐀</mi><mo stretchy="false" id="S2.SS1.p1.1.m1.3.4.3.2.4" xref="S2.SS1.p1.1.m1.3.4.3.1.cmml">)</mo></mrow></mrow><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.1.m1.3b"><apply id="S2.SS1.p1.1.m1.3.4.cmml" xref="S2.SS1.p1.1.m1.3.4"><eq id="S2.SS1.p1.1.m1.3.4.1.cmml" xref="S2.SS1.p1.1.m1.3.4.1"></eq><ci id="S2.SS1.p1.1.m1.3.4.2.cmml" xref="S2.SS1.p1.1.m1.3.4.2">𝐺</ci><vector id="S2.SS1.p1.1.m1.3.4.3.1.cmml" xref="S2.SS1.p1.1.m1.3.4.3.2"><ci id="S2.SS1.p1.1.m1.1.1.cmml" xref="S2.SS1.p1.1.m1.1.1">𝑉</ci><ci id="S2.SS1.p1.1.m1.2.2.cmml" xref="S2.SS1.p1.1.m1.2.2">𝐸</ci><ci id="S2.SS1.p1.1.m1.3.3.cmml" xref="S2.SS1.p1.1.m1.3.3">𝐀</ci></vector></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.1.m1.3c">G=(V,E,\mathbf{A})</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.1.m1.3d">italic_G = ( italic_V , italic_E , bold_A )</annotation></semantics></math>,where <math id="S2.SS1.p1.2.m2.1" class="ltx_Math" alttext="V" display="inline"><semantics id="S2.SS1.p1.2.m2.1a"><mi id="S2.SS1.p1.2.m2.1.1" xref="S2.SS1.p1.2.m2.1.1.cmml">V</mi><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.2.m2.1b"><ci id="S2.SS1.p1.2.m2.1.1.cmml" xref="S2.SS1.p1.2.m2.1.1">𝑉</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.2.m2.1c">V</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.2.m2.1d">italic_V</annotation></semantics></math> is a set of nodes and <math id="S2.SS1.p1.3.m3.1" class="ltx_Math" alttext="E" display="inline"><semantics id="S2.SS1.p1.3.m3.1a"><mi id="S2.SS1.p1.3.m3.1.1" xref="S2.SS1.p1.3.m3.1.1.cmml">E</mi><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.3.m3.1b"><ci id="S2.SS1.p1.3.m3.1.1.cmml" xref="S2.SS1.p1.3.m3.1.1">𝐸</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.3.m3.1c">E</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.3.m3.1d">italic_E</annotation></semantics></math> is a set of edges. The adjacency matrix is <math id="S2.SS1.p1.4.m4.1" class="ltx_Math" alttext="\mathbf{A}\in\mathbb{R}^{N\times N}" display="inline"><semantics id="S2.SS1.p1.4.m4.1a"><mrow id="S2.SS1.p1.4.m4.1.1" xref="S2.SS1.p1.4.m4.1.1.cmml"><mi id="S2.SS1.p1.4.m4.1.1.2" xref="S2.SS1.p1.4.m4.1.1.2.cmml">𝐀</mi><mo id="S2.SS1.p1.4.m4.1.1.1" xref="S2.SS1.p1.4.m4.1.1.1.cmml">∈</mo><msup id="S2.SS1.p1.4.m4.1.1.3" xref="S2.SS1.p1.4.m4.1.1.3.cmml"><mi id="S2.SS1.p1.4.m4.1.1.3.2" xref="S2.SS1.p1.4.m4.1.1.3.2.cmml">ℝ</mi><mrow id="S2.SS1.p1.4.m4.1.1.3.3" xref="S2.SS1.p1.4.m4.1.1.3.3.cmml"><mi id="S2.SS1.p1.4.m4.1.1.3.3.2" xref="S2.SS1.p1.4.m4.1.1.3.3.2.cmml">N</mi><mo id="S2.SS1.p1.4.m4.1.1.3.3.1" xref="S2.SS1.p1.4.m4.1.1.3.3.1.cmml">×</mo><mi id="S2.SS1.p1.4.m4.1.1.3.3.3" xref="S2.SS1.p1.4.m4.1.1.3.3.3.cmml">N</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.4.m4.1b"><apply id="S2.SS1.p1.4.m4.1.1.cmml" xref="S2.SS1.p1.4.m4.1.1"><in id="S2.SS1.p1.4.m4.1.1.1.cmml" xref="S2.SS1.p1.4.m4.1.1.1"></in><ci id="S2.SS1.p1.4.m4.1.1.2.cmml" xref="S2.SS1.p1.4.m4.1.1.2">𝐀</ci><apply id="S2.SS1.p1.4.m4.1.1.3.cmml" xref="S2.SS1.p1.4.m4.1.1.3"><csymbol cd="ambiguous" id="S2.SS1.p1.4.m4.1.1.3.1.cmml" xref="S2.SS1.p1.4.m4.1.1.3">superscript</csymbol><ci id="S2.SS1.p1.4.m4.1.1.3.2.cmml" xref="S2.SS1.p1.4.m4.1.1.3.2">ℝ</ci><apply id="S2.SS1.p1.4.m4.1.1.3.3.cmml" xref="S2.SS1.p1.4.m4.1.1.3.3"><times id="S2.SS1.p1.4.m4.1.1.3.3.1.cmml" xref="S2.SS1.p1.4.m4.1.1.3.3.1"></times><ci id="S2.SS1.p1.4.m4.1.1.3.3.2.cmml" xref="S2.SS1.p1.4.m4.1.1.3.3.2">𝑁</ci><ci id="S2.SS1.p1.4.m4.1.1.3.3.3.cmml" xref="S2.SS1.p1.4.m4.1.1.3.3.3">𝑁</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.4.m4.1c">\mathbf{A}\in\mathbb{R}^{N\times N}</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.4.m4.1d">bold_A ∈ blackboard_R start_POSTSUPERSCRIPT italic_N × italic_N end_POSTSUPERSCRIPT</annotation></semantics></math>. If <math id="S2.SS1.p1.5.m5.2" class="ltx_Math" alttext="v_{i},v_{j}\in{E}" display="inline"><semantics id="S2.SS1.p1.5.m5.2a"><mrow id="S2.SS1.p1.5.m5.2.2" xref="S2.SS1.p1.5.m5.2.2.cmml"><mrow id="S2.SS1.p1.5.m5.2.2.2.2" xref="S2.SS1.p1.5.m5.2.2.2.3.cmml"><msub id="S2.SS1.p1.5.m5.1.1.1.1.1" xref="S2.SS1.p1.5.m5.1.1.1.1.1.cmml"><mi id="S2.SS1.p1.5.m5.1.1.1.1.1.2" xref="S2.SS1.p1.5.m5.1.1.1.1.1.2.cmml">v</mi><mi id="S2.SS1.p1.5.m5.1.1.1.1.1.3" xref="S2.SS1.p1.5.m5.1.1.1.1.1.3.cmml">i</mi></msub><mo id="S2.SS1.p1.5.m5.2.2.2.2.3" xref="S2.SS1.p1.5.m5.2.2.2.3.cmml">,</mo><msub id="S2.SS1.p1.5.m5.2.2.2.2.2" xref="S2.SS1.p1.5.m5.2.2.2.2.2.cmml"><mi id="S2.SS1.p1.5.m5.2.2.2.2.2.2" xref="S2.SS1.p1.5.m5.2.2.2.2.2.2.cmml">v</mi><mi id="S2.SS1.p1.5.m5.2.2.2.2.2.3" xref="S2.SS1.p1.5.m5.2.2.2.2.2.3.cmml">j</mi></msub></mrow><mo id="S2.SS1.p1.5.m5.2.2.3" xref="S2.SS1.p1.5.m5.2.2.3.cmml">∈</mo><mi id="S2.SS1.p1.5.m5.2.2.4" xref="S2.SS1.p1.5.m5.2.2.4.cmml">E</mi></mrow><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.5.m5.2b"><apply id="S2.SS1.p1.5.m5.2.2.cmml" xref="S2.SS1.p1.5.m5.2.2"><in id="S2.SS1.p1.5.m5.2.2.3.cmml" xref="S2.SS1.p1.5.m5.2.2.3"></in><list id="S2.SS1.p1.5.m5.2.2.2.3.cmml" xref="S2.SS1.p1.5.m5.2.2.2.2"><apply id="S2.SS1.p1.5.m5.1.1.1.1.1.cmml" xref="S2.SS1.p1.5.m5.1.1.1.1.1"><csymbol cd="ambiguous" id="S2.SS1.p1.5.m5.1.1.1.1.1.1.cmml" xref="S2.SS1.p1.5.m5.1.1.1.1.1">subscript</csymbol><ci id="S2.SS1.p1.5.m5.1.1.1.1.1.2.cmml" xref="S2.SS1.p1.5.m5.1.1.1.1.1.2">𝑣</ci><ci id="S2.SS1.p1.5.m5.1.1.1.1.1.3.cmml" xref="S2.SS1.p1.5.m5.1.1.1.1.1.3">𝑖</ci></apply><apply id="S2.SS1.p1.5.m5.2.2.2.2.2.cmml" xref="S2.SS1.p1.5.m5.2.2.2.2.2"><csymbol cd="ambiguous" id="S2.SS1.p1.5.m5.2.2.2.2.2.1.cmml" xref="S2.SS1.p1.5.m5.2.2.2.2.2">subscript</csymbol><ci id="S2.SS1.p1.5.m5.2.2.2.2.2.2.cmml" xref="S2.SS1.p1.5.m5.2.2.2.2.2.2">𝑣</ci><ci id="S2.SS1.p1.5.m5.2.2.2.2.2.3.cmml" xref="S2.SS1.p1.5.m5.2.2.2.2.2.3">𝑗</ci></apply></list><ci id="S2.SS1.p1.5.m5.2.2.4.cmml" xref="S2.SS1.p1.5.m5.2.2.4">𝐸</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.5.m5.2c">v_{i},v_{j}\in{E}</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.5.m5.2d">italic_v start_POSTSUBSCRIPT italic_i end_POSTSUBSCRIPT , italic_v start_POSTSUBSCRIPT italic_j end_POSTSUBSCRIPT ∈ italic_E</annotation></semantics></math>,then <math id="S2.SS1.p1.6.m6.1" class="ltx_Math" alttext="A_{ij}" display="inline"><semantics id="S2.SS1.p1.6.m6.1a"><msub id="S2.SS1.p1.6.m6.1.1" xref="S2.SS1.p1.6.m6.1.1.cmml"><mi id="S2.SS1.p1.6.m6.1.1.2" xref="S2.SS1.p1.6.m6.1.1.2.cmml">A</mi><mrow id="S2.SS1.p1.6.m6.1.1.3" xref="S2.SS1.p1.6.m6.1.1.3.cmml"><mi id="S2.SS1.p1.6.m6.1.1.3.2" xref="S2.SS1.p1.6.m6.1.1.3.2.cmml">i</mi><mo id="S2.SS1.p1.6.m6.1.1.3.1" xref="S2.SS1.p1.6.m6.1.1.3.1.cmml">⁢</mo><mi id="S2.SS1.p1.6.m6.1.1.3.3" xref="S2.SS1.p1.6.m6.1.1.3.3.cmml">j</mi></mrow></msub><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.6.m6.1b"><apply id="S2.SS1.p1.6.m6.1.1.cmml" xref="S2.SS1.p1.6.m6.1.1"><csymbol cd="ambiguous" id="S2.SS1.p1.6.m6.1.1.1.cmml" xref="S2.SS1.p1.6.m6.1.1">subscript</csymbol><ci id="S2.SS1.p1.6.m6.1.1.2.cmml" xref="S2.SS1.p1.6.m6.1.1.2">𝐴</ci><apply id="S2.SS1.p1.6.m6.1.1.3.cmml" xref="S2.SS1.p1.6.m6.1.1.3"><times id="S2.SS1.p1.6.m6.1.1.3.1.cmml" xref="S2.SS1.p1.6.m6.1.1.3.1"></times><ci id="S2.SS1.p1.6.m6.1.1.3.2.cmml" xref="S2.SS1.p1.6.m6.1.1.3.2">𝑖</ci><ci id="S2.SS1.p1.6.m6.1.1.3.3.cmml" xref="S2.SS1.p1.6.m6.1.1.3.3">𝑗</ci></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.6.m6.1c">A_{ij}</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.6.m6.1d">italic_A start_POSTSUBSCRIPT italic_i italic_j end_POSTSUBSCRIPT</annotation></semantics></math> is one otherwise it is zero. If you want <math id="S2.SS1.p1.7.m7.1" class="ltx_Math" alttext="A_{ij}" display="inline"><semantics id="S2.SS1.p1.7.m7.1a"><msub id="S2.SS1.p1.7.m7.1.1" xref="S2.SS1.p1.7.m7.1.1.cmml"><mi id="S2.SS1.p1.7.m7.1.1.2" xref="S2.SS1.p1.7.m7.1.1.2.cmml">A</mi><mrow id="S2.SS1.p1.7.m7.1.1.3" xref="S2.SS1.p1.7.m7.1.1.3.cmml"><mi id="S2.SS1.p1.7.m7.1.1.3.2" xref="S2.SS1.p1.7.m7.1.1.3.2.cmml">i</mi><mo id="S2.SS1.p1.7.m7.1.1.3.1" xref="S2.SS1.p1.7.m7.1.1.3.1.cmml">⁢</mo><mi id="S2.SS1.p1.7.m7.1.1.3.3" xref="S2.SS1.p1.7.m7.1.1.3.3.cmml">j</mi></mrow></msub><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.7.m7.1b"><apply id="S2.SS1.p1.7.m7.1.1.cmml" xref="S2.SS1.p1.7.m7.1.1"><csymbol cd="ambiguous" id="S2.SS1.p1.7.m7.1.1.1.cmml" xref="S2.SS1.p1.7.m7.1.1">subscript</csymbol><ci id="S2.SS1.p1.7.m7.1.1.2.cmml" xref="S2.SS1.p1.7.m7.1.1.2">𝐴</ci><apply id="S2.SS1.p1.7.m7.1.1.3.cmml" xref="S2.SS1.p1.7.m7.1.1.3"><times id="S2.SS1.p1.7.m7.1.1.3.1.cmml" xref="S2.SS1.p1.7.m7.1.1.3.1"></times><ci id="S2.SS1.p1.7.m7.1.1.3.2.cmml" xref="S2.SS1.p1.7.m7.1.1.3.2">𝑖</ci><ci id="S2.SS1.p1.7.m7.1.1.3.3.cmml" xref="S2.SS1.p1.7.m7.1.1.3.3">𝑗</ci></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.7.m7.1c">A_{ij}</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.7.m7.1d">italic_A start_POSTSUBSCRIPT italic_i italic_j end_POSTSUBSCRIPT</annotation></semantics></math> more precise representation of dependencies between nodes, it can be in <math id="S2.SS1.p1.8.m8.2" class="ltx_Math" alttext="[0,1]" display="inline"><semantics id="S2.SS1.p1.8.m8.2a"><mrow id="S2.SS1.p1.8.m8.2.3.2" xref="S2.SS1.p1.8.m8.2.3.1.cmml"><mo stretchy="false" id="S2.SS1.p1.8.m8.2.3.2.1" xref="S2.SS1.p1.8.m8.2.3.1.cmml">[</mo><mn id="S2.SS1.p1.8.m8.1.1" xref="S2.SS1.p1.8.m8.1.1.cmml">0</mn><mo id="S2.SS1.p1.8.m8.2.3.2.2" xref="S2.SS1.p1.8.m8.2.3.1.cmml">,</mo><mn id="S2.SS1.p1.8.m8.2.2" xref="S2.SS1.p1.8.m8.2.2.cmml">1</mn><mo stretchy="false" id="S2.SS1.p1.8.m8.2.3.2.3" xref="S2.SS1.p1.8.m8.2.3.1.cmml">]</mo></mrow><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.8.m8.2b"><interval closure="closed" id="S2.SS1.p1.8.m8.2.3.1.cmml" xref="S2.SS1.p1.8.m8.2.3.2"><cn type="integer" id="S2.SS1.p1.8.m8.1.1.cmml" xref="S2.SS1.p1.8.m8.1.1">0</cn><cn type="integer" id="S2.SS1.p1.8.m8.2.2.cmml" xref="S2.SS1.p1.8.m8.2.2">1</cn></interval></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.8.m8.2c">[0,1]</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.8.m8.2d">[ 0 , 1 ]</annotation></semantics></math>.The closer this value is to 1, the greater the dependence between i and j. In each time step <math id="S2.SS1.p1.9.m9.1" class="ltx_Math" alttext="t" display="inline"><semantics id="S2.SS1.p1.9.m9.1a"><mi id="S2.SS1.p1.9.m9.1.1" xref="S2.SS1.p1.9.m9.1.1.cmml">t</mi><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.9.m9.1b"><ci id="S2.SS1.p1.9.m9.1.1.cmml" xref="S2.SS1.p1.9.m9.1.1">𝑡</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.9.m9.1c">t</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.9.m9.1d">italic_t</annotation></semantics></math> , <math id="S2.SS1.p1.10.m10.1" class="ltx_Math" alttext="G" display="inline"><semantics id="S2.SS1.p1.10.m10.1a"><mi id="S2.SS1.p1.10.m10.1.1" xref="S2.SS1.p1.10.m10.1.1.cmml">G</mi><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.10.m10.1b"><ci id="S2.SS1.p1.10.m10.1.1.cmml" xref="S2.SS1.p1.10.m10.1.1">𝐺</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.10.m10.1c">G</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.10.m10.1d">italic_G</annotation></semantics></math> has a dynamic feature matrix <math id="S2.SS1.p1.11.m11.1" class="ltx_Math" alttext="\mathbf{X}^{(t)}\in\mathbb{R}^{N\times M}" display="inline"><semantics id="S2.SS1.p1.11.m11.1a"><mrow id="S2.SS1.p1.11.m11.1.2" xref="S2.SS1.p1.11.m11.1.2.cmml"><msup id="S2.SS1.p1.11.m11.1.2.2" xref="S2.SS1.p1.11.m11.1.2.2.cmml"><mi id="S2.SS1.p1.11.m11.1.2.2.2" xref="S2.SS1.p1.11.m11.1.2.2.2.cmml">𝐗</mi><mrow id="S2.SS1.p1.11.m11.1.1.1.3" xref="S2.SS1.p1.11.m11.1.2.2.cmml"><mo stretchy="false" id="S2.SS1.p1.11.m11.1.1.1.3.1" xref="S2.SS1.p1.11.m11.1.2.2.cmml">(</mo><mi id="S2.SS1.p1.11.m11.1.1.1.1" xref="S2.SS1.p1.11.m11.1.1.1.1.cmml">t</mi><mo stretchy="false" id="S2.SS1.p1.11.m11.1.1.1.3.2" xref="S2.SS1.p1.11.m11.1.2.2.cmml">)</mo></mrow></msup><mo id="S2.SS1.p1.11.m11.1.2.1" xref="S2.SS1.p1.11.m11.1.2.1.cmml">∈</mo><msup id="S2.SS1.p1.11.m11.1.2.3" xref="S2.SS1.p1.11.m11.1.2.3.cmml"><mi id="S2.SS1.p1.11.m11.1.2.3.2" xref="S2.SS1.p1.11.m11.1.2.3.2.cmml">ℝ</mi><mrow id="S2.SS1.p1.11.m11.1.2.3.3" xref="S2.SS1.p1.11.m11.1.2.3.3.cmml"><mi id="S2.SS1.p1.11.m11.1.2.3.3.2" xref="S2.SS1.p1.11.m11.1.2.3.3.2.cmml">N</mi><mo id="S2.SS1.p1.11.m11.1.2.3.3.1" xref="S2.SS1.p1.11.m11.1.2.3.3.1.cmml">×</mo><mi id="S2.SS1.p1.11.m11.1.2.3.3.3" xref="S2.SS1.p1.11.m11.1.2.3.3.3.cmml">M</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.11.m11.1b"><apply id="S2.SS1.p1.11.m11.1.2.cmml" xref="S2.SS1.p1.11.m11.1.2"><in id="S2.SS1.p1.11.m11.1.2.1.cmml" xref="S2.SS1.p1.11.m11.1.2.1"></in><apply id="S2.SS1.p1.11.m11.1.2.2.cmml" xref="S2.SS1.p1.11.m11.1.2.2"><csymbol cd="ambiguous" id="S2.SS1.p1.11.m11.1.2.2.1.cmml" xref="S2.SS1.p1.11.m11.1.2.2">superscript</csymbol><ci id="S2.SS1.p1.11.m11.1.2.2.2.cmml" xref="S2.SS1.p1.11.m11.1.2.2.2">𝐗</ci><ci id="S2.SS1.p1.11.m11.1.1.1.1.cmml" xref="S2.SS1.p1.11.m11.1.1.1.1">𝑡</ci></apply><apply id="S2.SS1.p1.11.m11.1.2.3.cmml" xref="S2.SS1.p1.11.m11.1.2.3"><csymbol cd="ambiguous" id="S2.SS1.p1.11.m11.1.2.3.1.cmml" xref="S2.SS1.p1.11.m11.1.2.3">superscript</csymbol><ci id="S2.SS1.p1.11.m11.1.2.3.2.cmml" xref="S2.SS1.p1.11.m11.1.2.3.2">ℝ</ci><apply id="S2.SS1.p1.11.m11.1.2.3.3.cmml" xref="S2.SS1.p1.11.m11.1.2.3.3"><times id="S2.SS1.p1.11.m11.1.2.3.3.1.cmml" xref="S2.SS1.p1.11.m11.1.2.3.3.1"></times><ci id="S2.SS1.p1.11.m11.1.2.3.3.2.cmml" xref="S2.SS1.p1.11.m11.1.2.3.3.2">𝑁</ci><ci id="S2.SS1.p1.11.m11.1.2.3.3.3.cmml" xref="S2.SS1.p1.11.m11.1.2.3.3.3">𝑀</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.11.m11.1c">\mathbf{X}^{(t)}\in\mathbb{R}^{N\times M}</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.11.m11.1d">bold_X start_POSTSUPERSCRIPT ( italic_t ) end_POSTSUPERSCRIPT ∈ blackboard_R start_POSTSUPERSCRIPT italic_N × italic_M end_POSTSUPERSCRIPT</annotation></semantics></math>. Given H step graph signals of information in <math id="S2.SS1.p1.12.m12.1" class="ltx_Math" alttext="G" display="inline"><semantics id="S2.SS1.p1.12.m12.1a"><mi id="S2.SS1.p1.12.m12.1.1" xref="S2.SS1.p1.12.m12.1.1.cmml">G</mi><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.12.m12.1b"><ci id="S2.SS1.p1.12.m12.1.1.cmml" xref="S2.SS1.p1.12.m12.1.1">𝐺</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.12.m12.1c">G</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.12.m12.1d">italic_G</annotation></semantics></math>,our problem is to learn a function f to predict the next T step graph signals as</p>
+<table id="S2.E1" class="ltx_equation ltx_eqn_table">
+
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E1.m1.5" class="ltx_Math" alttext="\left[\mathbf{X}^{(t-S):t},G\right]\stackrel{{\scriptstyle f}}{{\rightarrow}}%
+\mathbf{X}^{(t+1):(t+T)}," display="block"><semantics id="S2.E1.m1.5a"><mrow id="S2.E1.m1.5.5.1" xref="S2.E1.m1.5.5.1.1.cmml"><mrow id="S2.E1.m1.5.5.1.1" xref="S2.E1.m1.5.5.1.1.cmml"><mrow id="S2.E1.m1.5.5.1.1.1.1" xref="S2.E1.m1.5.5.1.1.1.2.cmml"><mo id="S2.E1.m1.5.5.1.1.1.1.2" xref="S2.E1.m1.5.5.1.1.1.2.cmml">[</mo><msup id="S2.E1.m1.5.5.1.1.1.1.1" xref="S2.E1.m1.5.5.1.1.1.1.1.cmml"><mi id="S2.E1.m1.5.5.1.1.1.1.1.2" xref="S2.E1.m1.5.5.1.1.1.1.1.2.cmml">𝐗</mi><mrow id="S2.E1.m1.1.1.1" xref="S2.E1.m1.1.1.1.cmml"><mrow id="S2.E1.m1.1.1.1.1.1" xref="S2.E1.m1.1.1.1.1.1.1.cmml"><mo stretchy="false" id="S2.E1.m1.1.1.1.1.1.2" xref="S2.E1.m1.1.1.1.1.1.1.cmml">(</mo><mrow id="S2.E1.m1.1.1.1.1.1.1" xref="S2.E1.m1.1.1.1.1.1.1.cmml"><mi id="S2.E1.m1.1.1.1.1.1.1.2" xref="S2.E1.m1.1.1.1.1.1.1.2.cmml">t</mi><mo id="S2.E1.m1.1.1.1.1.1.1.1" xref="S2.E1.m1.1.1.1.1.1.1.1.cmml">-</mo><mi id="S2.E1.m1.1.1.1.1.1.1.3" xref="S2.E1.m1.1.1.1.1.1.1.3.cmml">S</mi></mrow><mo stretchy="false" id="S2.E1.m1.1.1.1.1.1.3" xref="S2.E1.m1.1.1.1.1.1.1.cmml">)</mo></mrow><mo id="S2.E1.m1.1.1.1.2" xref="S2.E1.m1.1.1.1.2.cmml">:</mo><mi id="S2.E1.m1.1.1.1.3" xref="S2.E1.m1.1.1.1.3.cmml">t</mi></mrow></msup><mo id="S2.E1.m1.5.5.1.1.1.1.3" xref="S2.E1.m1.5.5.1.1.1.2.cmml">,</mo><mi id="S2.E1.m1.4.4" xref="S2.E1.m1.4.4.cmml">G</mi><mo id="S2.E1.m1.5.5.1.1.1.1.4" xref="S2.E1.m1.5.5.1.1.1.2.cmml">]</mo></mrow><mover id="S2.E1.m1.5.5.1.1.2" xref="S2.E1.m1.5.5.1.1.2.cmml"><mo movablelimits="false" id="S2.E1.m1.5.5.1.1.2.2" xref="S2.E1.m1.5.5.1.1.2.2.cmml">→</mo><mi id="S2.E1.m1.5.5.1.1.2.3" xref="S2.E1.m1.5.5.1.1.2.3.cmml">f</mi></mover><msup id="S2.E1.m1.5.5.1.1.3" xref="S2.E1.m1.5.5.1.1.3.cmml"><mi id="S2.E1.m1.5.5.1.1.3.2" xref="S2.E1.m1.5.5.1.1.3.2.cmml">𝐗</mi><mrow id="S2.E1.m1.3.3.2" xref="S2.E1.m1.3.3.2.cmml"><mrow id="S2.E1.m1.2.2.1.1.1" xref="S2.E1.m1.2.2.1.1.1.1.cmml"><mo stretchy="false" id="S2.E1.m1.2.2.1.1.1.2" xref="S2.E1.m1.2.2.1.1.1.1.cmml">(</mo><mrow id="S2.E1.m1.2.2.1.1.1.1" xref="S2.E1.m1.2.2.1.1.1.1.cmml"><mi id="S2.E1.m1.2.2.1.1.1.1.2" xref="S2.E1.m1.2.2.1.1.1.1.2.cmml">t</mi><mo id="S2.E1.m1.2.2.1.1.1.1.1" xref="S2.E1.m1.2.2.1.1.1.1.1.cmml">+</mo><mn id="S2.E1.m1.2.2.1.1.1.1.3" xref="S2.E1.m1.2.2.1.1.1.1.3.cmml">1</mn></mrow><mo stretchy="false" id="S2.E1.m1.2.2.1.1.1.3" xref="S2.E1.m1.2.2.1.1.1.1.cmml">)</mo></mrow><mo id="S2.E1.m1.3.3.2.3" xref="S2.E1.m1.3.3.2.3.cmml">:</mo><mrow id="S2.E1.m1.3.3.2.2.1" xref="S2.E1.m1.3.3.2.2.1.1.cmml"><mo stretchy="false" id="S2.E1.m1.3.3.2.2.1.2" xref="S2.E1.m1.3.3.2.2.1.1.cmml">(</mo><mrow id="S2.E1.m1.3.3.2.2.1.1" xref="S2.E1.m1.3.3.2.2.1.1.cmml"><mi id="S2.E1.m1.3.3.2.2.1.1.2" xref="S2.E1.m1.3.3.2.2.1.1.2.cmml">t</mi><mo id="S2.E1.m1.3.3.2.2.1.1.1" xref="S2.E1.m1.3.3.2.2.1.1.1.cmml">+</mo><mi id="S2.E1.m1.3.3.2.2.1.1.3" xref="S2.E1.m1.3.3.2.2.1.1.3.cmml">T</mi></mrow><mo stretchy="false" id="S2.E1.m1.3.3.2.2.1.3" xref="S2.E1.m1.3.3.2.2.1.1.cmml">)</mo></mrow></mrow></msup></mrow><mo id="S2.E1.m1.5.5.1.2" xref="S2.E1.m1.5.5.1.1.cmml">,</mo></mrow><annotation-xml encoding="MathML-Content" id="S2.E1.m1.5b"><apply id="S2.E1.m1.5.5.1.1.cmml" xref="S2.E1.m1.5.5.1"><apply id="S2.E1.m1.5.5.1.1.2.cmml" xref="S2.E1.m1.5.5.1.1.2"><csymbol cd="ambiguous" id="S2.E1.m1.5.5.1.1.2.1.cmml" xref="S2.E1.m1.5.5.1.1.2">superscript</csymbol><ci id="S2.E1.m1.5.5.1.1.2.2.cmml" xref="S2.E1.m1.5.5.1.1.2.2">→</ci><ci id="S2.E1.m1.5.5.1.1.2.3.cmml" xref="S2.E1.m1.5.5.1.1.2.3">𝑓</ci></apply><interval closure="closed" id="S2.E1.m1.5.5.1.1.1.2.cmml" xref="S2.E1.m1.5.5.1.1.1.1"><apply id="S2.E1.m1.5.5.1.1.1.1.1.cmml" xref="S2.E1.m1.5.5.1.1.1.1.1"><csymbol cd="ambiguous" id="S2.E1.m1.5.5.1.1.1.1.1.1.cmml" xref="S2.E1.m1.5.5.1.1.1.1.1">superscript</csymbol><ci id="S2.E1.m1.5.5.1.1.1.1.1.2.cmml" xref="S2.E1.m1.5.5.1.1.1.1.1.2">𝐗</ci><apply id="S2.E1.m1.1.1.1.cmml" xref="S2.E1.m1.1.1.1"><ci id="S2.E1.m1.1.1.1.2.cmml" xref="S2.E1.m1.1.1.1.2">:</ci><apply id="S2.E1.m1.1.1.1.1.1.1.cmml" xref="S2.E1.m1.1.1.1.1.1"><minus id="S2.E1.m1.1.1.1.1.1.1.1.cmml" xref="S2.E1.m1.1.1.1.1.1.1.1"></minus><ci id="S2.E1.m1.1.1.1.1.1.1.2.cmml" xref="S2.E1.m1.1.1.1.1.1.1.2">𝑡</ci><ci id="S2.E1.m1.1.1.1.1.1.1.3.cmml" xref="S2.E1.m1.1.1.1.1.1.1.3">𝑆</ci></apply><ci id="S2.E1.m1.1.1.1.3.cmml" xref="S2.E1.m1.1.1.1.3">𝑡</ci></apply></apply><ci id="S2.E1.m1.4.4.cmml" xref="S2.E1.m1.4.4">𝐺</ci></interval><apply id="S2.E1.m1.5.5.1.1.3.cmml" xref="S2.E1.m1.5.5.1.1.3"><csymbol cd="ambiguous" id="S2.E1.m1.5.5.1.1.3.1.cmml" xref="S2.E1.m1.5.5.1.1.3">superscript</csymbol><ci id="S2.E1.m1.5.5.1.1.3.2.cmml" xref="S2.E1.m1.5.5.1.1.3.2">𝐗</ci><apply id="S2.E1.m1.3.3.2.cmml" xref="S2.E1.m1.3.3.2"><ci id="S2.E1.m1.3.3.2.3.cmml" xref="S2.E1.m1.3.3.2.3">:</ci><apply id="S2.E1.m1.2.2.1.1.1.1.cmml" xref="S2.E1.m1.2.2.1.1.1"><plus id="S2.E1.m1.2.2.1.1.1.1.1.cmml" xref="S2.E1.m1.2.2.1.1.1.1.1"></plus><ci id="S2.E1.m1.2.2.1.1.1.1.2.cmml" xref="S2.E1.m1.2.2.1.1.1.1.2">𝑡</ci><cn type="integer" id="S2.E1.m1.2.2.1.1.1.1.3.cmml" xref="S2.E1.m1.2.2.1.1.1.1.3">1</cn></apply><apply id="S2.E1.m1.3.3.2.2.1.1.cmml" xref="S2.E1.m1.3.3.2.2.1"><plus id="S2.E1.m1.3.3.2.2.1.1.1.cmml" xref="S2.E1.m1.3.3.2.2.1.1.1"></plus><ci id="S2.E1.m1.3.3.2.2.1.1.2.cmml" xref="S2.E1.m1.3.3.2.2.1.1.2">𝑡</ci><ci id="S2.E1.m1.3.3.2.2.1.1.3.cmml" xref="S2.E1.m1.3.3.2.2.1.1.3">𝑇</ci></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E1.m1.5c">\left[\mathbf{X}^{(t-S):t},G\right]\stackrel{{\scriptstyle f}}{{\rightarrow}}%
+\mathbf{X}^{(t+1):(t+T)},</annotation><annotation encoding="application/x-llamapun" id="S2.E1.m1.5d">[ bold_X start_POSTSUPERSCRIPT ( italic_t - italic_S ) : italic_t end_POSTSUPERSCRIPT , italic_G ] start_RELOP SUPERSCRIPTOP start_ARG → end_ARG start_ARG italic_f end_ARG end_RELOP bold_X start_POSTSUPERSCRIPT ( italic_t + 1 ) : ( italic_t + italic_T ) end_POSTSUPERSCRIPT ,</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(1)</span></td>
+</tr>
+</table>
+<p id="S2.SS1.p1.14" class="ltx_p">where <math id="S2.SS1.p1.13.m1.1" class="ltx_Math" alttext="\mathbf{X}^{(t-H):t}\in\mathbb{R}^{N\times M\times H}" display="inline"><semantics id="S2.SS1.p1.13.m1.1a"><mrow id="S2.SS1.p1.13.m1.1.2" xref="S2.SS1.p1.13.m1.1.2.cmml"><msup id="S2.SS1.p1.13.m1.1.2.2" xref="S2.SS1.p1.13.m1.1.2.2.cmml"><mi id="S2.SS1.p1.13.m1.1.2.2.2" xref="S2.SS1.p1.13.m1.1.2.2.2.cmml">𝐗</mi><mrow id="S2.SS1.p1.13.m1.1.1.1" xref="S2.SS1.p1.13.m1.1.1.1.cmml"><mrow id="S2.SS1.p1.13.m1.1.1.1.1.1" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.cmml"><mo stretchy="false" id="S2.SS1.p1.13.m1.1.1.1.1.1.2" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.cmml">(</mo><mrow id="S2.SS1.p1.13.m1.1.1.1.1.1.1" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.cmml"><mi id="S2.SS1.p1.13.m1.1.1.1.1.1.1.2" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.2.cmml">t</mi><mo id="S2.SS1.p1.13.m1.1.1.1.1.1.1.1" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.1.cmml">-</mo><mi id="S2.SS1.p1.13.m1.1.1.1.1.1.1.3" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.3.cmml">H</mi></mrow><mo stretchy="false" id="S2.SS1.p1.13.m1.1.1.1.1.1.3" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.cmml">)</mo></mrow><mo id="S2.SS1.p1.13.m1.1.1.1.2" xref="S2.SS1.p1.13.m1.1.1.1.2.cmml">:</mo><mi id="S2.SS1.p1.13.m1.1.1.1.3" xref="S2.SS1.p1.13.m1.1.1.1.3.cmml">t</mi></mrow></msup><mo id="S2.SS1.p1.13.m1.1.2.1" xref="S2.SS1.p1.13.m1.1.2.1.cmml">∈</mo><msup id="S2.SS1.p1.13.m1.1.2.3" xref="S2.SS1.p1.13.m1.1.2.3.cmml"><mi id="S2.SS1.p1.13.m1.1.2.3.2" xref="S2.SS1.p1.13.m1.1.2.3.2.cmml">ℝ</mi><mrow id="S2.SS1.p1.13.m1.1.2.3.3" xref="S2.SS1.p1.13.m1.1.2.3.3.cmml"><mi id="S2.SS1.p1.13.m1.1.2.3.3.2" xref="S2.SS1.p1.13.m1.1.2.3.3.2.cmml">N</mi><mo id="S2.SS1.p1.13.m1.1.2.3.3.1" xref="S2.SS1.p1.13.m1.1.2.3.3.1.cmml">×</mo><mi id="S2.SS1.p1.13.m1.1.2.3.3.3" xref="S2.SS1.p1.13.m1.1.2.3.3.3.cmml">M</mi><mo id="S2.SS1.p1.13.m1.1.2.3.3.1a" xref="S2.SS1.p1.13.m1.1.2.3.3.1.cmml">×</mo><mi id="S2.SS1.p1.13.m1.1.2.3.3.4" xref="S2.SS1.p1.13.m1.1.2.3.3.4.cmml">H</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.13.m1.1b"><apply id="S2.SS1.p1.13.m1.1.2.cmml" xref="S2.SS1.p1.13.m1.1.2"><in id="S2.SS1.p1.13.m1.1.2.1.cmml" xref="S2.SS1.p1.13.m1.1.2.1"></in><apply id="S2.SS1.p1.13.m1.1.2.2.cmml" xref="S2.SS1.p1.13.m1.1.2.2"><csymbol cd="ambiguous" id="S2.SS1.p1.13.m1.1.2.2.1.cmml" xref="S2.SS1.p1.13.m1.1.2.2">superscript</csymbol><ci id="S2.SS1.p1.13.m1.1.2.2.2.cmml" xref="S2.SS1.p1.13.m1.1.2.2.2">𝐗</ci><apply id="S2.SS1.p1.13.m1.1.1.1.cmml" xref="S2.SS1.p1.13.m1.1.1.1"><ci id="S2.SS1.p1.13.m1.1.1.1.2.cmml" xref="S2.SS1.p1.13.m1.1.1.1.2">:</ci><apply id="S2.SS1.p1.13.m1.1.1.1.1.1.1.cmml" xref="S2.SS1.p1.13.m1.1.1.1.1.1"><minus id="S2.SS1.p1.13.m1.1.1.1.1.1.1.1.cmml" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.1"></minus><ci id="S2.SS1.p1.13.m1.1.1.1.1.1.1.2.cmml" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.2">𝑡</ci><ci id="S2.SS1.p1.13.m1.1.1.1.1.1.1.3.cmml" xref="S2.SS1.p1.13.m1.1.1.1.1.1.1.3">𝐻</ci></apply><ci id="S2.SS1.p1.13.m1.1.1.1.3.cmml" xref="S2.SS1.p1.13.m1.1.1.1.3">𝑡</ci></apply></apply><apply id="S2.SS1.p1.13.m1.1.2.3.cmml" xref="S2.SS1.p1.13.m1.1.2.3"><csymbol cd="ambiguous" id="S2.SS1.p1.13.m1.1.2.3.1.cmml" xref="S2.SS1.p1.13.m1.1.2.3">superscript</csymbol><ci id="S2.SS1.p1.13.m1.1.2.3.2.cmml" xref="S2.SS1.p1.13.m1.1.2.3.2">ℝ</ci><apply id="S2.SS1.p1.13.m1.1.2.3.3.cmml" xref="S2.SS1.p1.13.m1.1.2.3.3"><times id="S2.SS1.p1.13.m1.1.2.3.3.1.cmml" xref="S2.SS1.p1.13.m1.1.2.3.3.1"></times><ci id="S2.SS1.p1.13.m1.1.2.3.3.2.cmml" xref="S2.SS1.p1.13.m1.1.2.3.3.2">𝑁</ci><ci id="S2.SS1.p1.13.m1.1.2.3.3.3.cmml" xref="S2.SS1.p1.13.m1.1.2.3.3.3">𝑀</ci><ci id="S2.SS1.p1.13.m1.1.2.3.3.4.cmml" xref="S2.SS1.p1.13.m1.1.2.3.3.4">𝐻</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.13.m1.1c">\mathbf{X}^{(t-H):t}\in\mathbb{R}^{N\times M\times H}</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.13.m1.1d">bold_X start_POSTSUPERSCRIPT ( italic_t - italic_H ) : italic_t end_POSTSUPERSCRIPT ∈ blackboard_R start_POSTSUPERSCRIPT italic_N × italic_M × italic_H end_POSTSUPERSCRIPT</annotation></semantics></math> and <math id="S2.SS1.p1.14.m2.2" class="ltx_Math" alttext="\mathbf{X}^{(t+1):(t+T)}\in\mathbb{R}^{N\times M\times T}" display="inline"><semantics id="S2.SS1.p1.14.m2.2a"><mrow id="S2.SS1.p1.14.m2.2.3" xref="S2.SS1.p1.14.m2.2.3.cmml"><msup id="S2.SS1.p1.14.m2.2.3.2" xref="S2.SS1.p1.14.m2.2.3.2.cmml"><mi id="S2.SS1.p1.14.m2.2.3.2.2" xref="S2.SS1.p1.14.m2.2.3.2.2.cmml">𝐗</mi><mrow id="S2.SS1.p1.14.m2.2.2.2" xref="S2.SS1.p1.14.m2.2.2.2.cmml"><mrow id="S2.SS1.p1.14.m2.1.1.1.1.1" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.cmml"><mo stretchy="false" id="S2.SS1.p1.14.m2.1.1.1.1.1.2" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.cmml">(</mo><mrow id="S2.SS1.p1.14.m2.1.1.1.1.1.1" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.cmml"><mi id="S2.SS1.p1.14.m2.1.1.1.1.1.1.2" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.2.cmml">t</mi><mo id="S2.SS1.p1.14.m2.1.1.1.1.1.1.1" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.1.cmml">+</mo><mn id="S2.SS1.p1.14.m2.1.1.1.1.1.1.3" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.3.cmml">1</mn></mrow><mo stretchy="false" id="S2.SS1.p1.14.m2.1.1.1.1.1.3" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.cmml">)</mo></mrow><mo id="S2.SS1.p1.14.m2.2.2.2.3" xref="S2.SS1.p1.14.m2.2.2.2.3.cmml">:</mo><mrow id="S2.SS1.p1.14.m2.2.2.2.2.1" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.cmml"><mo stretchy="false" id="S2.SS1.p1.14.m2.2.2.2.2.1.2" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.cmml">(</mo><mrow id="S2.SS1.p1.14.m2.2.2.2.2.1.1" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.cmml"><mi id="S2.SS1.p1.14.m2.2.2.2.2.1.1.2" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.2.cmml">t</mi><mo id="S2.SS1.p1.14.m2.2.2.2.2.1.1.1" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.1.cmml">+</mo><mi id="S2.SS1.p1.14.m2.2.2.2.2.1.1.3" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.3.cmml">T</mi></mrow><mo stretchy="false" id="S2.SS1.p1.14.m2.2.2.2.2.1.3" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.cmml">)</mo></mrow></mrow></msup><mo id="S2.SS1.p1.14.m2.2.3.1" xref="S2.SS1.p1.14.m2.2.3.1.cmml">∈</mo><msup id="S2.SS1.p1.14.m2.2.3.3" xref="S2.SS1.p1.14.m2.2.3.3.cmml"><mi id="S2.SS1.p1.14.m2.2.3.3.2" xref="S2.SS1.p1.14.m2.2.3.3.2.cmml">ℝ</mi><mrow id="S2.SS1.p1.14.m2.2.3.3.3" xref="S2.SS1.p1.14.m2.2.3.3.3.cmml"><mi id="S2.SS1.p1.14.m2.2.3.3.3.2" xref="S2.SS1.p1.14.m2.2.3.3.3.2.cmml">N</mi><mo id="S2.SS1.p1.14.m2.2.3.3.3.1" xref="S2.SS1.p1.14.m2.2.3.3.3.1.cmml">×</mo><mi id="S2.SS1.p1.14.m2.2.3.3.3.3" xref="S2.SS1.p1.14.m2.2.3.3.3.3.cmml">M</mi><mo id="S2.SS1.p1.14.m2.2.3.3.3.1a" xref="S2.SS1.p1.14.m2.2.3.3.3.1.cmml">×</mo><mi id="S2.SS1.p1.14.m2.2.3.3.3.4" xref="S2.SS1.p1.14.m2.2.3.3.3.4.cmml">T</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS1.p1.14.m2.2b"><apply id="S2.SS1.p1.14.m2.2.3.cmml" xref="S2.SS1.p1.14.m2.2.3"><in id="S2.SS1.p1.14.m2.2.3.1.cmml" xref="S2.SS1.p1.14.m2.2.3.1"></in><apply id="S2.SS1.p1.14.m2.2.3.2.cmml" xref="S2.SS1.p1.14.m2.2.3.2"><csymbol cd="ambiguous" id="S2.SS1.p1.14.m2.2.3.2.1.cmml" xref="S2.SS1.p1.14.m2.2.3.2">superscript</csymbol><ci id="S2.SS1.p1.14.m2.2.3.2.2.cmml" xref="S2.SS1.p1.14.m2.2.3.2.2">𝐗</ci><apply id="S2.SS1.p1.14.m2.2.2.2.cmml" xref="S2.SS1.p1.14.m2.2.2.2"><ci id="S2.SS1.p1.14.m2.2.2.2.3.cmml" xref="S2.SS1.p1.14.m2.2.2.2.3">:</ci><apply id="S2.SS1.p1.14.m2.1.1.1.1.1.1.cmml" xref="S2.SS1.p1.14.m2.1.1.1.1.1"><plus id="S2.SS1.p1.14.m2.1.1.1.1.1.1.1.cmml" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.1"></plus><ci id="S2.SS1.p1.14.m2.1.1.1.1.1.1.2.cmml" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.2">𝑡</ci><cn type="integer" id="S2.SS1.p1.14.m2.1.1.1.1.1.1.3.cmml" xref="S2.SS1.p1.14.m2.1.1.1.1.1.1.3">1</cn></apply><apply id="S2.SS1.p1.14.m2.2.2.2.2.1.1.cmml" xref="S2.SS1.p1.14.m2.2.2.2.2.1"><plus id="S2.SS1.p1.14.m2.2.2.2.2.1.1.1.cmml" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.1"></plus><ci id="S2.SS1.p1.14.m2.2.2.2.2.1.1.2.cmml" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.2">𝑡</ci><ci id="S2.SS1.p1.14.m2.2.2.2.2.1.1.3.cmml" xref="S2.SS1.p1.14.m2.2.2.2.2.1.1.3">𝑇</ci></apply></apply></apply><apply id="S2.SS1.p1.14.m2.2.3.3.cmml" xref="S2.SS1.p1.14.m2.2.3.3"><csymbol cd="ambiguous" id="S2.SS1.p1.14.m2.2.3.3.1.cmml" xref="S2.SS1.p1.14.m2.2.3.3">superscript</csymbol><ci id="S2.SS1.p1.14.m2.2.3.3.2.cmml" xref="S2.SS1.p1.14.m2.2.3.3.2">ℝ</ci><apply id="S2.SS1.p1.14.m2.2.3.3.3.cmml" xref="S2.SS1.p1.14.m2.2.3.3.3"><times id="S2.SS1.p1.14.m2.2.3.3.3.1.cmml" xref="S2.SS1.p1.14.m2.2.3.3.3.1"></times><ci id="S2.SS1.p1.14.m2.2.3.3.3.2.cmml" xref="S2.SS1.p1.14.m2.2.3.3.3.2">𝑁</ci><ci id="S2.SS1.p1.14.m2.2.3.3.3.3.cmml" xref="S2.SS1.p1.14.m2.2.3.3.3.3">𝑀</ci><ci id="S2.SS1.p1.14.m2.2.3.3.3.4.cmml" xref="S2.SS1.p1.14.m2.2.3.3.3.4">𝑇</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS1.p1.14.m2.2c">\mathbf{X}^{(t+1):(t+T)}\in\mathbb{R}^{N\times M\times T}</annotation><annotation encoding="application/x-llamapun" id="S2.SS1.p1.14.m2.2d">bold_X start_POSTSUPERSCRIPT ( italic_t + 1 ) : ( italic_t + italic_T ) end_POSTSUPERSCRIPT ∈ blackboard_R start_POSTSUPERSCRIPT italic_N × italic_M × italic_T end_POSTSUPERSCRIPT</annotation></semantics></math>.</p>
+</div>
+</section>
+<section id="S2.SS2" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S2.SS2.5.1.1" class="ltx_text">II-B</span> </span><span id="S2.SS2.6.2" class="ltx_text ltx_font_italic">Graph Convolution Layer</span>
+</h3>
+
+<div id="S2.SS2.p1" class="ltx_para">
+<p id="S2.SS2.p1.7" class="ltx_p">At present, graph convolutional network is a very important model, which can extract node features with given node structure information.Kipf et al.<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib20" title="" class="ltx_ref">20</a>]</cite> proposed a first approximation of Chebyshev spectral filter<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib21" title="" class="ltx_ref">21</a>]</cite>. Graph convolutional network has two ways based on spectrum or space. From the point of view of space, it is to smooth the signal of node by gathering and transforming the neighborhood information of node.The advantage of this method is that multidimensional data can be modeled and the prediction effect can be improved through aggregation and transfer mechanisms. <math id="S2.SS2.p1.1.m1.1" class="ltx_Math" alttext="\tilde{\mathbf{A}}\in\mathbf{R}^{N\times N}" display="inline"><semantics id="S2.SS2.p1.1.m1.1a"><mrow id="S2.SS2.p1.1.m1.1.1" xref="S2.SS2.p1.1.m1.1.1.cmml"><mover accent="true" id="S2.SS2.p1.1.m1.1.1.2" xref="S2.SS2.p1.1.m1.1.1.2.cmml"><mi id="S2.SS2.p1.1.m1.1.1.2.2" xref="S2.SS2.p1.1.m1.1.1.2.2.cmml">𝐀</mi><mo stretchy="false" id="S2.SS2.p1.1.m1.1.1.2.1" xref="S2.SS2.p1.1.m1.1.1.2.1.cmml">~</mo></mover><mo id="S2.SS2.p1.1.m1.1.1.1" xref="S2.SS2.p1.1.m1.1.1.1.cmml">∈</mo><msup id="S2.SS2.p1.1.m1.1.1.3" xref="S2.SS2.p1.1.m1.1.1.3.cmml"><mi id="S2.SS2.p1.1.m1.1.1.3.2" xref="S2.SS2.p1.1.m1.1.1.3.2.cmml">𝐑</mi><mrow id="S2.SS2.p1.1.m1.1.1.3.3" xref="S2.SS2.p1.1.m1.1.1.3.3.cmml"><mi id="S2.SS2.p1.1.m1.1.1.3.3.2" xref="S2.SS2.p1.1.m1.1.1.3.3.2.cmml">N</mi><mo id="S2.SS2.p1.1.m1.1.1.3.3.1" xref="S2.SS2.p1.1.m1.1.1.3.3.1.cmml">×</mo><mi id="S2.SS2.p1.1.m1.1.1.3.3.3" xref="S2.SS2.p1.1.m1.1.1.3.3.3.cmml">N</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS2.p1.1.m1.1b"><apply id="S2.SS2.p1.1.m1.1.1.cmml" xref="S2.SS2.p1.1.m1.1.1"><in id="S2.SS2.p1.1.m1.1.1.1.cmml" xref="S2.SS2.p1.1.m1.1.1.1"></in><apply id="S2.SS2.p1.1.m1.1.1.2.cmml" xref="S2.SS2.p1.1.m1.1.1.2"><ci id="S2.SS2.p1.1.m1.1.1.2.1.cmml" xref="S2.SS2.p1.1.m1.1.1.2.1">~</ci><ci id="S2.SS2.p1.1.m1.1.1.2.2.cmml" xref="S2.SS2.p1.1.m1.1.1.2.2">𝐀</ci></apply><apply id="S2.SS2.p1.1.m1.1.1.3.cmml" xref="S2.SS2.p1.1.m1.1.1.3"><csymbol cd="ambiguous" id="S2.SS2.p1.1.m1.1.1.3.1.cmml" xref="S2.SS2.p1.1.m1.1.1.3">superscript</csymbol><ci id="S2.SS2.p1.1.m1.1.1.3.2.cmml" xref="S2.SS2.p1.1.m1.1.1.3.2">𝐑</ci><apply id="S2.SS2.p1.1.m1.1.1.3.3.cmml" xref="S2.SS2.p1.1.m1.1.1.3.3"><times id="S2.SS2.p1.1.m1.1.1.3.3.1.cmml" xref="S2.SS2.p1.1.m1.1.1.3.3.1"></times><ci id="S2.SS2.p1.1.m1.1.1.3.3.2.cmml" xref="S2.SS2.p1.1.m1.1.1.3.3.2">𝑁</ci><ci id="S2.SS2.p1.1.m1.1.1.3.3.3.cmml" xref="S2.SS2.p1.1.m1.1.1.3.3.3">𝑁</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS2.p1.1.m1.1c">\tilde{\mathbf{A}}\in\mathbf{R}^{N\times N}</annotation><annotation encoding="application/x-llamapun" id="S2.SS2.p1.1.m1.1d">over~ start_ARG bold_A end_ARG ∈ bold_R start_POSTSUPERSCRIPT italic_N × italic_N end_POSTSUPERSCRIPT</annotation></semantics></math> represents the self-loops adjacency matrix. By adding the identity matrix, the graph convolution network can retain its own characteristic information during aggregation. In other words, <math id="S2.SS2.p1.2.m2.1" class="ltx_Math" alttext="\mathbf{A}" display="inline"><semantics id="S2.SS2.p1.2.m2.1a"><mi id="S2.SS2.p1.2.m2.1.1" xref="S2.SS2.p1.2.m2.1.1.cmml">𝐀</mi><annotation-xml encoding="MathML-Content" id="S2.SS2.p1.2.m2.1b"><ci id="S2.SS2.p1.2.m2.1.1.cmml" xref="S2.SS2.p1.2.m2.1.1">𝐀</ci></annotation-xml><annotation encoding="application/x-tex" id="S2.SS2.p1.2.m2.1c">\mathbf{A}</annotation><annotation encoding="application/x-llamapun" id="S2.SS2.p1.2.m2.1d">bold_A</annotation></semantics></math> becomes <math id="S2.SS2.p1.3.m3.1" class="ltx_Math" alttext="\tilde{\mathbf{A}}" display="inline"><semantics id="S2.SS2.p1.3.m3.1a"><mover accent="true" id="S2.SS2.p1.3.m3.1.1" xref="S2.SS2.p1.3.m3.1.1.cmml"><mi id="S2.SS2.p1.3.m3.1.1.2" xref="S2.SS2.p1.3.m3.1.1.2.cmml">𝐀</mi><mo stretchy="false" id="S2.SS2.p1.3.m3.1.1.1" xref="S2.SS2.p1.3.m3.1.1.1.cmml">~</mo></mover><annotation-xml encoding="MathML-Content" id="S2.SS2.p1.3.m3.1b"><apply id="S2.SS2.p1.3.m3.1.1.cmml" xref="S2.SS2.p1.3.m3.1.1"><ci id="S2.SS2.p1.3.m3.1.1.1.cmml" xref="S2.SS2.p1.3.m3.1.1.1">~</ci><ci id="S2.SS2.p1.3.m3.1.1.2.cmml" xref="S2.SS2.p1.3.m3.1.1.2">𝐀</ci></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS2.p1.3.m3.1c">\tilde{\mathbf{A}}</annotation><annotation encoding="application/x-llamapun" id="S2.SS2.p1.3.m3.1d">over~ start_ARG bold_A end_ARG</annotation></semantics></math> by adding an identity matrix. <math id="S2.SS2.p1.4.m4.1" class="ltx_Math" alttext="\mathbf{X}\in\mathbf{R}^{N\times D}" display="inline"><semantics id="S2.SS2.p1.4.m4.1a"><mrow id="S2.SS2.p1.4.m4.1.1" xref="S2.SS2.p1.4.m4.1.1.cmml"><mi id="S2.SS2.p1.4.m4.1.1.2" xref="S2.SS2.p1.4.m4.1.1.2.cmml">𝐗</mi><mo id="S2.SS2.p1.4.m4.1.1.1" xref="S2.SS2.p1.4.m4.1.1.1.cmml">∈</mo><msup id="S2.SS2.p1.4.m4.1.1.3" xref="S2.SS2.p1.4.m4.1.1.3.cmml"><mi id="S2.SS2.p1.4.m4.1.1.3.2" xref="S2.SS2.p1.4.m4.1.1.3.2.cmml">𝐑</mi><mrow id="S2.SS2.p1.4.m4.1.1.3.3" xref="S2.SS2.p1.4.m4.1.1.3.3.cmml"><mi id="S2.SS2.p1.4.m4.1.1.3.3.2" xref="S2.SS2.p1.4.m4.1.1.3.3.2.cmml">N</mi><mo id="S2.SS2.p1.4.m4.1.1.3.3.1" xref="S2.SS2.p1.4.m4.1.1.3.3.1.cmml">×</mo><mi id="S2.SS2.p1.4.m4.1.1.3.3.3" xref="S2.SS2.p1.4.m4.1.1.3.3.3.cmml">D</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS2.p1.4.m4.1b"><apply id="S2.SS2.p1.4.m4.1.1.cmml" xref="S2.SS2.p1.4.m4.1.1"><in id="S2.SS2.p1.4.m4.1.1.1.cmml" xref="S2.SS2.p1.4.m4.1.1.1"></in><ci id="S2.SS2.p1.4.m4.1.1.2.cmml" xref="S2.SS2.p1.4.m4.1.1.2">𝐗</ci><apply id="S2.SS2.p1.4.m4.1.1.3.cmml" xref="S2.SS2.p1.4.m4.1.1.3"><csymbol cd="ambiguous" id="S2.SS2.p1.4.m4.1.1.3.1.cmml" xref="S2.SS2.p1.4.m4.1.1.3">superscript</csymbol><ci id="S2.SS2.p1.4.m4.1.1.3.2.cmml" xref="S2.SS2.p1.4.m4.1.1.3.2">𝐑</ci><apply id="S2.SS2.p1.4.m4.1.1.3.3.cmml" xref="S2.SS2.p1.4.m4.1.1.3.3"><times id="S2.SS2.p1.4.m4.1.1.3.3.1.cmml" xref="S2.SS2.p1.4.m4.1.1.3.3.1"></times><ci id="S2.SS2.p1.4.m4.1.1.3.3.2.cmml" xref="S2.SS2.p1.4.m4.1.1.3.3.2">𝑁</ci><ci id="S2.SS2.p1.4.m4.1.1.3.3.3.cmml" xref="S2.SS2.p1.4.m4.1.1.3.3.3">𝐷</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS2.p1.4.m4.1c">\mathbf{X}\in\mathbf{R}^{N\times D}</annotation><annotation encoding="application/x-llamapun" id="S2.SS2.p1.4.m4.1d">bold_X ∈ bold_R start_POSTSUPERSCRIPT italic_N × italic_D end_POSTSUPERSCRIPT</annotation></semantics></math>represents the input signal. <math id="S2.SS2.p1.5.m5.1" class="ltx_Math" alttext="\mathbf{X}\in\mathbf{R}^{N\times M}" display="inline"><semantics id="S2.SS2.p1.5.m5.1a"><mrow id="S2.SS2.p1.5.m5.1.1" xref="S2.SS2.p1.5.m5.1.1.cmml"><mi id="S2.SS2.p1.5.m5.1.1.2" xref="S2.SS2.p1.5.m5.1.1.2.cmml">𝐗</mi><mo id="S2.SS2.p1.5.m5.1.1.1" xref="S2.SS2.p1.5.m5.1.1.1.cmml">∈</mo><msup id="S2.SS2.p1.5.m5.1.1.3" xref="S2.SS2.p1.5.m5.1.1.3.cmml"><mi id="S2.SS2.p1.5.m5.1.1.3.2" xref="S2.SS2.p1.5.m5.1.1.3.2.cmml">𝐑</mi><mrow id="S2.SS2.p1.5.m5.1.1.3.3" xref="S2.SS2.p1.5.m5.1.1.3.3.cmml"><mi id="S2.SS2.p1.5.m5.1.1.3.3.2" xref="S2.SS2.p1.5.m5.1.1.3.3.2.cmml">N</mi><mo id="S2.SS2.p1.5.m5.1.1.3.3.1" xref="S2.SS2.p1.5.m5.1.1.3.3.1.cmml">×</mo><mi id="S2.SS2.p1.5.m5.1.1.3.3.3" xref="S2.SS2.p1.5.m5.1.1.3.3.3.cmml">M</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS2.p1.5.m5.1b"><apply id="S2.SS2.p1.5.m5.1.1.cmml" xref="S2.SS2.p1.5.m5.1.1"><in id="S2.SS2.p1.5.m5.1.1.1.cmml" xref="S2.SS2.p1.5.m5.1.1.1"></in><ci id="S2.SS2.p1.5.m5.1.1.2.cmml" xref="S2.SS2.p1.5.m5.1.1.2">𝐗</ci><apply id="S2.SS2.p1.5.m5.1.1.3.cmml" xref="S2.SS2.p1.5.m5.1.1.3"><csymbol cd="ambiguous" id="S2.SS2.p1.5.m5.1.1.3.1.cmml" xref="S2.SS2.p1.5.m5.1.1.3">superscript</csymbol><ci id="S2.SS2.p1.5.m5.1.1.3.2.cmml" xref="S2.SS2.p1.5.m5.1.1.3.2">𝐑</ci><apply id="S2.SS2.p1.5.m5.1.1.3.3.cmml" xref="S2.SS2.p1.5.m5.1.1.3.3"><times id="S2.SS2.p1.5.m5.1.1.3.3.1.cmml" xref="S2.SS2.p1.5.m5.1.1.3.3.1"></times><ci id="S2.SS2.p1.5.m5.1.1.3.3.2.cmml" xref="S2.SS2.p1.5.m5.1.1.3.3.2">𝑁</ci><ci id="S2.SS2.p1.5.m5.1.1.3.3.3.cmml" xref="S2.SS2.p1.5.m5.1.1.3.3.3">𝑀</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS2.p1.5.m5.1c">\mathbf{X}\in\mathbf{R}^{N\times M}</annotation><annotation encoding="application/x-llamapun" id="S2.SS2.p1.5.m5.1d">bold_X ∈ bold_R start_POSTSUPERSCRIPT italic_N × italic_M end_POSTSUPERSCRIPT</annotation></semantics></math>represents the input output,<math id="S2.SS2.p1.6.m6.1" class="ltx_Math" alttext="\mathbf{Z}\in\mathbf{R}^{N\times M}" display="inline"><semantics id="S2.SS2.p1.6.m6.1a"><mrow id="S2.SS2.p1.6.m6.1.1" xref="S2.SS2.p1.6.m6.1.1.cmml"><mi id="S2.SS2.p1.6.m6.1.1.2" xref="S2.SS2.p1.6.m6.1.1.2.cmml">𝐙</mi><mo id="S2.SS2.p1.6.m6.1.1.1" xref="S2.SS2.p1.6.m6.1.1.1.cmml">∈</mo><msup id="S2.SS2.p1.6.m6.1.1.3" xref="S2.SS2.p1.6.m6.1.1.3.cmml"><mi id="S2.SS2.p1.6.m6.1.1.3.2" xref="S2.SS2.p1.6.m6.1.1.3.2.cmml">𝐑</mi><mrow id="S2.SS2.p1.6.m6.1.1.3.3" xref="S2.SS2.p1.6.m6.1.1.3.3.cmml"><mi id="S2.SS2.p1.6.m6.1.1.3.3.2" xref="S2.SS2.p1.6.m6.1.1.3.3.2.cmml">N</mi><mo id="S2.SS2.p1.6.m6.1.1.3.3.1" xref="S2.SS2.p1.6.m6.1.1.3.3.1.cmml">×</mo><mi id="S2.SS2.p1.6.m6.1.1.3.3.3" xref="S2.SS2.p1.6.m6.1.1.3.3.3.cmml">M</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS2.p1.6.m6.1b"><apply id="S2.SS2.p1.6.m6.1.1.cmml" xref="S2.SS2.p1.6.m6.1.1"><in id="S2.SS2.p1.6.m6.1.1.1.cmml" xref="S2.SS2.p1.6.m6.1.1.1"></in><ci id="S2.SS2.p1.6.m6.1.1.2.cmml" xref="S2.SS2.p1.6.m6.1.1.2">𝐙</ci><apply id="S2.SS2.p1.6.m6.1.1.3.cmml" xref="S2.SS2.p1.6.m6.1.1.3"><csymbol cd="ambiguous" id="S2.SS2.p1.6.m6.1.1.3.1.cmml" xref="S2.SS2.p1.6.m6.1.1.3">superscript</csymbol><ci id="S2.SS2.p1.6.m6.1.1.3.2.cmml" xref="S2.SS2.p1.6.m6.1.1.3.2">𝐑</ci><apply id="S2.SS2.p1.6.m6.1.1.3.3.cmml" xref="S2.SS2.p1.6.m6.1.1.3.3"><times id="S2.SS2.p1.6.m6.1.1.3.3.1.cmml" xref="S2.SS2.p1.6.m6.1.1.3.3.1"></times><ci id="S2.SS2.p1.6.m6.1.1.3.3.2.cmml" xref="S2.SS2.p1.6.m6.1.1.3.3.2">𝑁</ci><ci id="S2.SS2.p1.6.m6.1.1.3.3.3.cmml" xref="S2.SS2.p1.6.m6.1.1.3.3.3">𝑀</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS2.p1.6.m6.1c">\mathbf{Z}\in\mathbf{R}^{N\times M}</annotation><annotation encoding="application/x-llamapun" id="S2.SS2.p1.6.m6.1d">bold_Z ∈ bold_R start_POSTSUPERSCRIPT italic_N × italic_M end_POSTSUPERSCRIPT</annotation></semantics></math>,and <math id="S2.SS2.p1.7.m7.1" class="ltx_Math" alttext="\mathbf{W}\in\mathbf{R}^{D\times M}" display="inline"><semantics id="S2.SS2.p1.7.m7.1a"><mrow id="S2.SS2.p1.7.m7.1.1" xref="S2.SS2.p1.7.m7.1.1.cmml"><mi id="S2.SS2.p1.7.m7.1.1.2" xref="S2.SS2.p1.7.m7.1.1.2.cmml">𝐖</mi><mo id="S2.SS2.p1.7.m7.1.1.1" xref="S2.SS2.p1.7.m7.1.1.1.cmml">∈</mo><msup id="S2.SS2.p1.7.m7.1.1.3" xref="S2.SS2.p1.7.m7.1.1.3.cmml"><mi id="S2.SS2.p1.7.m7.1.1.3.2" xref="S2.SS2.p1.7.m7.1.1.3.2.cmml">𝐑</mi><mrow id="S2.SS2.p1.7.m7.1.1.3.3" xref="S2.SS2.p1.7.m7.1.1.3.3.cmml"><mi id="S2.SS2.p1.7.m7.1.1.3.3.2" xref="S2.SS2.p1.7.m7.1.1.3.3.2.cmml">D</mi><mo id="S2.SS2.p1.7.m7.1.1.3.3.1" xref="S2.SS2.p1.7.m7.1.1.3.3.1.cmml">×</mo><mi id="S2.SS2.p1.7.m7.1.1.3.3.3" xref="S2.SS2.p1.7.m7.1.1.3.3.3.cmml">M</mi></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S2.SS2.p1.7.m7.1b"><apply id="S2.SS2.p1.7.m7.1.1.cmml" xref="S2.SS2.p1.7.m7.1.1"><in id="S2.SS2.p1.7.m7.1.1.1.cmml" xref="S2.SS2.p1.7.m7.1.1.1"></in><ci id="S2.SS2.p1.7.m7.1.1.2.cmml" xref="S2.SS2.p1.7.m7.1.1.2">𝐖</ci><apply id="S2.SS2.p1.7.m7.1.1.3.cmml" xref="S2.SS2.p1.7.m7.1.1.3"><csymbol cd="ambiguous" id="S2.SS2.p1.7.m7.1.1.3.1.cmml" xref="S2.SS2.p1.7.m7.1.1.3">superscript</csymbol><ci id="S2.SS2.p1.7.m7.1.1.3.2.cmml" xref="S2.SS2.p1.7.m7.1.1.3.2">𝐑</ci><apply id="S2.SS2.p1.7.m7.1.1.3.3.cmml" xref="S2.SS2.p1.7.m7.1.1.3.3"><times id="S2.SS2.p1.7.m7.1.1.3.3.1.cmml" xref="S2.SS2.p1.7.m7.1.1.3.3.1"></times><ci id="S2.SS2.p1.7.m7.1.1.3.3.2.cmml" xref="S2.SS2.p1.7.m7.1.1.3.3.2">𝐷</ci><ci id="S2.SS2.p1.7.m7.1.1.3.3.3.cmml" xref="S2.SS2.p1.7.m7.1.1.3.3.3">𝑀</ci></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.SS2.p1.7.m7.1c">\mathbf{W}\in\mathbf{R}^{D\times M}</annotation><annotation encoding="application/x-llamapun" id="S2.SS2.p1.7.m7.1d">bold_W ∈ bold_R start_POSTSUPERSCRIPT italic_D × italic_M end_POSTSUPERSCRIPT</annotation></semantics></math>represents the model parameter matrix,in <cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib20" title="" class="ltx_ref">20</a>]</cite> the graph convolution layer is defined as</p>
+<table id="S2.E2" class="ltx_equation ltx_eqn_table">
+
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E2.m1.1" class="ltx_Math" alttext="\mathbf{Z}=\tilde{\mathbf{A}}\mathbf{X}\mathbf{W}." display="block"><semantics id="S2.E2.m1.1a"><mrow id="S2.E2.m1.1.1.1" xref="S2.E2.m1.1.1.1.1.cmml"><mrow id="S2.E2.m1.1.1.1.1" xref="S2.E2.m1.1.1.1.1.cmml"><mi id="S2.E2.m1.1.1.1.1.2" xref="S2.E2.m1.1.1.1.1.2.cmml">𝐙</mi><mo id="S2.E2.m1.1.1.1.1.1" xref="S2.E2.m1.1.1.1.1.1.cmml">=</mo><mrow id="S2.E2.m1.1.1.1.1.3" xref="S2.E2.m1.1.1.1.1.3.cmml"><mover accent="true" id="S2.E2.m1.1.1.1.1.3.2" xref="S2.E2.m1.1.1.1.1.3.2.cmml"><mi id="S2.E2.m1.1.1.1.1.3.2.2" xref="S2.E2.m1.1.1.1.1.3.2.2.cmml">𝐀</mi><mo stretchy="false" id="S2.E2.m1.1.1.1.1.3.2.1" xref="S2.E2.m1.1.1.1.1.3.2.1.cmml">~</mo></mover><mo id="S2.E2.m1.1.1.1.1.3.1" xref="S2.E2.m1.1.1.1.1.3.1.cmml">⁢</mo><mi id="S2.E2.m1.1.1.1.1.3.3" xref="S2.E2.m1.1.1.1.1.3.3.cmml">𝐗𝐖</mi></mrow></mrow><mo id="S2.E2.m1.1.1.1.2" xref="S2.E2.m1.1.1.1.1.cmml">.</mo></mrow><annotation-xml encoding="MathML-Content" id="S2.E2.m1.1b"><apply id="S2.E2.m1.1.1.1.1.cmml" xref="S2.E2.m1.1.1.1"><eq id="S2.E2.m1.1.1.1.1.1.cmml" xref="S2.E2.m1.1.1.1.1.1"></eq><ci id="S2.E2.m1.1.1.1.1.2.cmml" xref="S2.E2.m1.1.1.1.1.2">𝐙</ci><apply id="S2.E2.m1.1.1.1.1.3.cmml" xref="S2.E2.m1.1.1.1.1.3"><times id="S2.E2.m1.1.1.1.1.3.1.cmml" xref="S2.E2.m1.1.1.1.1.3.1"></times><apply id="S2.E2.m1.1.1.1.1.3.2.cmml" xref="S2.E2.m1.1.1.1.1.3.2"><ci id="S2.E2.m1.1.1.1.1.3.2.1.cmml" xref="S2.E2.m1.1.1.1.1.3.2.1">~</ci><ci id="S2.E2.m1.1.1.1.1.3.2.2.cmml" xref="S2.E2.m1.1.1.1.1.3.2.2">𝐀</ci></apply><ci id="S2.E2.m1.1.1.1.1.3.3.cmml" xref="S2.E2.m1.1.1.1.1.3.3">𝐗𝐖</ci></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E2.m1.1c">\mathbf{Z}=\tilde{\mathbf{A}}\mathbf{X}\mathbf{W}.</annotation><annotation encoding="application/x-llamapun" id="S2.E2.m1.1d">bold_Z = over~ start_ARG bold_A end_ARG bold_XW .</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(2)</span></td>
+</tr>
+</table>
+</div>
+<div id="S2.SS2.p2" class="ltx_para">
+<p id="S2.SS2.p2.1" class="ltx_p"><cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib22" title="" class="ltx_ref">22</a>]</cite>proposed a diffusion convolution layer and integrated it into the recurrent neural network to make the model more effective in predicting spatio-temporal data. We summarise that the diffusion convolution layer into equation 3,which results in,</p>
+<table id="S2.E3" class="ltx_equation ltx_eqn_table">
+
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E3.m1.1" class="ltx_Math" alttext="\mathbf{Z}=\sum_{k=0}^{K}\mathbf{P}^{k}\mathbf{X}\mathbf{W}_{\mathbf{k}}." display="block"><semantics id="S2.E3.m1.1a"><mrow id="S2.E3.m1.1.1.1" xref="S2.E3.m1.1.1.1.1.cmml"><mrow id="S2.E3.m1.1.1.1.1" xref="S2.E3.m1.1.1.1.1.cmml"><mi id="S2.E3.m1.1.1.1.1.2" xref="S2.E3.m1.1.1.1.1.2.cmml">𝐙</mi><mo id="S2.E3.m1.1.1.1.1.1" xref="S2.E3.m1.1.1.1.1.1.cmml">=</mo><mrow id="S2.E3.m1.1.1.1.1.3" xref="S2.E3.m1.1.1.1.1.3.cmml"><munderover id="S2.E3.m1.1.1.1.1.3.1" xref="S2.E3.m1.1.1.1.1.3.1.cmml"><mo largeop="true" movablelimits="false" symmetric="true" id="S2.E3.m1.1.1.1.1.3.1.2.2" xref="S2.E3.m1.1.1.1.1.3.1.2.2.cmml">∑</mo><mrow id="S2.E3.m1.1.1.1.1.3.1.2.3" xref="S2.E3.m1.1.1.1.1.3.1.2.3.cmml"><mi id="S2.E3.m1.1.1.1.1.3.1.2.3.2" xref="S2.E3.m1.1.1.1.1.3.1.2.3.2.cmml">k</mi><mo id="S2.E3.m1.1.1.1.1.3.1.2.3.1" xref="S2.E3.m1.1.1.1.1.3.1.2.3.1.cmml">=</mo><mn id="S2.E3.m1.1.1.1.1.3.1.2.3.3" xref="S2.E3.m1.1.1.1.1.3.1.2.3.3.cmml">0</mn></mrow><mi id="S2.E3.m1.1.1.1.1.3.1.3" xref="S2.E3.m1.1.1.1.1.3.1.3.cmml">K</mi></munderover><mrow id="S2.E3.m1.1.1.1.1.3.2" xref="S2.E3.m1.1.1.1.1.3.2.cmml"><msup id="S2.E3.m1.1.1.1.1.3.2.2" xref="S2.E3.m1.1.1.1.1.3.2.2.cmml"><mi id="S2.E3.m1.1.1.1.1.3.2.2.2" xref="S2.E3.m1.1.1.1.1.3.2.2.2.cmml">𝐏</mi><mi id="S2.E3.m1.1.1.1.1.3.2.2.3" xref="S2.E3.m1.1.1.1.1.3.2.2.3.cmml">k</mi></msup><mo id="S2.E3.m1.1.1.1.1.3.2.1" xref="S2.E3.m1.1.1.1.1.3.2.1.cmml">⁢</mo><msub id="S2.E3.m1.1.1.1.1.3.2.3" xref="S2.E3.m1.1.1.1.1.3.2.3.cmml"><mi id="S2.E3.m1.1.1.1.1.3.2.3.2" xref="S2.E3.m1.1.1.1.1.3.2.3.2.cmml">𝐗𝐖</mi><mi id="S2.E3.m1.1.1.1.1.3.2.3.3" xref="S2.E3.m1.1.1.1.1.3.2.3.3.cmml">𝐤</mi></msub></mrow></mrow></mrow><mo id="S2.E3.m1.1.1.1.2" xref="S2.E3.m1.1.1.1.1.cmml">.</mo></mrow><annotation-xml encoding="MathML-Content" id="S2.E3.m1.1b"><apply id="S2.E3.m1.1.1.1.1.cmml" xref="S2.E3.m1.1.1.1"><eq id="S2.E3.m1.1.1.1.1.1.cmml" xref="S2.E3.m1.1.1.1.1.1"></eq><ci id="S2.E3.m1.1.1.1.1.2.cmml" xref="S2.E3.m1.1.1.1.1.2">𝐙</ci><apply id="S2.E3.m1.1.1.1.1.3.cmml" xref="S2.E3.m1.1.1.1.1.3"><apply id="S2.E3.m1.1.1.1.1.3.1.cmml" xref="S2.E3.m1.1.1.1.1.3.1"><csymbol cd="ambiguous" id="S2.E3.m1.1.1.1.1.3.1.1.cmml" xref="S2.E3.m1.1.1.1.1.3.1">superscript</csymbol><apply id="S2.E3.m1.1.1.1.1.3.1.2.cmml" xref="S2.E3.m1.1.1.1.1.3.1"><csymbol cd="ambiguous" id="S2.E3.m1.1.1.1.1.3.1.2.1.cmml" xref="S2.E3.m1.1.1.1.1.3.1">subscript</csymbol><sum id="S2.E3.m1.1.1.1.1.3.1.2.2.cmml" xref="S2.E3.m1.1.1.1.1.3.1.2.2"></sum><apply id="S2.E3.m1.1.1.1.1.3.1.2.3.cmml" xref="S2.E3.m1.1.1.1.1.3.1.2.3"><eq id="S2.E3.m1.1.1.1.1.3.1.2.3.1.cmml" xref="S2.E3.m1.1.1.1.1.3.1.2.3.1"></eq><ci id="S2.E3.m1.1.1.1.1.3.1.2.3.2.cmml" xref="S2.E3.m1.1.1.1.1.3.1.2.3.2">𝑘</ci><cn type="integer" id="S2.E3.m1.1.1.1.1.3.1.2.3.3.cmml" xref="S2.E3.m1.1.1.1.1.3.1.2.3.3">0</cn></apply></apply><ci id="S2.E3.m1.1.1.1.1.3.1.3.cmml" xref="S2.E3.m1.1.1.1.1.3.1.3">𝐾</ci></apply><apply id="S2.E3.m1.1.1.1.1.3.2.cmml" xref="S2.E3.m1.1.1.1.1.3.2"><times id="S2.E3.m1.1.1.1.1.3.2.1.cmml" xref="S2.E3.m1.1.1.1.1.3.2.1"></times><apply id="S2.E3.m1.1.1.1.1.3.2.2.cmml" xref="S2.E3.m1.1.1.1.1.3.2.2"><csymbol cd="ambiguous" id="S2.E3.m1.1.1.1.1.3.2.2.1.cmml" xref="S2.E3.m1.1.1.1.1.3.2.2">superscript</csymbol><ci id="S2.E3.m1.1.1.1.1.3.2.2.2.cmml" xref="S2.E3.m1.1.1.1.1.3.2.2.2">𝐏</ci><ci id="S2.E3.m1.1.1.1.1.3.2.2.3.cmml" xref="S2.E3.m1.1.1.1.1.3.2.2.3">𝑘</ci></apply><apply id="S2.E3.m1.1.1.1.1.3.2.3.cmml" xref="S2.E3.m1.1.1.1.1.3.2.3"><csymbol cd="ambiguous" id="S2.E3.m1.1.1.1.1.3.2.3.1.cmml" xref="S2.E3.m1.1.1.1.1.3.2.3">subscript</csymbol><ci id="S2.E3.m1.1.1.1.1.3.2.3.2.cmml" xref="S2.E3.m1.1.1.1.1.3.2.3.2">𝐗𝐖</ci><ci id="S2.E3.m1.1.1.1.1.3.2.3.3.cmml" xref="S2.E3.m1.1.1.1.1.3.2.3.3">𝐤</ci></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E3.m1.1c">\mathbf{Z}=\sum_{k=0}^{K}\mathbf{P}^{k}\mathbf{X}\mathbf{W}_{\mathbf{k}}.</annotation><annotation encoding="application/x-llamapun" id="S2.E3.m1.1d">bold_Z = ∑ start_POSTSUBSCRIPT italic_k = 0 end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_K end_POSTSUPERSCRIPT bold_P start_POSTSUPERSCRIPT italic_k end_POSTSUPERSCRIPT bold_XW start_POSTSUBSCRIPT bold_k end_POSTSUBSCRIPT .</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(3)</span></td>
+</tr>
+</table>
+</div>
+</section>
+<section id="S2.SS3" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S2.SS3.5.1.1" class="ltx_text">II-C</span> </span><span id="S2.SS3.6.2" class="ltx_text ltx_font_italic">Self-adaptive Adjacency Matrix</span>
+</h3>
+
+<div id="S2.SS3.p1" class="ltx_para">
+<p id="S2.SS3.p1.1" class="ltx_p">Wu et al.<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib19" title="" class="ltx_ref">19</a>]</cite> proposed Graph Wavenet model to solve the prediction problem of spatio-temporal data, in which they introduced adaptive adjacency matrix into graph convolution network, so that the model did not need adjacency matrix based on spatial relations. This model can also incorporate adjacency matrix based on spatial distance. What they do is they operate on the adaptive adjacency matrix and the distance-based adjacency matrix separately and stack the results together. We know that in multidimensional prediction problems, there are dependencies between data of different dimensions, just like there are dependencies between different locations of spatio-temporal data. Therefore, since the adaptive adjacency matrix can be used to extract the dependencies of different spatial positions, it can also extract the dependencies between different dimensions. In air quality forecasts, for example, visibility should be strongly correlated with wind speed, since fog is only present when wind speeds are low. Then in the adjacency matrix, the intersection value of these two dimensions should be larger than that of other unrelated dimensions. In the spatio-temporal data, we can define the dependence of nodes in the adjacency matrix according to the distance between nodes, but in the multidimensional prediction problem, it is difficult to quantify the relationship between different dimensions. So we use this adaptive adjacency matrix and let the model learn this dependency by itself. The adaptive adjacency matrix is constructed by multiplying two learnable parameters. It is defined as</p>
+<table id="S2.E4" class="ltx_equation ltx_eqn_table">
+
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E4.m1.3" class="ltx_Math" alttext="\tilde{\mathbf{A}}_{adp}=\operatorname{SoftMax}\left(\operatorname{ReLU}\left(%
+\mathbf{E}_{1}\mathbf{E}_{2}^{T}\right)\right)." display="block"><semantics id="S2.E4.m1.3a"><mrow id="S2.E4.m1.3.3.1" xref="S2.E4.m1.3.3.1.1.cmml"><mrow id="S2.E4.m1.3.3.1.1" xref="S2.E4.m1.3.3.1.1.cmml"><msub id="S2.E4.m1.3.3.1.1.3" xref="S2.E4.m1.3.3.1.1.3.cmml"><mover accent="true" id="S2.E4.m1.3.3.1.1.3.2" xref="S2.E4.m1.3.3.1.1.3.2.cmml"><mi id="S2.E4.m1.3.3.1.1.3.2.2" xref="S2.E4.m1.3.3.1.1.3.2.2.cmml">𝐀</mi><mo stretchy="false" id="S2.E4.m1.3.3.1.1.3.2.1" xref="S2.E4.m1.3.3.1.1.3.2.1.cmml">~</mo></mover><mrow id="S2.E4.m1.3.3.1.1.3.3" xref="S2.E4.m1.3.3.1.1.3.3.cmml"><mi id="S2.E4.m1.3.3.1.1.3.3.2" xref="S2.E4.m1.3.3.1.1.3.3.2.cmml">a</mi><mo id="S2.E4.m1.3.3.1.1.3.3.1" xref="S2.E4.m1.3.3.1.1.3.3.1.cmml">⁢</mo><mi id="S2.E4.m1.3.3.1.1.3.3.3" xref="S2.E4.m1.3.3.1.1.3.3.3.cmml">d</mi><mo id="S2.E4.m1.3.3.1.1.3.3.1a" xref="S2.E4.m1.3.3.1.1.3.3.1.cmml">⁢</mo><mi id="S2.E4.m1.3.3.1.1.3.3.4" xref="S2.E4.m1.3.3.1.1.3.3.4.cmml">p</mi></mrow></msub><mo id="S2.E4.m1.3.3.1.1.2" xref="S2.E4.m1.3.3.1.1.2.cmml">=</mo><mrow id="S2.E4.m1.3.3.1.1.1.1" xref="S2.E4.m1.3.3.1.1.1.2.cmml"><mi id="S2.E4.m1.2.2" xref="S2.E4.m1.2.2.cmml">SoftMax</mi><mo id="S2.E4.m1.3.3.1.1.1.1a" xref="S2.E4.m1.3.3.1.1.1.2.cmml">⁡</mo><mrow id="S2.E4.m1.3.3.1.1.1.1.1" xref="S2.E4.m1.3.3.1.1.1.2.cmml"><mo id="S2.E4.m1.3.3.1.1.1.1.1.2" xref="S2.E4.m1.3.3.1.1.1.2.cmml">(</mo><mrow id="S2.E4.m1.3.3.1.1.1.1.1.1.1" xref="S2.E4.m1.3.3.1.1.1.1.1.1.2.cmml"><mi id="S2.E4.m1.1.1" xref="S2.E4.m1.1.1.cmml">ReLU</mi><mo id="S2.E4.m1.3.3.1.1.1.1.1.1.1a" xref="S2.E4.m1.3.3.1.1.1.1.1.1.2.cmml">⁡</mo><mrow id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1" xref="S2.E4.m1.3.3.1.1.1.1.1.1.2.cmml"><mo id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.2" xref="S2.E4.m1.3.3.1.1.1.1.1.1.2.cmml">(</mo><mrow id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.cmml"><msub id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.cmml"><mi id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.2" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.2.cmml">𝐄</mi><mn id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.3" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.3.cmml">1</mn></msub><mo id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.1" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.1.cmml">⁢</mo><msubsup id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.cmml"><mi id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.2" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.2.cmml">𝐄</mi><mn id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.3" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.3.cmml">2</mn><mi id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.3" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.3.cmml">T</mi></msubsup></mrow><mo id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.3" xref="S2.E4.m1.3.3.1.1.1.1.1.1.2.cmml">)</mo></mrow></mrow><mo id="S2.E4.m1.3.3.1.1.1.1.1.3" xref="S2.E4.m1.3.3.1.1.1.2.cmml">)</mo></mrow></mrow></mrow><mo id="S2.E4.m1.3.3.1.2" xref="S2.E4.m1.3.3.1.1.cmml">.</mo></mrow><annotation-xml encoding="MathML-Content" id="S2.E4.m1.3b"><apply id="S2.E4.m1.3.3.1.1.cmml" xref="S2.E4.m1.3.3.1"><eq id="S2.E4.m1.3.3.1.1.2.cmml" xref="S2.E4.m1.3.3.1.1.2"></eq><apply id="S2.E4.m1.3.3.1.1.3.cmml" xref="S2.E4.m1.3.3.1.1.3"><csymbol cd="ambiguous" id="S2.E4.m1.3.3.1.1.3.1.cmml" xref="S2.E4.m1.3.3.1.1.3">subscript</csymbol><apply id="S2.E4.m1.3.3.1.1.3.2.cmml" xref="S2.E4.m1.3.3.1.1.3.2"><ci id="S2.E4.m1.3.3.1.1.3.2.1.cmml" xref="S2.E4.m1.3.3.1.1.3.2.1">~</ci><ci id="S2.E4.m1.3.3.1.1.3.2.2.cmml" xref="S2.E4.m1.3.3.1.1.3.2.2">𝐀</ci></apply><apply id="S2.E4.m1.3.3.1.1.3.3.cmml" xref="S2.E4.m1.3.3.1.1.3.3"><times id="S2.E4.m1.3.3.1.1.3.3.1.cmml" xref="S2.E4.m1.3.3.1.1.3.3.1"></times><ci id="S2.E4.m1.3.3.1.1.3.3.2.cmml" xref="S2.E4.m1.3.3.1.1.3.3.2">𝑎</ci><ci id="S2.E4.m1.3.3.1.1.3.3.3.cmml" xref="S2.E4.m1.3.3.1.1.3.3.3">𝑑</ci><ci id="S2.E4.m1.3.3.1.1.3.3.4.cmml" xref="S2.E4.m1.3.3.1.1.3.3.4">𝑝</ci></apply></apply><apply id="S2.E4.m1.3.3.1.1.1.2.cmml" xref="S2.E4.m1.3.3.1.1.1.1"><ci id="S2.E4.m1.2.2.cmml" xref="S2.E4.m1.2.2">SoftMax</ci><apply id="S2.E4.m1.3.3.1.1.1.1.1.1.2.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1"><ci id="S2.E4.m1.1.1.cmml" xref="S2.E4.m1.1.1">ReLU</ci><apply id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1"><times id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.1.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.1"></times><apply id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2"><csymbol cd="ambiguous" id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.1.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2">subscript</csymbol><ci id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.2.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.2">𝐄</ci><cn type="integer" id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.3.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.2.3">1</cn></apply><apply id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3"><csymbol cd="ambiguous" id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.1.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3">superscript</csymbol><apply id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3"><csymbol cd="ambiguous" id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.1.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3">subscript</csymbol><ci id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.2.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.2">𝐄</ci><cn type="integer" id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.3.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.2.3">2</cn></apply><ci id="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.3.cmml" xref="S2.E4.m1.3.3.1.1.1.1.1.1.1.1.1.3.3">𝑇</ci></apply></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E4.m1.3c">\tilde{\mathbf{A}}_{adp}=\operatorname{SoftMax}\left(\operatorname{ReLU}\left(%
+\mathbf{E}_{1}\mathbf{E}_{2}^{T}\right)\right).</annotation><annotation encoding="application/x-llamapun" id="S2.E4.m1.3d">over~ start_ARG bold_A end_ARG start_POSTSUBSCRIPT italic_a italic_d italic_p end_POSTSUBSCRIPT = roman_SoftMax ( roman_ReLU ( bold_E start_POSTSUBSCRIPT 1 end_POSTSUBSCRIPT bold_E start_POSTSUBSCRIPT 2 end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_T end_POSTSUPERSCRIPT ) ) .</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(4)</span></td>
+</tr>
+</table>
+<p id="S2.SS3.p1.2" class="ltx_p">After combining the formula of adaptive adjacency matrix and graph convolution network, it can be defined as</p>
+<table id="S2.E5" class="ltx_equation ltx_eqn_table">
+
+<tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math id="S2.E5.m1.1" class="ltx_Math" alttext="\mathbf{Z}=\sum_{k=0}^{K}\tilde{\mathbf{A}}_{apt}^{k}\mathbf{X}\mathbf{W}_{k}." display="block"><semantics id="S2.E5.m1.1a"><mrow id="S2.E5.m1.1.1.1" xref="S2.E5.m1.1.1.1.1.cmml"><mrow id="S2.E5.m1.1.1.1.1" xref="S2.E5.m1.1.1.1.1.cmml"><mi id="S2.E5.m1.1.1.1.1.2" xref="S2.E5.m1.1.1.1.1.2.cmml">𝐙</mi><mo id="S2.E5.m1.1.1.1.1.1" xref="S2.E5.m1.1.1.1.1.1.cmml">=</mo><mrow id="S2.E5.m1.1.1.1.1.3" xref="S2.E5.m1.1.1.1.1.3.cmml"><munderover id="S2.E5.m1.1.1.1.1.3.1" xref="S2.E5.m1.1.1.1.1.3.1.cmml"><mo largeop="true" movablelimits="false" symmetric="true" id="S2.E5.m1.1.1.1.1.3.1.2.2" xref="S2.E5.m1.1.1.1.1.3.1.2.2.cmml">∑</mo><mrow id="S2.E5.m1.1.1.1.1.3.1.2.3" xref="S2.E5.m1.1.1.1.1.3.1.2.3.cmml"><mi id="S2.E5.m1.1.1.1.1.3.1.2.3.2" xref="S2.E5.m1.1.1.1.1.3.1.2.3.2.cmml">k</mi><mo id="S2.E5.m1.1.1.1.1.3.1.2.3.1" xref="S2.E5.m1.1.1.1.1.3.1.2.3.1.cmml">=</mo><mn id="S2.E5.m1.1.1.1.1.3.1.2.3.3" xref="S2.E5.m1.1.1.1.1.3.1.2.3.3.cmml">0</mn></mrow><mi id="S2.E5.m1.1.1.1.1.3.1.3" xref="S2.E5.m1.1.1.1.1.3.1.3.cmml">K</mi></munderover><mrow id="S2.E5.m1.1.1.1.1.3.2" xref="S2.E5.m1.1.1.1.1.3.2.cmml"><msubsup id="S2.E5.m1.1.1.1.1.3.2.2" xref="S2.E5.m1.1.1.1.1.3.2.2.cmml"><mover accent="true" id="S2.E5.m1.1.1.1.1.3.2.2.2.2" xref="S2.E5.m1.1.1.1.1.3.2.2.2.2.cmml"><mi id="S2.E5.m1.1.1.1.1.3.2.2.2.2.2" xref="S2.E5.m1.1.1.1.1.3.2.2.2.2.2.cmml">𝐀</mi><mo stretchy="false" id="S2.E5.m1.1.1.1.1.3.2.2.2.2.1" xref="S2.E5.m1.1.1.1.1.3.2.2.2.2.1.cmml">~</mo></mover><mrow id="S2.E5.m1.1.1.1.1.3.2.2.2.3" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.cmml"><mi id="S2.E5.m1.1.1.1.1.3.2.2.2.3.2" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.2.cmml">a</mi><mo id="S2.E5.m1.1.1.1.1.3.2.2.2.3.1" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.1.cmml">⁢</mo><mi id="S2.E5.m1.1.1.1.1.3.2.2.2.3.3" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.3.cmml">p</mi><mo id="S2.E5.m1.1.1.1.1.3.2.2.2.3.1a" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.1.cmml">⁢</mo><mi id="S2.E5.m1.1.1.1.1.3.2.2.2.3.4" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.4.cmml">t</mi></mrow><mi id="S2.E5.m1.1.1.1.1.3.2.2.3" xref="S2.E5.m1.1.1.1.1.3.2.2.3.cmml">k</mi></msubsup><mo id="S2.E5.m1.1.1.1.1.3.2.1" xref="S2.E5.m1.1.1.1.1.3.2.1.cmml">⁢</mo><msub id="S2.E5.m1.1.1.1.1.3.2.3" xref="S2.E5.m1.1.1.1.1.3.2.3.cmml"><mi id="S2.E5.m1.1.1.1.1.3.2.3.2" xref="S2.E5.m1.1.1.1.1.3.2.3.2.cmml">𝐗𝐖</mi><mi id="S2.E5.m1.1.1.1.1.3.2.3.3" xref="S2.E5.m1.1.1.1.1.3.2.3.3.cmml">k</mi></msub></mrow></mrow></mrow><mo id="S2.E5.m1.1.1.1.2" xref="S2.E5.m1.1.1.1.1.cmml">.</mo></mrow><annotation-xml encoding="MathML-Content" id="S2.E5.m1.1b"><apply id="S2.E5.m1.1.1.1.1.cmml" xref="S2.E5.m1.1.1.1"><eq id="S2.E5.m1.1.1.1.1.1.cmml" xref="S2.E5.m1.1.1.1.1.1"></eq><ci id="S2.E5.m1.1.1.1.1.2.cmml" xref="S2.E5.m1.1.1.1.1.2">𝐙</ci><apply id="S2.E5.m1.1.1.1.1.3.cmml" xref="S2.E5.m1.1.1.1.1.3"><apply id="S2.E5.m1.1.1.1.1.3.1.cmml" xref="S2.E5.m1.1.1.1.1.3.1"><csymbol cd="ambiguous" id="S2.E5.m1.1.1.1.1.3.1.1.cmml" xref="S2.E5.m1.1.1.1.1.3.1">superscript</csymbol><apply id="S2.E5.m1.1.1.1.1.3.1.2.cmml" xref="S2.E5.m1.1.1.1.1.3.1"><csymbol cd="ambiguous" id="S2.E5.m1.1.1.1.1.3.1.2.1.cmml" xref="S2.E5.m1.1.1.1.1.3.1">subscript</csymbol><sum id="S2.E5.m1.1.1.1.1.3.1.2.2.cmml" xref="S2.E5.m1.1.1.1.1.3.1.2.2"></sum><apply id="S2.E5.m1.1.1.1.1.3.1.2.3.cmml" xref="S2.E5.m1.1.1.1.1.3.1.2.3"><eq id="S2.E5.m1.1.1.1.1.3.1.2.3.1.cmml" xref="S2.E5.m1.1.1.1.1.3.1.2.3.1"></eq><ci id="S2.E5.m1.1.1.1.1.3.1.2.3.2.cmml" xref="S2.E5.m1.1.1.1.1.3.1.2.3.2">𝑘</ci><cn type="integer" id="S2.E5.m1.1.1.1.1.3.1.2.3.3.cmml" xref="S2.E5.m1.1.1.1.1.3.1.2.3.3">0</cn></apply></apply><ci id="S2.E5.m1.1.1.1.1.3.1.3.cmml" xref="S2.E5.m1.1.1.1.1.3.1.3">𝐾</ci></apply><apply id="S2.E5.m1.1.1.1.1.3.2.cmml" xref="S2.E5.m1.1.1.1.1.3.2"><times id="S2.E5.m1.1.1.1.1.3.2.1.cmml" xref="S2.E5.m1.1.1.1.1.3.2.1"></times><apply id="S2.E5.m1.1.1.1.1.3.2.2.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2"><csymbol cd="ambiguous" id="S2.E5.m1.1.1.1.1.3.2.2.1.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2">superscript</csymbol><apply id="S2.E5.m1.1.1.1.1.3.2.2.2.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2"><csymbol cd="ambiguous" id="S2.E5.m1.1.1.1.1.3.2.2.2.1.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2">subscript</csymbol><apply id="S2.E5.m1.1.1.1.1.3.2.2.2.2.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.2.2"><ci id="S2.E5.m1.1.1.1.1.3.2.2.2.2.1.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.2.2.1">~</ci><ci id="S2.E5.m1.1.1.1.1.3.2.2.2.2.2.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.2.2.2">𝐀</ci></apply><apply id="S2.E5.m1.1.1.1.1.3.2.2.2.3.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3"><times id="S2.E5.m1.1.1.1.1.3.2.2.2.3.1.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.1"></times><ci id="S2.E5.m1.1.1.1.1.3.2.2.2.3.2.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.2">𝑎</ci><ci id="S2.E5.m1.1.1.1.1.3.2.2.2.3.3.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.3">𝑝</ci><ci id="S2.E5.m1.1.1.1.1.3.2.2.2.3.4.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.2.3.4">𝑡</ci></apply></apply><ci id="S2.E5.m1.1.1.1.1.3.2.2.3.cmml" xref="S2.E5.m1.1.1.1.1.3.2.2.3">𝑘</ci></apply><apply id="S2.E5.m1.1.1.1.1.3.2.3.cmml" xref="S2.E5.m1.1.1.1.1.3.2.3"><csymbol cd="ambiguous" id="S2.E5.m1.1.1.1.1.3.2.3.1.cmml" xref="S2.E5.m1.1.1.1.1.3.2.3">subscript</csymbol><ci id="S2.E5.m1.1.1.1.1.3.2.3.2.cmml" xref="S2.E5.m1.1.1.1.1.3.2.3.2">𝐗𝐖</ci><ci id="S2.E5.m1.1.1.1.1.3.2.3.3.cmml" xref="S2.E5.m1.1.1.1.1.3.2.3.3">𝑘</ci></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S2.E5.m1.1c">\mathbf{Z}=\sum_{k=0}^{K}\tilde{\mathbf{A}}_{apt}^{k}\mathbf{X}\mathbf{W}_{k}.</annotation><annotation encoding="application/x-llamapun" id="S2.E5.m1.1d">bold_Z = ∑ start_POSTSUBSCRIPT italic_k = 0 end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_K end_POSTSUPERSCRIPT over~ start_ARG bold_A end_ARG start_POSTSUBSCRIPT italic_a italic_p italic_t end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_k end_POSTSUPERSCRIPT bold_XW start_POSTSUBSCRIPT italic_k end_POSTSUBSCRIPT .</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+<td rowspan="1" class="ltx_eqn_cell ltx_eqn_eqno ltx_align_middle ltx_align_right"><span class="ltx_tag ltx_tag_equation ltx_align_right">(5)</span></td>
+</tr>
+</table>
+</div>
+</section>
+<section id="S2.SS4" class="ltx_subsection">
+<h3 class="ltx_title ltx_title_subsection">
+<span class="ltx_tag ltx_tag_subsection"><span id="S2.SS4.5.1.1" class="ltx_text">II-D</span> </span><span id="S2.SS4.6.2" class="ltx_text ltx_font_italic">Temporal Convolution Layer</span>
+</h3>
+
+<div id="S2.SS4.p1" class="ltx_para">
+<p id="S2.SS4.p1.1" class="ltx_p">The adaptive GCN framework can be integrated into almost all multi-dimensional time series prediction models. Here, one of the models is taken as an example.
+We adopt the Informer model<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib15" title="" class="ltx_ref">15</a>]</cite> based on Transformer structure to capture the time trends in each dimension. The Informer model improves the Transformer model by reducing the time and space complexity through ProbSparse self-attention mechanism, and enables the model to receive long sequences of inputs through self-attention distilling operation.And the model is a one-time output sequence to avoid cumulative errors.Informer processes sequence data in a non-recursive way compared to the RNn-based approach, which alleviates the problem of gradient explosions. Informer prevents the model from knowing the predicted result by setting the last few points of the decoder’s input sequence to zero.</p>
+</div>
+</section>
+</section>
+<section id="S3" class="ltx_section">
+<h2 class="ltx_title ltx_centering ltx_title_section">
+<span class="ltx_tag ltx_tag_section">III </span><span id="S3.1.1" class="ltx_text ltx_font_smallcaps">Experiments</span>
+</h2>
+
+<div id="S3.p1" class="ltx_para ltx_align_center">
+<p id="S3.p1.1" class="ltx_p"><span id="S3.p1.1.1" class="ltx_text ltx_font_bold">Datasets</span></p>
+</div>
+<div id="S3.p2" class="ltx_para ltx_align_center">
+<p id="S3.p2.1" class="ltx_p">We conducted experiments on all four data sets, two of which were public data sets and the other two were real data sets.</p>
+</div>
+<div id="S3.p3" class="ltx_para ltx_align_center">
+<p id="S3.p3.1" class="ltx_p"><span id="S3.p3.1.1" class="ltx_text ltx_font_bold">Weather<span id="footnote1" class="ltx_note ltx_role_footnote"><sup class="ltx_note_mark">1</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">1</sup><span class="ltx_tag ltx_tag_note"><span id="footnote1.1.1.1" class="ltx_text ltx_font_medium">1</span></span><span id="footnote1.5" class="ltx_text ltx_font_medium">Weather dataset was acquired at https://www.ncei.noaa.gov/data/local-climatological-data/.</span></span></span></span></span>:The weather data set includes local U.S. climate data from nearly 1,600 sites, collected at hourly intervals from 2010 to 2013.Each piece of data has 12 dimensions, of which 11 are the characteristics of the input and the remaining one is the target value with the prediction.</p>
+</div>
+<div id="S3.p4" class="ltx_para ltx_align_center">
+<p id="S3.p4.1" class="ltx_p"><span id="S3.p4.1.1" class="ltx_text ltx_font_bold">ECL</span>(Electricity Consuming Load)<span id="footnote2" class="ltx_note ltx_role_footnote"><sup class="ltx_note_mark">2</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">2</sup><span class="ltx_tag ltx_tag_note">2</span>ECL dataset was acquired at https://archive.ics.uci.edu/ml/datasets/ElectricityLoadDiagrams20112014.</span></span></span>This data set collected the power consumption of 321 customers<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib23" title="" class="ltx_ref">23</a>]</cite>.We set characteristic MT320 as the target value.</p>
+</div>
+<div id="S3.p5" class="ltx_para ltx_align_center">
+<p id="S3.p5.1" class="ltx_p"><span id="S3.p5.1.1" class="ltx_text ltx_font_bold">ETT</span>(Electricity Transformer Temperature)<span id="footnote3" class="ltx_note ltx_role_footnote"><sup class="ltx_note_mark">3</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">3</sup><span class="ltx_tag ltx_tag_note">3</span>ETT is posted on Github.https://github.com/zhouhaoyi/ETDataset</span></span></span>:The data set was collected over two years from two different counties in China. Data sets with an interval of 1 hour and 15 minutes are created respectively. Each data contains six power load characteristics and a target value ”oil temperature”.</p>
+</div>
+<div id="S3.p6" class="ltx_para ltx_align_center">
+<p id="S3.p6.1" class="ltx_p"><span id="S3.p6.1.1" class="ltx_text ltx_font_bold">Experimental Details</span></p>
+</div>
+<div id="S3.p7" class="ltx_para ltx_align_center">
+<p id="S3.p7.1" class="ltx_p"><span id="S3.p7.1.1" class="ltx_text ltx_font_bold">Baselines:</span>Since we are mainly improving the processing ability of the multidimensional data of the Informer model, We generally compare the original model with the model incorporating adaptive GCN. We choose the most advanced time series prediction models, including Autoformer<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib24" title="" class="ltx_ref">24</a>]</cite>, Informer<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib15" title="" class="ltx_ref">15</a>]</cite>, Transformer<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib25" title="" class="ltx_ref">25</a>]</cite>, Reformer<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib16" title="" class="ltx_ref">16</a>]</cite> and SCINet<cite class="ltx_cite ltx_citemacro_cite">[<a href="#bib.bib26" title="" class="ltx_ref">26</a>]</cite> models.</p>
+</div>
+<div id="S3.p8" class="ltx_para ltx_align_center">
+<p id="S3.p8.1" class="ltx_p"><span id="S3.p8.1.1" class="ltx_text ltx_font_bold">Hyper-parameter tuning:</span>Again, take informer,informer contains 3-layer stack and a 1-layer stack in the encoder,and a 2-layer int the decoder. For the optimizer, we chose Adam, whose starting value of learning rate is <math id="S3.p8.1.m1.1" class="ltx_Math" alttext="1e^{-4}" display="inline"><semantics id="S3.p8.1.m1.1a"><mrow id="S3.p8.1.m1.1.1" xref="S3.p8.1.m1.1.1.cmml"><mn id="S3.p8.1.m1.1.1.2" xref="S3.p8.1.m1.1.1.2.cmml">1</mn><mo id="S3.p8.1.m1.1.1.1" xref="S3.p8.1.m1.1.1.1.cmml">⁢</mo><msup id="S3.p8.1.m1.1.1.3" xref="S3.p8.1.m1.1.1.3.cmml"><mi id="S3.p8.1.m1.1.1.3.2" xref="S3.p8.1.m1.1.1.3.2.cmml">e</mi><mrow id="S3.p8.1.m1.1.1.3.3" xref="S3.p8.1.m1.1.1.3.3.cmml"><mo id="S3.p8.1.m1.1.1.3.3.1" xref="S3.p8.1.m1.1.1.3.3.1.cmml">-</mo><mn id="S3.p8.1.m1.1.1.3.3.2" xref="S3.p8.1.m1.1.1.3.3.2.cmml">4</mn></mrow></msup></mrow><annotation-xml encoding="MathML-Content" id="S3.p8.1.m1.1b"><apply id="S3.p8.1.m1.1.1.cmml" xref="S3.p8.1.m1.1.1"><times id="S3.p8.1.m1.1.1.1.cmml" xref="S3.p8.1.m1.1.1.1"></times><cn type="integer" id="S3.p8.1.m1.1.1.2.cmml" xref="S3.p8.1.m1.1.1.2">1</cn><apply id="S3.p8.1.m1.1.1.3.cmml" xref="S3.p8.1.m1.1.1.3"><csymbol cd="ambiguous" id="S3.p8.1.m1.1.1.3.1.cmml" xref="S3.p8.1.m1.1.1.3">superscript</csymbol><ci id="S3.p8.1.m1.1.1.3.2.cmml" xref="S3.p8.1.m1.1.1.3.2">𝑒</ci><apply id="S3.p8.1.m1.1.1.3.3.cmml" xref="S3.p8.1.m1.1.1.3.3"><minus id="S3.p8.1.m1.1.1.3.3.1.cmml" xref="S3.p8.1.m1.1.1.3.3.1"></minus><cn type="integer" id="S3.p8.1.m1.1.1.3.3.2.cmml" xref="S3.p8.1.m1.1.1.3.3.2">4</cn></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.p8.1.m1.1c">1e^{-4}</annotation><annotation encoding="application/x-llamapun" id="S3.p8.1.m1.1d">1 italic_e start_POSTSUPERSCRIPT - 4 end_POSTSUPERSCRIPT</annotation></semantics></math>,and the value of each epoch would be halved.Train-epochs for the model was set to 6 and patience was set to 3.Patience 3 means that if the loss is not minimized for three consecutive times, the training will be stopped.The training batch of the experiment is 32. In actual experiments, we generally do not change the parameters of the original model, and only compare the results with those after adding adaptive GCN, so as to avoid interference from other factors.</p>
+</div>
+<div id="S3.p9" class="ltx_para ltx_align_center">
+<p id="S3.p9.2" class="ltx_p"><span id="S3.p9.2.1" class="ltx_text ltx_font_bold">Setup:</span>The input of each dataset is zero-mean normalized. In order to verify the effectiveness of GCN-Informer in long time series prediction, we also keep consistent with the prediction length of Informer’s experiment. And the lengths are 24,48,168,336 respectively.There are other models that increase the predicted length even further, such as the minimum predicted length of 96 in the Autoformer article, Our predicted length is also consistent with it. The predicted length of 720 cannot be tested due to performance issues with the graphics card. <span id="S3.p9.2.2" class="ltx_text ltx_font_bold">Metrics:</span> We use MSE and MAE criteria to test the effectiveness of the model.Its calculation formula is <math id="S3.p9.1.m1.1" class="ltx_Math" alttext="\mathrm{MSE}=\frac{1}{n}\sum_{i=1}^{n}(\mathbf{y}-\hat{\mathbf{y}})^{2}" display="inline"><semantics id="S3.p9.1.m1.1a"><mrow id="S3.p9.1.m1.1.1" xref="S3.p9.1.m1.1.1.cmml"><mi id="S3.p9.1.m1.1.1.3" xref="S3.p9.1.m1.1.1.3.cmml">MSE</mi><mo id="S3.p9.1.m1.1.1.2" xref="S3.p9.1.m1.1.1.2.cmml">=</mo><mrow id="S3.p9.1.m1.1.1.1" xref="S3.p9.1.m1.1.1.1.cmml"><mfrac id="S3.p9.1.m1.1.1.1.3" xref="S3.p9.1.m1.1.1.1.3.cmml"><mn id="S3.p9.1.m1.1.1.1.3.2" xref="S3.p9.1.m1.1.1.1.3.2.cmml">1</mn><mi id="S3.p9.1.m1.1.1.1.3.3" xref="S3.p9.1.m1.1.1.1.3.3.cmml">n</mi></mfrac><mo id="S3.p9.1.m1.1.1.1.2" xref="S3.p9.1.m1.1.1.1.2.cmml">⁢</mo><mrow id="S3.p9.1.m1.1.1.1.1" xref="S3.p9.1.m1.1.1.1.1.cmml"><msubsup id="S3.p9.1.m1.1.1.1.1.2" xref="S3.p9.1.m1.1.1.1.1.2.cmml"><mo largeop="true" symmetric="true" id="S3.p9.1.m1.1.1.1.1.2.2.2" xref="S3.p9.1.m1.1.1.1.1.2.2.2.cmml">∑</mo><mrow id="S3.p9.1.m1.1.1.1.1.2.2.3" xref="S3.p9.1.m1.1.1.1.1.2.2.3.cmml"><mi id="S3.p9.1.m1.1.1.1.1.2.2.3.2" xref="S3.p9.1.m1.1.1.1.1.2.2.3.2.cmml">i</mi><mo id="S3.p9.1.m1.1.1.1.1.2.2.3.1" xref="S3.p9.1.m1.1.1.1.1.2.2.3.1.cmml">=</mo><mn id="S3.p9.1.m1.1.1.1.1.2.2.3.3" xref="S3.p9.1.m1.1.1.1.1.2.2.3.3.cmml">1</mn></mrow><mi id="S3.p9.1.m1.1.1.1.1.2.3" xref="S3.p9.1.m1.1.1.1.1.2.3.cmml">n</mi></msubsup><msup id="S3.p9.1.m1.1.1.1.1.1" xref="S3.p9.1.m1.1.1.1.1.1.cmml"><mrow id="S3.p9.1.m1.1.1.1.1.1.1.1" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.cmml"><mo stretchy="false" id="S3.p9.1.m1.1.1.1.1.1.1.1.2" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.cmml">(</mo><mrow id="S3.p9.1.m1.1.1.1.1.1.1.1.1" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.cmml"><mi id="S3.p9.1.m1.1.1.1.1.1.1.1.1.2" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.2.cmml">𝐲</mi><mo id="S3.p9.1.m1.1.1.1.1.1.1.1.1.1" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.1.cmml">-</mo><mover accent="true" id="S3.p9.1.m1.1.1.1.1.1.1.1.1.3" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.cmml"><mi id="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.2" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.2.cmml">𝐲</mi><mo stretchy="false" id="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.1" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.1.cmml">^</mo></mover></mrow><mo stretchy="false" id="S3.p9.1.m1.1.1.1.1.1.1.1.3" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.cmml">)</mo></mrow><mn id="S3.p9.1.m1.1.1.1.1.1.3" xref="S3.p9.1.m1.1.1.1.1.1.3.cmml">2</mn></msup></mrow></mrow></mrow><annotation-xml encoding="MathML-Content" id="S3.p9.1.m1.1b"><apply id="S3.p9.1.m1.1.1.cmml" xref="S3.p9.1.m1.1.1"><eq id="S3.p9.1.m1.1.1.2.cmml" xref="S3.p9.1.m1.1.1.2"></eq><ci id="S3.p9.1.m1.1.1.3.cmml" xref="S3.p9.1.m1.1.1.3">MSE</ci><apply id="S3.p9.1.m1.1.1.1.cmml" xref="S3.p9.1.m1.1.1.1"><times id="S3.p9.1.m1.1.1.1.2.cmml" xref="S3.p9.1.m1.1.1.1.2"></times><apply id="S3.p9.1.m1.1.1.1.3.cmml" xref="S3.p9.1.m1.1.1.1.3"><divide id="S3.p9.1.m1.1.1.1.3.1.cmml" xref="S3.p9.1.m1.1.1.1.3"></divide><cn type="integer" id="S3.p9.1.m1.1.1.1.3.2.cmml" xref="S3.p9.1.m1.1.1.1.3.2">1</cn><ci id="S3.p9.1.m1.1.1.1.3.3.cmml" xref="S3.p9.1.m1.1.1.1.3.3">𝑛</ci></apply><apply id="S3.p9.1.m1.1.1.1.1.cmml" xref="S3.p9.1.m1.1.1.1.1"><apply id="S3.p9.1.m1.1.1.1.1.2.cmml" xref="S3.p9.1.m1.1.1.1.1.2"><csymbol cd="ambiguous" id="S3.p9.1.m1.1.1.1.1.2.1.cmml" xref="S3.p9.1.m1.1.1.1.1.2">superscript</csymbol><apply id="S3.p9.1.m1.1.1.1.1.2.2.cmml" xref="S3.p9.1.m1.1.1.1.1.2"><csymbol cd="ambiguous" id="S3.p9.1.m1.1.1.1.1.2.2.1.cmml" xref="S3.p9.1.m1.1.1.1.1.2">subscript</csymbol><sum id="S3.p9.1.m1.1.1.1.1.2.2.2.cmml" xref="S3.p9.1.m1.1.1.1.1.2.2.2"></sum><apply id="S3.p9.1.m1.1.1.1.1.2.2.3.cmml" xref="S3.p9.1.m1.1.1.1.1.2.2.3"><eq id="S3.p9.1.m1.1.1.1.1.2.2.3.1.cmml" xref="S3.p9.1.m1.1.1.1.1.2.2.3.1"></eq><ci id="S3.p9.1.m1.1.1.1.1.2.2.3.2.cmml" xref="S3.p9.1.m1.1.1.1.1.2.2.3.2">𝑖</ci><cn type="integer" id="S3.p9.1.m1.1.1.1.1.2.2.3.3.cmml" xref="S3.p9.1.m1.1.1.1.1.2.2.3.3">1</cn></apply></apply><ci id="S3.p9.1.m1.1.1.1.1.2.3.cmml" xref="S3.p9.1.m1.1.1.1.1.2.3">𝑛</ci></apply><apply id="S3.p9.1.m1.1.1.1.1.1.cmml" xref="S3.p9.1.m1.1.1.1.1.1"><csymbol cd="ambiguous" id="S3.p9.1.m1.1.1.1.1.1.2.cmml" xref="S3.p9.1.m1.1.1.1.1.1">superscript</csymbol><apply id="S3.p9.1.m1.1.1.1.1.1.1.1.1.cmml" xref="S3.p9.1.m1.1.1.1.1.1.1.1"><minus id="S3.p9.1.m1.1.1.1.1.1.1.1.1.1.cmml" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.1"></minus><ci id="S3.p9.1.m1.1.1.1.1.1.1.1.1.2.cmml" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.2">𝐲</ci><apply id="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.cmml" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.3"><ci id="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.1.cmml" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.1">^</ci><ci id="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.2.cmml" xref="S3.p9.1.m1.1.1.1.1.1.1.1.1.3.2">𝐲</ci></apply></apply><cn type="integer" id="S3.p9.1.m1.1.1.1.1.1.3.cmml" xref="S3.p9.1.m1.1.1.1.1.1.3">2</cn></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.p9.1.m1.1c">\mathrm{MSE}=\frac{1}{n}\sum_{i=1}^{n}(\mathbf{y}-\hat{\mathbf{y}})^{2}</annotation><annotation encoding="application/x-llamapun" id="S3.p9.1.m1.1d">roman_MSE = divide start_ARG 1 end_ARG start_ARG italic_n end_ARG ∑ start_POSTSUBSCRIPT italic_i = 1 end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_n end_POSTSUPERSCRIPT ( bold_y - over^ start_ARG bold_y end_ARG ) start_POSTSUPERSCRIPT 2 end_POSTSUPERSCRIPT</annotation></semantics></math> and <math id="S3.p9.2.m2.1" class="ltx_Math" alttext="\operatorname{MAE}=\frac{1}{n}\sum_{i=1}^{n}|\mathbf{y}-\hat{\mathbf{y}}|" display="inline"><semantics id="S3.p9.2.m2.1a"><mrow id="S3.p9.2.m2.1.1" xref="S3.p9.2.m2.1.1.cmml"><mi id="S3.p9.2.m2.1.1.3" xref="S3.p9.2.m2.1.1.3.cmml">MAE</mi><mo id="S3.p9.2.m2.1.1.2" xref="S3.p9.2.m2.1.1.2.cmml">=</mo><mrow id="S3.p9.2.m2.1.1.1" xref="S3.p9.2.m2.1.1.1.cmml"><mfrac id="S3.p9.2.m2.1.1.1.3" xref="S3.p9.2.m2.1.1.1.3.cmml"><mn id="S3.p9.2.m2.1.1.1.3.2" xref="S3.p9.2.m2.1.1.1.3.2.cmml">1</mn><mi id="S3.p9.2.m2.1.1.1.3.3" xref="S3.p9.2.m2.1.1.1.3.3.cmml">n</mi></mfrac><mo id="S3.p9.2.m2.1.1.1.2" xref="S3.p9.2.m2.1.1.1.2.cmml">⁢</mo><mrow id="S3.p9.2.m2.1.1.1.1" xref="S3.p9.2.m2.1.1.1.1.cmml"><msubsup id="S3.p9.2.m2.1.1.1.1.2" xref="S3.p9.2.m2.1.1.1.1.2.cmml"><mo largeop="true" symmetric="true" id="S3.p9.2.m2.1.1.1.1.2.2.2" xref="S3.p9.2.m2.1.1.1.1.2.2.2.cmml">∑</mo><mrow id="S3.p9.2.m2.1.1.1.1.2.2.3" xref="S3.p9.2.m2.1.1.1.1.2.2.3.cmml"><mi id="S3.p9.2.m2.1.1.1.1.2.2.3.2" xref="S3.p9.2.m2.1.1.1.1.2.2.3.2.cmml">i</mi><mo id="S3.p9.2.m2.1.1.1.1.2.2.3.1" xref="S3.p9.2.m2.1.1.1.1.2.2.3.1.cmml">=</mo><mn id="S3.p9.2.m2.1.1.1.1.2.2.3.3" xref="S3.p9.2.m2.1.1.1.1.2.2.3.3.cmml">1</mn></mrow><mi id="S3.p9.2.m2.1.1.1.1.2.3" xref="S3.p9.2.m2.1.1.1.1.2.3.cmml">n</mi></msubsup><mrow id="S3.p9.2.m2.1.1.1.1.1.1" xref="S3.p9.2.m2.1.1.1.1.1.2.cmml"><mo stretchy="false" id="S3.p9.2.m2.1.1.1.1.1.1.2" xref="S3.p9.2.m2.1.1.1.1.1.2.1.cmml">|</mo><mrow id="S3.p9.2.m2.1.1.1.1.1.1.1" xref="S3.p9.2.m2.1.1.1.1.1.1.1.cmml"><mi id="S3.p9.2.m2.1.1.1.1.1.1.1.2" xref="S3.p9.2.m2.1.1.1.1.1.1.1.2.cmml">𝐲</mi><mo id="S3.p9.2.m2.1.1.1.1.1.1.1.1" xref="S3.p9.2.m2.1.1.1.1.1.1.1.1.cmml">-</mo><mover accent="true" id="S3.p9.2.m2.1.1.1.1.1.1.1.3" xref="S3.p9.2.m2.1.1.1.1.1.1.1.3.cmml"><mi id="S3.p9.2.m2.1.1.1.1.1.1.1.3.2" xref="S3.p9.2.m2.1.1.1.1.1.1.1.3.2.cmml">𝐲</mi><mo stretchy="false" id="S3.p9.2.m2.1.1.1.1.1.1.1.3.1" xref="S3.p9.2.m2.1.1.1.1.1.1.1.3.1.cmml">^</mo></mover></mrow><mo stretchy="false" id="S3.p9.2.m2.1.1.1.1.1.1.3" xref="S3.p9.2.m2.1.1.1.1.1.2.1.cmml">|</mo></mrow></mrow></mrow></mrow><annotation-xml encoding="MathML-Content" id="S3.p9.2.m2.1b"><apply id="S3.p9.2.m2.1.1.cmml" xref="S3.p9.2.m2.1.1"><eq id="S3.p9.2.m2.1.1.2.cmml" xref="S3.p9.2.m2.1.1.2"></eq><ci id="S3.p9.2.m2.1.1.3.cmml" xref="S3.p9.2.m2.1.1.3">MAE</ci><apply id="S3.p9.2.m2.1.1.1.cmml" xref="S3.p9.2.m2.1.1.1"><times id="S3.p9.2.m2.1.1.1.2.cmml" xref="S3.p9.2.m2.1.1.1.2"></times><apply id="S3.p9.2.m2.1.1.1.3.cmml" xref="S3.p9.2.m2.1.1.1.3"><divide id="S3.p9.2.m2.1.1.1.3.1.cmml" xref="S3.p9.2.m2.1.1.1.3"></divide><cn type="integer" id="S3.p9.2.m2.1.1.1.3.2.cmml" xref="S3.p9.2.m2.1.1.1.3.2">1</cn><ci id="S3.p9.2.m2.1.1.1.3.3.cmml" xref="S3.p9.2.m2.1.1.1.3.3">𝑛</ci></apply><apply id="S3.p9.2.m2.1.1.1.1.cmml" xref="S3.p9.2.m2.1.1.1.1"><apply id="S3.p9.2.m2.1.1.1.1.2.cmml" xref="S3.p9.2.m2.1.1.1.1.2"><csymbol cd="ambiguous" id="S3.p9.2.m2.1.1.1.1.2.1.cmml" xref="S3.p9.2.m2.1.1.1.1.2">superscript</csymbol><apply id="S3.p9.2.m2.1.1.1.1.2.2.cmml" xref="S3.p9.2.m2.1.1.1.1.2"><csymbol cd="ambiguous" id="S3.p9.2.m2.1.1.1.1.2.2.1.cmml" xref="S3.p9.2.m2.1.1.1.1.2">subscript</csymbol><sum id="S3.p9.2.m2.1.1.1.1.2.2.2.cmml" xref="S3.p9.2.m2.1.1.1.1.2.2.2"></sum><apply id="S3.p9.2.m2.1.1.1.1.2.2.3.cmml" xref="S3.p9.2.m2.1.1.1.1.2.2.3"><eq id="S3.p9.2.m2.1.1.1.1.2.2.3.1.cmml" xref="S3.p9.2.m2.1.1.1.1.2.2.3.1"></eq><ci id="S3.p9.2.m2.1.1.1.1.2.2.3.2.cmml" xref="S3.p9.2.m2.1.1.1.1.2.2.3.2">𝑖</ci><cn type="integer" id="S3.p9.2.m2.1.1.1.1.2.2.3.3.cmml" xref="S3.p9.2.m2.1.1.1.1.2.2.3.3">1</cn></apply></apply><ci id="S3.p9.2.m2.1.1.1.1.2.3.cmml" xref="S3.p9.2.m2.1.1.1.1.2.3">𝑛</ci></apply><apply id="S3.p9.2.m2.1.1.1.1.1.2.cmml" xref="S3.p9.2.m2.1.1.1.1.1.1"><abs id="S3.p9.2.m2.1.1.1.1.1.2.1.cmml" xref="S3.p9.2.m2.1.1.1.1.1.1.2"></abs><apply id="S3.p9.2.m2.1.1.1.1.1.1.1.cmml" xref="S3.p9.2.m2.1.1.1.1.1.1.1"><minus id="S3.p9.2.m2.1.1.1.1.1.1.1.1.cmml" xref="S3.p9.2.m2.1.1.1.1.1.1.1.1"></minus><ci id="S3.p9.2.m2.1.1.1.1.1.1.1.2.cmml" xref="S3.p9.2.m2.1.1.1.1.1.1.1.2">𝐲</ci><apply id="S3.p9.2.m2.1.1.1.1.1.1.1.3.cmml" xref="S3.p9.2.m2.1.1.1.1.1.1.1.3"><ci id="S3.p9.2.m2.1.1.1.1.1.1.1.3.1.cmml" xref="S3.p9.2.m2.1.1.1.1.1.1.1.3.1">^</ci><ci id="S3.p9.2.m2.1.1.1.1.1.1.1.3.2.cmml" xref="S3.p9.2.m2.1.1.1.1.1.1.1.3.2">𝐲</ci></apply></apply></apply></apply></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.p9.2.m2.1c">\operatorname{MAE}=\frac{1}{n}\sum_{i=1}^{n}|\mathbf{y}-\hat{\mathbf{y}}|</annotation><annotation encoding="application/x-llamapun" id="S3.p9.2.m2.1d">roman_MAE = divide start_ARG 1 end_ARG start_ARG italic_n end_ARG ∑ start_POSTSUBSCRIPT italic_i = 1 end_POSTSUBSCRIPT start_POSTSUPERSCRIPT italic_n end_POSTSUPERSCRIPT | bold_y - over^ start_ARG bold_y end_ARG |</annotation></semantics></math>. <span id="S3.p9.2.3" class="ltx_text ltx_font_bold">Platform:</span> All experiments were done on a GTX1660super 6GB GPU.</p>
+</div>
+<figure id="S3.tab1" class="ltx_table ltx_align_center">
+<table id="S3.tab1.1" class="ltx_tabular ltx_centering ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr id="S3.tab1.1.1.1" class="ltx_tr">
+<td id="S3.tab1.1.1.1.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_tt">dataset</td>
+<td id="S3.tab1.1.1.1.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" colspan="2">WTH</td>
+<td id="S3.tab1.1.1.1.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" colspan="2">ECL</td>
+<td id="S3.tab1.1.1.1.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" colspan="2">ETTh1</td>
+<td id="S3.tab1.1.1.1.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" colspan="2">ETTm1</td>
+</tr>
+<tr id="S3.tab1.1.2.2" class="ltx_tr">
+<td id="S3.tab1.1.2.2.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">Model</td>
+<td id="S3.tab1.1.2.2.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Informer</td>
+<td id="S3.tab1.1.2.2.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">AdpInformer</td>
+<td id="S3.tab1.1.2.2.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Informer</td>
+<td id="S3.tab1.1.2.2.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">AdpInformer</td>
+<td id="S3.tab1.1.2.2.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Informer</td>
+<td id="S3.tab1.1.2.2.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">AdpAutoformer</td>
+<td id="S3.tab1.1.2.2.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Informer</td>
+<td id="S3.tab1.1.2.2.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">AdpInformer</td>
+</tr>
+<tr id="S3.tab1.1.3.3" class="ltx_tr">
+<td id="S3.tab1.1.3.3.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">Metric</td>
+<td id="S3.tab1.1.3.3.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab1.1.3.3.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab1.1.3.3.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab1.1.3.3.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab1.1.3.3.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab1.1.3.3.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab1.1.3.3.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab1.1.3.3.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+</tr>
+<tr id="S3.tab1.1.4.4" class="ltx_tr">
+<td id="S3.tab1.1.4.4.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">24</td>
+<td id="S3.tab1.1.4.4.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.326 0.380</td>
+<td id="S3.tab1.1.4.4.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.4.4.3.1" class="ltx_text ltx_font_bold">0.311 0.363</span></td>
+<td id="S3.tab1.1.4.4.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.239 0.347</td>
+<td id="S3.tab1.1.4.4.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.4.4.5.1" class="ltx_text ltx_font_bold">0.237 0.338</span></td>
+<td id="S3.tab1.1.4.4.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.604 0.573</td>
+<td id="S3.tab1.1.4.4.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.4.4.7.1" class="ltx_text ltx_font_bold">0.599 0.570</span></td>
+<td id="S3.tab1.1.4.4.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.344 0.393</td>
+<td id="S3.tab1.1.4.4.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.4.4.9.1" class="ltx_text ltx_font_bold">0.358 0.406</span></td>
+</tr>
+<tr id="S3.tab1.1.5.5" class="ltx_tr">
+<td id="S3.tab1.1.5.5.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">68</td>
+<td id="S3.tab1.1.5.5.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.414 0.441</td>
+<td id="S3.tab1.1.5.5.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.5.5.3.1" class="ltx_text ltx_font_bold">0.389 0.435</span></td>
+<td id="S3.tab1.1.5.5.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.265 0.363</td>
+<td id="S3.tab1.1.5.5.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.5.5.5.1" class="ltx_text ltx_font_bold">0.253 0.350</span></td>
+<td id="S3.tab1.1.5.5.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.692 0.630</td>
+<td id="S3.tab1.1.5.5.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.5.5.7.1" class="ltx_text ltx_font_bold">0.650 0.597</span></td>
+<td id="S3.tab1.1.5.5.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.535 0.505</td>
+<td id="S3.tab1.1.5.5.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.5.5.9.1" class="ltx_text ltx_font_bold">0.513 0.500</span></td>
+</tr>
+<tr id="S3.tab1.1.6.6" class="ltx_tr">
+<td id="S3.tab1.1.6.6.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">168</td>
+<td id="S3.tab1.1.6.6.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.581 0.544</td>
+<td id="S3.tab1.1.6.6.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.6.6.3.1" class="ltx_text ltx_font_bold">0.548 0.532</span></td>
+<td id="S3.tab1.1.6.6.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">
+<span id="S3.tab1.1.6.6.4.1" class="ltx_text ltx_font_bold">0.285 0.377</span></td>
+<td id="S3.tab1.1.6.6.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.314 0.390</td>
+<td id="S3.tab1.1.6.6.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">
+<span id="S3.tab1.1.6.6.6.1" class="ltx_text ltx_font_bold">0.930</span> 0.751</td>
+<td id="S3.tab1.1.6.6.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.933 <span id="S3.tab1.1.6.6.7.1" class="ltx_text ltx_font_bold">0.750</span>
+</td>
+<td id="S3.tab1.1.6.6.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.644 0.583</td>
+<td id="S3.tab1.1.6.6.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab1.1.6.6.9.1" class="ltx_text ltx_font_bold">0.637 0.570</span></td>
+</tr>
+<tr id="S3.tab1.1.7.7" class="ltx_tr">
+<td id="S3.tab1.1.7.7.1" class="ltx_td ltx_align_left ltx_border_bb ltx_border_l ltx_border_r ltx_border_t">336</td>
+<td id="S3.tab1.1.7.7.2" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">0.630 0.590</td>
+<td id="S3.tab1.1.7.7.3" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t"><span id="S3.tab1.1.7.7.3.1" class="ltx_text ltx_font_bold">0.572 0.561</span></td>
+<td id="S3.tab1.1.7.7.4" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">0.309 0.397</td>
+<td id="S3.tab1.1.7.7.5" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t"><span id="S3.tab1.1.7.7.5.1" class="ltx_text ltx_font_bold">0.305 0.381</span></td>
+<td id="S3.tab1.1.7.7.6" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">1.120 0.847</td>
+<td id="S3.tab1.1.7.7.7" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t"><span id="S3.tab1.1.7.7.7.1" class="ltx_text ltx_font_bold">1.108 0.845</span></td>
+<td id="S3.tab1.1.7.7.8" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">0.931 0.734</td>
+<td id="S3.tab1.1.7.7.9" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t"><span id="S3.tab1.1.7.7.9.1" class="ltx_text ltx_font_bold">0.884 0.706</span></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<figure id="S3.tab2" class="ltx_table ltx_align_center">
+<table id="S3.tab2.1" class="ltx_tabular ltx_centering ltx_align_middle">
+<tbody class="ltx_tbody">
+<tr id="S3.tab2.1.1.1" class="ltx_tr">
+<td id="S3.tab2.1.1.1.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_tt">dataset</td>
+<td id="S3.tab2.1.1.1.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" colspan="2">WTH</td>
+<td id="S3.tab2.1.1.1.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" colspan="2">ECL</td>
+<td id="S3.tab2.1.1.1.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" colspan="2">ETTh1</td>
+<td id="S3.tab2.1.1.1.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_tt" colspan="2">ETTm1</td>
+</tr>
+<tr id="S3.tab2.1.2.2" class="ltx_tr">
+<td id="S3.tab2.1.2.2.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">Model</td>
+<td id="S3.tab2.1.2.2.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Autoformer</td>
+<td id="S3.tab2.1.2.2.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">AdpAutoformer</td>
+<td id="S3.tab2.1.2.2.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Autoformer</td>
+<td id="S3.tab2.1.2.2.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">AdpAutoformer</td>
+<td id="S3.tab2.1.2.2.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Autoformer</td>
+<td id="S3.tab2.1.2.2.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">AdpAutoformer</td>
+<td id="S3.tab2.1.2.2.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">Autoformer</td>
+<td id="S3.tab2.1.2.2.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">AdpAutoformer</td>
+</tr>
+<tr id="S3.tab2.1.3.3" class="ltx_tr">
+<td id="S3.tab2.1.3.3.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">Metric</td>
+<td id="S3.tab2.1.3.3.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab2.1.3.3.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab2.1.3.3.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab2.1.3.3.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab2.1.3.3.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab2.1.3.3.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab2.1.3.3.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+<td id="S3.tab2.1.3.3.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">MSE MAE</td>
+</tr>
+<tr id="S3.tab2.1.4.4" class="ltx_tr">
+<td id="S3.tab2.1.4.4.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">96</td>
+<td id="S3.tab2.1.4.4.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.590 0.552</td>
+<td id="S3.tab2.1.4.4.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.4.4.3.1" class="ltx_text ltx_font_bold">0.492 0.503</span></td>
+<td id="S3.tab2.1.4.4.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">
+<span id="S3.tab2.1.4.4.4.1" class="ltx_text ltx_font_bold">0.201</span> 0.316</td>
+<td id="S3.tab2.1.4.4.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.217 <span id="S3.tab2.1.4.4.5.1" class="ltx_text ltx_font_bold">0.307</span>
+</td>
+<td id="S3.tab2.1.4.4.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.448 <span id="S3.tab2.1.4.4.6.1" class="ltx_text ltx_font_bold">0.452</span></td>
+<td id="S3.tab2.1.4.4.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">
+<span id="S3.tab2.1.4.4.7.1" class="ltx_text ltx_font_bold">0.441</span> 0.455</td>
+<td id="S3.tab2.1.4.4.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.542 0.492</td>
+<td id="S3.tab2.1.4.4.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.4.4.9.1" class="ltx_text ltx_font_bold">0.422 0.438</span></td>
+</tr>
+<tr id="S3.tab2.1.5.5" class="ltx_tr">
+<td id="S3.tab2.1.5.5.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">192</td>
+<td id="S3.tab2.1.5.5.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.612 0.567</td>
+<td id="S3.tab2.1.5.5.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.5.5.3.1" class="ltx_text ltx_font_bold">0.552 0.543</span></td>
+<td id="S3.tab2.1.5.5.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.217 0.329</td>
+<td id="S3.tab2.1.5.5.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.5.5.5.1" class="ltx_text ltx_font_bold">0.209 0.321</span></td>
+<td id="S3.tab2.1.5.5.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.501 0.485</td>
+<td id="S3.tab2.1.5.5.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.5.5.7.1" class="ltx_text ltx_font_bold">0.462 0.465</span></td>
+<td id="S3.tab2.1.5.5.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.603 0.517</td>
+<td id="S3.tab2.1.5.5.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.5.5.9.1" class="ltx_text ltx_font_bold">0.490 0.483</span></td>
+</tr>
+<tr id="S3.tab2.1.6.6" class="ltx_tr">
+<td id="S3.tab2.1.6.6.1" class="ltx_td ltx_align_left ltx_border_l ltx_border_r ltx_border_t">336</td>
+<td id="S3.tab2.1.6.6.2" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.636 0.580</td>
+<td id="S3.tab2.1.6.6.3" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.6.6.3.1" class="ltx_text ltx_font_bold">0.578 0.558</span></td>
+<td id="S3.tab2.1.6.6.4" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.319 0.413</td>
+<td id="S3.tab2.1.6.6.5" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.6.6.5.1" class="ltx_text ltx_font_bold">0.215 0.328</span></td>
+<td id="S3.tab2.1.6.6.6" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.515 0.493</td>
+<td id="S3.tab2.1.6.6.7" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.6.6.7.1" class="ltx_text ltx_font_bold">0.495 0.484</span></td>
+<td id="S3.tab2.1.6.6.8" class="ltx_td ltx_align_left ltx_border_r ltx_border_t">0.609 0.524</td>
+<td id="S3.tab2.1.6.6.9" class="ltx_td ltx_align_left ltx_border_r ltx_border_t"><span id="S3.tab2.1.6.6.9.1" class="ltx_text ltx_font_bold">0.576 0.523</span></td>
+</tr>
+<tr id="S3.tab2.1.7.7" class="ltx_tr">
+<td id="S3.tab2.1.7.7.1" class="ltx_td ltx_align_left ltx_border_bb ltx_border_l ltx_border_r ltx_border_t">720</td>
+<td id="S3.tab2.1.7.7.2" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">0.664 0.598</td>
+<td id="S3.tab2.1.7.7.3" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t"><span id="S3.tab2.1.7.7.3.1" class="ltx_text ltx_font_bold">0.615 0.583</span></td>
+<td id="S3.tab2.1.7.7.4" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">out of memory</td>
+<td id="S3.tab2.1.7.7.5" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">out of memory</td>
+<td id="S3.tab2.1.7.7.6" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">0.552 0.536</td>
+<td id="S3.tab2.1.7.7.7" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t"><span id="S3.tab2.1.7.7.7.1" class="ltx_text ltx_font_bold">0.613 0.555</span></td>
+<td id="S3.tab2.1.7.7.8" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">out of memory</td>
+<td id="S3.tab2.1.7.7.9" class="ltx_td ltx_align_left ltx_border_bb ltx_border_r ltx_border_t">out of memory</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<div id="S3.p10" class="ltx_para ltx_align_center">
+<p id="S3.p10.1" class="ltx_p"><span id="S3.p10.1.1" class="ltx_text ltx_font_bold">Results and Analysis</span>
+Table I show the comparison of the results of multi-dimensional long time series prediction based on the original Informer model and the improved GCN-Informer model. We also restored the predicted lengths in the informer paper’s experiment as much as possible, which were 24,48,168,336 respectively. Due to insufficient GPU memory, there is no test to predict a length of 720. Both MSE and MAE were calculated by means of 6 repetitions. The time was also the average of six repeated experiments. The best results are in bold. Taking the WTH data set as an example, our model showed an 11% improvement in MSE and a 9.7% improvement in MAE at a predicted length of 24. When the predicted length was 336, MSE increased by 10.36% and MAE increased by 6.0%. It can be seen that with the increase of the predicted length, our model still has a good improvement. Since we added stacked GCN model in Informer, the training time will be about 2 minutes slower than that of Informer model. This is because in adaptive graph convolution networks, we need to perform additional matrix operations, as well as the iteration of the adjacency matrix. In the Autoformer model, we also achieved an improvement in accuracy with the addition of adaptive GCN, which is the highest in the current model.</p>
+</div>
+</section>
+<section id="S4" class="ltx_section">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">IV </span><span id="S4.1.1" class="ltx_text ltx_font_smallcaps">Conclusions</span>
+</h2>
+
+<div id="S4.p1" class="ltx_para">
+<p id="S4.p1.1" class="ltx_p">In this paper, We proposed a new framework, which we named ADPGCN. Our model can adaptively capture the hidden dependencies between different dimensions and update the adjacency matrix with such dependencies, so that the GCN module can aggregate such dependencies and finally improve the accuracy. In addition, the coupling degree between the ADPGCN we added and the Informer model is very low. This model can also be added to other multi-dimensional time series prediction models. We’ve also demonstrated this by incorporating it into other models. In the future work,We’ll explore whether this ADPGCN framework can be used to learn about other types of dependencies.</p>
+</div>
+</section>
+<section id="Ax1" class="ltx_appendix">
+<h2 class="ltx_title ltx_title_appendix">Acknowledgment</h2>
+
+</section>
+<section id="bib" class="ltx_bibliography">
+<h2 class="ltx_title ltx_title_bibliography">References</h2>
+
+<ul class="ltx_biblist">
+<li id="bib.bib1" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[1]</span>
+<span class="ltx_bibblock">
+S. Papadimitriou and P. Yu, “Optimal multi-scale patterns in time series
+streams,” in <em id="bib.bib1.1.1" class="ltx_emph ltx_font_italic">Proceedings of the 2006 ACM SIGMOD international
+conference on Management of data</em>, 2006, pp. 647–658.
+
+</span>
+</li>
+<li id="bib.bib2" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[2]</span>
+<span class="ltx_bibblock">
+Y. Zhu and D. Shasha, “Statstream: Statistical monitoring of thousands of data
+streams in real time,” in <em id="bib.bib2.1.1" class="ltx_emph ltx_font_italic">VLDB’02: Proceedings of the 28th
+International Conference on Very Large Databases</em>.   Elsevier, 2002, pp. 358–369.
+
+</span>
+</li>
+<li id="bib.bib3" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[3]</span>
+<span class="ltx_bibblock">
+Y. Matsubara, Y. Sakurai, W. G. Van Panhuis, and C. Faloutsos, “Funnel:
+automatic mining of spatially coevolving epidemics,” in <em id="bib.bib3.1.1" class="ltx_emph ltx_font_italic">Proceedings of
+the 20th ACM SIGKDD international conference on Knowledge discovery and data
+mining</em>, 2014, pp. 105–114.
+
+</span>
+</li>
+<li id="bib.bib4" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[4]</span>
+<span class="ltx_bibblock">
+G. E. Box, G. M. Jenkins, G. C. Reinsel, and G. M. Ljung, <em id="bib.bib4.1.1" class="ltx_emph ltx_font_italic">Time series
+analysis: forecasting and control</em>.   John Wiley &amp; Sons, 2015.
+
+</span>
+</li>
+<li id="bib.bib5" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[5]</span>
+<span class="ltx_bibblock">
+J. D. Hamilton, <em id="bib.bib5.1.1" class="ltx_emph ltx_font_italic">Time series analysis</em>.   Princeton university press, 2020.
+
+</span>
+</li>
+<li id="bib.bib6" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[6]</span>
+<span class="ltx_bibblock">
+H. Lütkepohl, <em id="bib.bib6.1.1" class="ltx_emph ltx_font_italic">New introduction to multiple time series
+analysis</em>.   Springer Science &amp;
+Business Media, 2005.
+
+</span>
+</li>
+<li id="bib.bib7" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[7]</span>
+<span class="ltx_bibblock">
+H. Qiu, S. Xu, F. Han, H. Liu, and B. Caffo, “Robust estimation of transition
+matrices in high dimensional heavy-tailed vector autoregressive processes,”
+in <em id="bib.bib7.1.1" class="ltx_emph ltx_font_italic">International Conference on Machine Learning</em>.   PMLR, 2015, pp. 1843–1851.
+
+</span>
+</li>
+<li id="bib.bib8" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[8]</span>
+<span class="ltx_bibblock">
+I. Melnyk and A. Banerjee, “Estimating structured vector autoregressive
+models,” in <em id="bib.bib8.1.1" class="ltx_emph ltx_font_italic">International Conference on Machine Learning</em>.   PMLR, 2016, pp. 830–839.
+
+</span>
+</li>
+<li id="bib.bib9" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[9]</span>
+<span class="ltx_bibblock">
+H.-F. Yu, N. Rao, and I. S. Dhillon, “Temporal regularized matrix
+factorization for high-dimensional time series prediction,” <em id="bib.bib9.1.1" class="ltx_emph ltx_font_italic">Advances
+in neural information processing systems</em>, vol. 29, 2016.
+
+</span>
+</li>
+<li id="bib.bib10" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[10]</span>
+<span class="ltx_bibblock">
+J. Li and W. Chen, “Forecasting macroeconomic time series: Lasso-based
+approaches and their forecast combinations with dynamic factor models,”
+<em id="bib.bib10.1.1" class="ltx_emph ltx_font_italic">International Journal of Forecasting</em>, vol. 30, no. 4, pp. 996–1015,
+2014.
+
+</span>
+</li>
+<li id="bib.bib11" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[11]</span>
+<span class="ltx_bibblock">
+S. Roberts, M. Osborne, M. Ebden, S. Reece, N. Gibson, and S. Aigrain,
+“Gaussian processes for time-series modelling,” <em id="bib.bib11.1.1" class="ltx_emph ltx_font_italic">Philosophical
+Transactions of the Royal Society A: Mathematical, Physical and Engineering
+Sciences</em>, vol. 371, no. 1984, p. 20110550, 2013.
+
+</span>
+</li>
+<li id="bib.bib12" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[12]</span>
+<span class="ltx_bibblock">
+R. Frigola, F. Lindsten, T. B. Schön, and C. E. Rasmussen, “Bayesian
+inference and learning in gaussian process state-space models with particle
+mcmc,” <em id="bib.bib12.1.1" class="ltx_emph ltx_font_italic">Advances in neural information processing systems</em>, vol. 26,
+2013.
+
+</span>
+</li>
+<li id="bib.bib13" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[13]</span>
+<span class="ltx_bibblock">
+G. Lai, W.-C. Chang, Y. Yang, and H. Liu, “Modeling long-and short-term
+temporal patterns with deep neural networks,” in <em id="bib.bib13.1.1" class="ltx_emph ltx_font_italic">The 41st
+International ACM SIGIR Conference on Research &amp; Development in Information
+Retrieval</em>, 2018, pp. 95–104.
+
+</span>
+</li>
+<li id="bib.bib14" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[14]</span>
+<span class="ltx_bibblock">
+D. Bahdanau, K. Cho, and Y. Bengio, “Neural machine translation by jointly
+learning to align and translate,” <em id="bib.bib14.1.1" class="ltx_emph ltx_font_italic">arXiv preprint arXiv:1409.0473</em>,
+2014.
+
+</span>
+</li>
+<li id="bib.bib15" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[15]</span>
+<span class="ltx_bibblock">
+H. Zhou, S. Zhang, J. Peng, S. Zhang, J. Li, H. Xiong, and W. Zhang,
+“Informer: Beyond efficient transformer for long sequence time-series
+forecasting,” in <em id="bib.bib15.1.1" class="ltx_emph ltx_font_italic">Proceedings of AAAI</em>, 2021.
+
+</span>
+</li>
+<li id="bib.bib16" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[16]</span>
+<span class="ltx_bibblock">
+N. Kitaev, Ł. Kaiser, and A. Levskaya, “Reformer: The efficient
+transformer,” <em id="bib.bib16.1.1" class="ltx_emph ltx_font_italic">arXiv preprint arXiv:2001.04451</em>, 2020.
+
+</span>
+</li>
+<li id="bib.bib17" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[17]</span>
+<span class="ltx_bibblock">
+Z. Dai, Z. Yang, Y. Yang, J. Carbonell, Q. V. Le, and R. Salakhutdinov,
+“Transformer-xl: Attentive language models beyond a fixed-length context,”
+<em id="bib.bib17.1.1" class="ltx_emph ltx_font_italic">arXiv preprint arXiv:1901.02860</em>, 2019.
+
+</span>
+</li>
+<li id="bib.bib18" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[18]</span>
+<span class="ltx_bibblock">
+J. W. Rae, A. Potapenko, S. M. Jayakumar, and T. P. Lillicrap, “Compressive
+transformers for long-range sequence modelling,” <em id="bib.bib18.1.1" class="ltx_emph ltx_font_italic">arXiv preprint
+arXiv:1911.05507</em>, 2019.
+
+</span>
+</li>
+<li id="bib.bib19" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[19]</span>
+<span class="ltx_bibblock">
+Z. Wu, S. Pan, G. Long, J. Jiang, and C. Zhang, “Graph wavenet for deep
+spatial-temporal graph modeling,” <em id="bib.bib19.1.1" class="ltx_emph ltx_font_italic">arXiv preprint arXiv:1906.00121</em>,
+2019.
+
+</span>
+</li>
+<li id="bib.bib20" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[20]</span>
+<span class="ltx_bibblock">
+T. N. Kipf and M. Welling, “Semi-supervised classification with graph
+convolutional networks,” <em id="bib.bib20.1.1" class="ltx_emph ltx_font_italic">arXiv preprint arXiv:1609.02907</em>, 2016.
+
+</span>
+</li>
+<li id="bib.bib21" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[21]</span>
+<span class="ltx_bibblock">
+M. Defferrard, X. Bresson, and P. Vandergheynst, “Convolutional neural
+networks on graphs with fast localized spectral filtering,” <em id="bib.bib21.1.1" class="ltx_emph ltx_font_italic">Advances
+in neural information processing systems</em>, vol. 29, 2016.
+
+</span>
+</li>
+<li id="bib.bib22" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[22]</span>
+<span class="ltx_bibblock">
+Y. Li, R. Yu, C. Shahabi, and Y. Liu, “Diffusion convolutional recurrent
+neural network: Data-driven traffic forecasting,” <em id="bib.bib22.1.1" class="ltx_emph ltx_font_italic">arXiv preprint
+arXiv:1707.01926</em>, 2017.
+
+</span>
+</li>
+<li id="bib.bib23" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[23]</span>
+<span class="ltx_bibblock">
+S. Li, X. Jin, Y. Xuan, X. Zhou, W. Chen, Y.-X. Wang, and X. Yan, “Enhancing
+the locality and breaking the memory bottleneck of transformer on time series
+forecasting,” <em id="bib.bib23.1.1" class="ltx_emph ltx_font_italic">Advances in Neural Information Processing Systems</em>,
+vol. 32, 2019.
+
+</span>
+</li>
+<li id="bib.bib24" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[24]</span>
+<span class="ltx_bibblock">
+J. Xu, J. Wang, M. Long <em id="bib.bib24.1.1" class="ltx_emph ltx_font_italic">et al.</em>, “Autoformer: Decomposition transformers
+with auto-correlation for long-term series forecasting,” <em id="bib.bib24.2.2" class="ltx_emph ltx_font_italic">Advances in
+Neural Information Processing Systems</em>, vol. 34, 2021.
+
+</span>
+</li>
+<li id="bib.bib25" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[25]</span>
+<span class="ltx_bibblock">
+A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez,
+Ł. Kaiser, and I. Polosukhin, “Attention is all you need,”
+<em id="bib.bib25.1.1" class="ltx_emph ltx_font_italic">Advances in neural information processing systems</em>, vol. 30, 2017.
+
+</span>
+</li>
+<li id="bib.bib26" class="ltx_bibitem">
+<span class="ltx_tag ltx_tag_bibitem">[26]</span>
+<span class="ltx_bibblock">
+M. Liu, A. Zeng, Z. Xu, Q. Lai, and Q. Xu, “Time series is a special sequence:
+Forecasting with sample convolution and interaction,” <em id="bib.bib26.1.1" class="ltx_emph ltx_font_italic">arXiv preprint
+arXiv:2106.09305</em>, 2021.
+
+</span>
+</li>
+</ul>
+</section>
+<div class="ltx_pagination ltx_role_newpage"></div>
+</article>
+</div>
+<div class="ar5iv-footer"><a href="/html/2205.04884" class="ar5iv-nav-button ar5iv-nav-button-prev">◄</a>
+    <a class="ar5iv-home-button" href="/"><img height="56" alt="ar5iv homepage" class="ar5iv_logo" src="/assets/ar5iv_halloween.png"></a>
+    <a href="/feeling_lucky" class="ar5iv-text-button">Feeling<br>lucky?</a>
+    <a href="/log/2205.04885" class="ar5iv-text-button ar5iv-severity-warning">Conversion<br>report</a>
+    <a class="ar5iv-text-button" target="_blank" href="https://github.com/dginev/ar5iv/issues/new?template=improve-article--arxiv-id-.md&title=Improve+article+2205.04885">Report<br>an issue</a>
+    <a href="https://arxiv.org/abs/2205.04885" class="ar5iv-text-button arxiv-ui-theme">View&nbsp;original<br>on&nbsp;arXiv</a><a href="/html/2205.04886" class="ar5iv-nav-button ar5iv-nav-button-next">►</a>
+</div><footer class="ltx_page_footer">
+<a class="ar5iv-toggle-color-scheme" href="javascript:toggleColorScheme()" title="Toggle ar5iv color scheme"><span class="color-scheme-icon"></span></a>
+<a class="ar5iv-footer-button" href="https://arxiv.org/help/license" target="_blank">Copyright</a>
+<a class="ar5iv-footer-button" href="https://arxiv.org/help/policies/privacy_policy" target="_blank">Privacy Policy</a>
+
+<div class="ltx_page_logo">Generated  on Sun Jun  5 22:38:02 2022 by <a target="_blank" href="http://dlmf.nist.gov/LaTeXML/">LaTeXML <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOCAYAAAD5YeaVAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wKExQZLWTEaOUAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAdpJREFUKM9tkL+L2nAARz9fPZNCKFapUn8kyI0e4iRHSR1Kb8ng0lJw6FYHFwv2LwhOpcWxTjeUunYqOmqd6hEoRDhtDWdA8ApRYsSUCDHNt5ul13vz4w0vWCgUnnEc975arX6ORqN3VqtVZbfbTQC4uEHANM3jSqXymFI6yWazP2KxWAXAL9zCUa1Wy2tXVxheKA9YNoR8Pt+aTqe4FVVVvz05O6MBhqUIBGk8Hn8HAOVy+T+XLJfLS4ZhTiRJgqIoVBRFIoric47jPnmeB1mW/9rr9ZpSSn3Lsmir1fJZlqWlUonKsvwWwD8ymc/nXwVBeLjf7xEKhdBut9Hr9WgmkyGEkJwsy5eHG5vN5g0AKIoCAEgkEkin0wQAfN9/cXPdheu6P33fBwB4ngcAcByHJpPJl+fn54mD3Gg0NrquXxeLRQAAwzAYj8cwTZPwPH9/sVg8PXweDAauqqr2cDjEer1GJBLBZDJBs9mE4zjwfZ85lAGg2+06hmGgXq+j3+/DsixYlgVN03a9Xu8jgCNCyIegIAgx13Vfd7vdu+FweG8YRkjXdWy329+dTgeSJD3ieZ7RNO0VAXAPwDEAO5VKndi2fWrb9jWl9Esul6PZbDY9Go1OZ7PZ9z/lyuD3OozU2wAAAABJRU5ErkJggg==" alt="[LOGO]"></a>
+</div></footer>
+</div>
+
+    <script>
+      var canMathML = typeof(MathMLElement) == "function";
+      if (!canMathML) {
+        var body = document.querySelector("body");
+        body.firstElementChild.setAttribute('style', 'opacity: 0;');
+        var loading = document.createElement("div");
+        loading.setAttribute("id", "mathjax-loading-spinner");
+        var message = document.createElement("div");
+        message.setAttribute("id", "mathjax-loading-message");
+        message.innerText = "Typesetting Equations...";
+        body.prepend(loading);
+        body.prepend(message);
+
+        var el = document.createElement("script");
+        el.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+        document.querySelector("head").appendChild(el);
+
+        window.MathJax = {
+          startup: {
+            pageReady: () => {
+              return MathJax.startup.defaultPageReady().then(() => {
+                body.removeChild(loading);
+                body.removeChild(message);
+                body.firstElementChild.removeAttribute('style');
+              }); } } };
+      }
+    </script>
+    <script>
+    // Auxiliary function, building the preview feature when
+    // an inline citation is clicked
+    function clicked_cite(e) {
+      e.preventDefault();
+      let cite = this.closest('.ltx_cite');
+      let next = cite.nextSibling;
+      if (next && next.nodeType == Node.ELEMENT_NODE && next.getAttribute('class') == "ar5iv-bibitem-preview") {
+        next.remove();
+        return; }
+      // Before adding a preview modal,
+      // cleanup older previews, in case they're still open
+      document.querySelectorAll('span.ar5iv-bibitem-preview').forEach(function(node) {
+        node.remove();
+      })
+
+      // Create the preview
+      preview = document.createElement('span');
+      preview.setAttribute('class','ar5iv-bibitem-preview');
+      let target = document.getElementById(this.getAttribute('href').slice(1));
+      target.childNodes.forEach(function (child) {
+        preview.append(child.cloneNode(true));
+      });
+      let close_x = document.createElement('button');
+      close_x.setAttribute("aria-label","Close modal for bibliography item preview");
+      close_x.textContent = "×";
+      close_x.setAttribute('class', 'ar5iv-button-close-preview');
+      close_x.setAttribute('onclick','this.parentNode.remove()');
+      preview.append(close_x);
+      preview.querySelectorAll('.ltx_tag_bibitem').forEach(function(node) {
+        node.remove();
+      });
+      cite.parentNode.insertBefore(preview, cite.nextSibling);
+      return;
+    }
+    // Global Document initialization:
+    // - assign the preview feature to all inline citation links
+    document.querySelectorAll(".ltx_cite .ltx_ref").forEach(function (link) {
+      link.addEventListener("click", clicked_cite);
+    });
+    </script>
+    </body>
+</html>
