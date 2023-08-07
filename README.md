@@ -3,7 +3,7 @@ This is an initial code repository for the ranking algorithm of mathematical equ
 
 ## Overview
 
-![An overview of the proposed ranking system.](./images/flowchart.png)
+![An overview of the proposed ranking system.](./images/flowchart.jpg)
 
 ## How to Run
 
