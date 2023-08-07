@@ -13,7 +13,7 @@ Here is the basic flow to run these scripts:
 ```bash
 git clone https://github.com/senyalin/MERank.git
 ```
-2.`cd` into the MERank directory.
+2. `cd` into the MERank directory.
 ```bash
 cd ./MERank
 ```
